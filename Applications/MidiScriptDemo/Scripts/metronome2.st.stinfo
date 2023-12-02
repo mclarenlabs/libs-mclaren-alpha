@@ -1,0 +1,12 @@
+{
+  Default = {
+    Name = "metronome2";
+    Description = "A demonstration metronome using the ToneGenerator for producing High and Low tones, and configuring Gauge1 to control the tempo.
+
+This script demonstrates an interesting use of the ALSA Sequencer interface to send noteOn and noteOff events and scheduled times.  It also demonstrates using the user-defined event USR1 to schedule the next measure.
+
+Buttons 4 and 3 are configured to STOP and START the metronome.  Stopping the metronome takes place after the current measure plays.
+
+";
+  };
+}

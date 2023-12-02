@@ -1,0 +1,7 @@
+{
+  Default = {
+    Name = "utilNames";
+    Description = "This script will log all of the names accessible from the main Application object.";
+  };
+}
+

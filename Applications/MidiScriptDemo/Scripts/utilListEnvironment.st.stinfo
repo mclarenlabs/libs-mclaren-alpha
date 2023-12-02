@@ -1,0 +1,7 @@
+{
+  Default = {
+    Name = "utilListEnvironment";
+    Description = "This script will log all of the objects accessible in the current environment.  Useful for seeing what is in there.";
+  };
+}
+

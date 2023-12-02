@@ -1,0 +1,6 @@
+{
+  Default = {
+    Name = "demoShowError";
+    Description = "This script attempts to open a non-existent ALSA Sequencing Client and uses the Transcipt's showError: method to log the error.";
+  };
+}

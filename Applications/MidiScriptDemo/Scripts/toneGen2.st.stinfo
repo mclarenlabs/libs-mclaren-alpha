@@ -1,0 +1,6 @@
+{
+  Default = {
+    Name = "toneGen2";
+    Description = "Connects the GUI Piano Keyboard to the internal Tone Generator.  The gauges are mapped to Attack/Sustain/Release control.";
+  };
+}
