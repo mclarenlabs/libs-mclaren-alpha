@@ -8,26 +8,45 @@
 
 @implementation AppDelegate
 
+- (id) init {
+  if (self = [super init]) {
+
+    if ([NSApp isScriptingSupported]) {
+    NSLog(@"YES Scripting is supported.  calling initializeApplicationScripting");
+
+    // This call sets up the scripting environment by calling the category method
+    // added to NSApplication in the file
+    //    ./STScriptingSupport.h
+    // which is provided as part of the StepTalk distribution.
+    [NSApp initializeApplicationScripting];
+
+  }
+
+  [self makeWindow]; // order matters to get NSWindows95InterfaceStyle menus
+  [self makeMenu];
+  }
+  return self;
+}
+
+
 - (void) makeMenu {
 
-  // The main menu
+  // The main menu - must create before [NSApp run] to get some default behavior
   self.mainMenu = [NSMenu new];
 
-  // the [File] item
-  id<NSMenuItem> fileItem =
-    [self.mainMenu addItemWithTitle: @"File"
+  // the [Info] item
+  id<NSMenuItem> infoItem =
+    [self.mainMenu addItemWithTitle: @"Info"
 			    action: NULL
 		     keyEquivalent: @""];
 
-  NSMenu *fileMenu = [NSMenu new];
-  fileItem.title = @"File";
+  NSMenu *infoMenu = [NSMenu new];
+  [infoItem setSubmenu:infoMenu];
+  infoItem.title = @"Info";
 
-  [fileMenu addItemWithTitle:@ "Quit"
-		      action:@selector(terminate:)
-	       keyEquivalent:@"q"];
-
-  [fileItem setSubmenu:fileMenu];
-
+  [infoMenu addItemWithTitle:@ "About"
+		      action:@selector(orderFrontStandardAboutPanel:)
+	       keyEquivalent:@""];
 
 #if 1
   // Note: the [NSApp scriptingMenu] installs itself as the main
@@ -55,6 +74,42 @@
   
 #endif
 
+  // the [Services] item
+  id<NSMenuItem> servicesItem =
+    [self.mainMenu addItemWithTitle: @"Services"
+			    action: NULL
+		     keyEquivalent: @""];
+  NSMenu *servicesMenu = [NSMenu new];
+  [servicesItem setSubmenu: servicesMenu];
+
+
+  // the [Windows] item
+  id<NSMenuItem> windowsItem =
+    [self.mainMenu addItemWithTitle: @"Windows"
+			    action: NULL
+		     keyEquivalent: @""];
+  NSMenu *windowsMenu = [NSMenu new];
+
+  [windowsMenu addItemWithTitle:@"Arrange in Front"
+			 action:@selector(arrangeInFront:)
+		  keyEquivalent:@""];
+
+  [windowsItem setSubmenu: windowsMenu];
+
+
+  // The last two on the main menu
+  [self.mainMenu addItemWithTitle:@ "Hide"
+			   action:@selector(hide:)
+		    keyEquivalent:@"h"];
+
+  [self.mainMenu addItemWithTitle:@ "Quit"
+		      action:@selector(terminate:)
+	       keyEquivalent:@"q"];
+
+
+
+  [NSApp setServicesMenu:servicesMenu];
+  [NSApp setWindowsMenu:windowsMenu];
   [NSApp setMainMenu:self.mainMenu];
 }
 
@@ -260,24 +315,15 @@
 	  
 /*
  * Application Delegate Callbacks
- */      
+ */
+
+- (void) applicationWillFinishLaunching: (NSNotification *) aNotification
+{
+}
   
 
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
 {
-  if ([NSApp isScriptingSupported]) {
-    NSLog(@"YES Scripting is supported.  calling initializeApplicationScripting");
-
-    // This call sets up the scripting environment by calling the category method
-    // added to NSApplication in the file
-    //    ./STScriptingSupport.h
-    // which is provided as part of the StepTalk distribution.
-    [NSApp initializeApplicationScripting];
-
-  }
-
-  [self makeWindow]; // order matters to get NSWindows95InterfaceStyle menus
-  [self makeMenu];
   [self makeToneGenerator];
   [self makeButtons];
   [self makeGauges];

@@ -28,7 +28,10 @@ MidiScriptDemo_OBJC_FILES = \
   MidiScriptDemo_main.m \
   MidiScriptDemo_AppDelegate.m
 
-MidiScriptDemo_RESOURCE_FILES = ScriptingInfo.plist Scripts
+MidiScriptDemo_RESOURCE_FILES = \
+  Resources/Info-gnustep.plist \
+  ScriptingInfo.plist \
+  Scripts
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc
 ADDITIONAL_LDFLAGS = -ldispatch -lStepTalk
