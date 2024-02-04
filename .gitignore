@@ -1,6 +1,7 @@
 #GNUstep
 obj
 *.bundle
+.gwdir
 
 # Mkdocs
 mkdocs/site/
