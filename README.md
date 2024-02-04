@@ -2,6 +2,8 @@
 
 This project contains libraries and programs for using MIDI and Sound devices on Linux with GNUstep.  The base of the project is the ASK ("Alsa Sound Kit") library for interfacing with ALSA (Advanced Linux Sound Architecture) via ObjectiveC.  This library makes it easy to enumerate MIDI and Sound devices, to open and close them, and to send and receive MIDI events and Sound buffers.
 
+The second layer of the project is the MSK ("McLaren Synth Kit") library.  It builds on top of the device-level ASK library by providing an object-oriented approach to sound generation.  An MSKContext provides a substrate for rendering sound graphs that are described by envelopes, oscillators, filters and effects generators.
+
 Currently, there are the following demonstration programs.
 
 * askpcmlist (tool) - list the PCM (sound) devices in the system
@@ -14,6 +16,8 @@ There are also a few GUI applications that use GNUstep AppKit.
 
 * MidiMon (app) - watch the MIDI system and dump events from multiple clients
 * MidiScriptDemo (app) - a scriptable app using StepTalk that can do many things with MIDI and PCM (audio) devices by accessing the ASK library
+* MskFilterDemo - use sliders to vary the properties of a filter
+* MskOrganDemo - a drawbar organ with reverb and a filter
 
 
 ## Building
@@ -26,9 +30,9 @@ $ make install
 ```
 ### Developing Locally
 
-You can choose whether to `make install` the library (ASK) or not.  Installing the ASK library will place its headers and objects in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing and repeated compiling it can be more convenient to leave it in place, and to also leave the tools and applications in place.
+You can choose whether to `make install` the library (ASK) or not.  Installing the ASK and MSK libraries will place their headers and objects in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing and repeated compiling it can be more convenient to leave them in place, and to also leave the tools and applications in place.
 
-To facilitate working with the ASK library "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the ASK library. 
+To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries.
 
 In the example below, the ASK library is compiled but not installed.  The MidiMon application is compiled with the "localdev" flag so that it finds the library in the project and not in a global location.  There's nothing special about the "localdev" flag, we have simply used it in a consistent way so that each sub-program finds the ASK library using relative paths.
 
