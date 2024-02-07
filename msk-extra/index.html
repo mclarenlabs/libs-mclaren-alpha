@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="McLaren Labs of San Francisco">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Msk extra - MSK</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">MSK</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../setup/" class="dropdown-item">GNUstep Setup</a>
+</li>
+                                    
+<li>
+    <a href="../ask-midi/" class="dropdown-item">Alsa Sound Kit - MIDI</a>
+</li>
+                                    
+<li>
+    <a href="../ask-pcm/" class="dropdown-item">Alsa Sound Kit - PCM</a>
+</li>
+                                    
+<li>
+    <a href="../msk-over/" class="dropdown-item">McLaren Synth Kit - Overview</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../conclusion/" class="nav-link">Conclusion</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../toc/" class="nav-link">Table Of Contents</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#msk-context-buffer" class="nav-link">MSK Context Buffer</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#msk-context-voice" class="nav-link">MSK Context Voice</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#playing-a-voice" class="nav-link">Playing a Voice</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#the-voice-protocol" class="nav-link">The Voice Protocol</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#msk-context-envelope" class="nav-link">MSK Context Envelope</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="msk-context-buffer">MSK Context Buffer</h2>
+<p>In the Mclaren Synth Kit, all sample buffers are an array of single-precision FLOATs in INTERLEAVED access pattern.  An <code>MSKContextBuffer</code> holds an <code>NSData</code> sized to the period size of a configured <code>MSKContext</code>.</p>
+<p>An <code>MSKContextBuffer</code> is always initialized with a specific Context, and it holds a reference to that Context.</p>
+<pre><code class="language-objc">ASKContextBuffer *buf = [[ASKContextBuffer alloc] initWithCtx:ctx]
+</code></pre>
+<p>If you are writing your own Voices, you will need to access the underlying frames in the <code>_frames</code> instance variable.</p>
+<h2 id="msk-context-voice">MSK Context Voice</h2>
+<p>In the Mclaren Synth Kit, an <code>MSKContextVoice</code> is a buffer that has been augmented with callback functions for producing various kinds of sounds or envelopes.  The callback functions are called once each period and fill the underlying <code>MSKContextBuffer</code> with samples.</p>
+<p>The base class <code>MSKContextVoice</code> has a predefined callback that fills the buffer with zeros every time it is updated.  In other words, the base <code>MSKContextVoice</code> is a silence generator.</p>
+<h2 id="playing-a-voice">Playing a Voice</h2>
+<p>Voices are designed to be played by a Context.  To play a Voice, add it to the Context.  The following code creates a Voice that plays silence.</p>
+<pre><code class="language-objc">ASKContextVoice *silence = [[ASKcontextVoice alloc] initWithCtx:ctx]
+[ctx addVoice:silence]
+</code></pre>
+<p>Once added to a Context, a Voice plays until its <code>_active</code> instance variable is set to <code>NO</code>.  We could stop our silence voice from playing like this.</p>
+<pre><code class="language-objc">  silence-&gt;_active = NO;
+  silence = nil;
+</code></pre>
+<p>Part of the logic implemented by the Context is the release of inactive voices ... <strong>safely</strong>.  At some point after the <code>silence</code> voice is marked inactive, the Context will release its reference to the voice.  When all of the references to the Voice are released, the memory for the VOice is reclaimed by Objective-C's ARC.</p>
+<h2 id="the-voice-protocol">The Voice Protocol</h2>
+<p>The example above demonstrates the basis for transferring Voices <em>into</em> and <em>out-of</em> the audio thread.  To add a voice to a Context, use the <code>addVoice:</code> method with a Voice.  To stop a voice from playing and arrange to have it removed from the Context, cause its <code>_active</code> instance variable to be set to <code>NO</code>.</p>
+<p>That's it!  That is the informal protocol for transferring voices to and from the audio thread.  We'll see later that manipulating the <code>_active</code> instance variable is rarely done directly.  More usually it is handled by a pre-defined audio unit like an Envelope.</p>
+<blockquote>
+<p>Aside: Why is it safe to set the <code>_active</code> instance variable from a thread outside of the audio thread?</p>
+<p>In the chapter on PCMs, we said that care must be taken to not perform an operation that would block.
+Reading and writing variables across threads is allowed however.  The setting of the <code>_active</code> instance
+variable to <code>NO</code> from outside the audio thread is allowed.  In the callback block of the Context running
+inside the audio thread, the <code>_active</code> flag is read at the end of each period.  Inactive Voices are safely
+released.</p>
+</blockquote>
+<h2 id="msk-context-envelope">MSK Context Envelope</h2>
+<p>There is a formal protocol for Voices that generate an Envelope.  Envelopes in the Mclaren Synth Kit implement the standard attack, decay, sustain, release segments.  An <code>MSKContextEnvelope</code> implements the following methods.</p>
+<pre><code class="language-objc">@protocol MSKContextEnvelope
+
+- (BOOL) noteOff;
+- (BOOL) noteAbort;
+- (BOOL) noteReset:(int)idx;
+
+@end
+</code></pre>
+<p>Invoking the <code>noteOff</code> method of an Envelope causes it to begin its release.  After the release time, the Envelope is marked inactive.</p>
+<p>Invoking the <code>noteAbort</code> method causes an Envelope to drop to 0.0 by the end of the period.  The Envelope is then marked inactive.</p>
+<p>Invoking <code>noteReset</code> causes an Envelope to start all over.</p>
+<p>As stated, <code>MSKContextEnvelope</code> is a formal protocol, and not an implementation.  The McLaren Synth Kit provides two standard Envelope generators.</p>
+<ul>
+<li><code>MSKExpEnvelope</code> - an exponential envelope</li>
+<li><code>MSKLinEnvelope</code> - a linear envelope</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>(c) McLaren Labs 2024</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

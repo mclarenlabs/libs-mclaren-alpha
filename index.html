@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Documentation from the McLaren Synth Kit Objective-C audio construction kit">
+        <meta name="author" content="McLaren Labs of San Francisco">
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>MSK</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">MSK</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="setup/" class="dropdown-item">GNUstep Setup</a>
+</li>
+                                    
+<li>
+    <a href="ask-midi/" class="dropdown-item">Alsa Sound Kit - MIDI</a>
+</li>
+                                    
+<li>
+    <a href="ask-pcm/" class="dropdown-item">Alsa Sound Kit - PCM</a>
+</li>
+                                    
+<li>
+    <a href="msk-over/" class="dropdown-item">McLaren Synth Kit - Overview</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="conclusion/" class="nav-link">Conclusion</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="toc/" class="nav-link">Table Of Contents</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#introduction-to-mclaren-synth-kit" class="nav-link">Introduction to McLaren Synth Kit</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#project-home" class="nav-link">Project Home</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#background" class="nav-link">Background</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#concurrency" class="nav-link">Concurrency</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#memory-management" class="nav-link">Memory Management</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#objective-c-is-c" class="nav-link">Objective-C is C</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#error-handling" class="nav-link">Error Handling</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#steptalk" class="nav-link">StepTalk</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#a-brief-tour-of-the-components" class="nav-link">A Brief Tour of the Components</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#a-complete-example" class="nav-link">A Complete Example</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#summary" class="nav-link">Summary</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="introduction-to-mclaren-synth-kit">Introduction to McLaren Synth Kit</h1>
+<p>The McLaren Synth Kit aims to bring audio programming to GNUstep Objective-C on Linux.  It consists of a number of parts.</p>
+<ol>
+<li>Alsa Sound Kit (ASK) - Obj-C wrappers around Alsa sound and MIDI devices</li>
+<li>McLaren Synth Kit (MSK) - a more abstract sound "context" and synthesizer construction operators like oscillators, envelopes and effects.</li>
+<li>Demonstration programs and applications.</li>
+</ol>
+<h2 id="project-home">Project Home</h2>
+<p>The documentation you are reading here is from the <code>/mkdocs</code> directory of the McLaren Synth Kit repository on github.</p>
+<ul>
+<li><a href="https://github.com/mclarenlabs/libs-mclaren-alpha">https://github.com/mclarenlabs/libs-mclaren-alpha</a></li>
+</ul>
+<h2 id="background">Background</h2>
+<p>This project is partially inspired by experiences with audio systems on IOS, OSX and Webkit and a NeXT project called <a href="https://github.com/leighsmith/MusicKit">MusicKit</a>.  We had in mind building a networked synthesizer using RTP-MIDI in an embedded Raspberry Pi application.  We really liked the features of modern Objective-C and thought it could provide a nice experience for audio programming.</p>
+<p>We purposely chose to focus on Linux and its ALSA interface.  We wanted to avoid the layers of abstraction provided by the PortAudio project or JUCE. We also wanted to avoid dependence on a sound server like Pulse or JACK simply to reduce dependencies.  We wanted to keep the toolkit lean and easy to set up.</p>
+<p>These decisions helped make the toolkit simple to use for simple things.  Along the way we learned a lot and discovered some interesting capabilities.  Hopefully this project will help share the things we learned.</p>
+<h2 id="concurrency">Concurrency</h2>
+<p>One of the things that makes audio programming difficult is the management of concurrency.  In an audio application like a synthesizer, there is usually a thread dedicated to rendering the audio, a thread dedicated to MIDI, a thread managing the GUI, and possibly other threads performing background tasks.</p>
+<p>Apple's GCD (Grand Central Dispatch) aka "dispatch queues" help simplify concurrency, and they are a first-class part of GNUstep's Objective-C environment.  Instead of writing code that manages threads and locks, your code is organized into blocks that execute sequentially in a dispatch queue concurrency domain.  The syntactic sugar of "blocks" in C lets you write code that executes in one concurrency domain and launches an operation in another.  This replaces a cross-thread operation with something simpler.</p>
+<p>One of the design goals of the McLaren Synth Kit it to elevate audio programming to the realm of dispatch events, and to hide threads and locks as much as possible.  We think we have succeeded.</p>
+<h2 id="memory-management">Memory Management</h2>
+<p>The McLaren Synth Kit is designed to take full advantage of ARC (Automatic Reference Counting) for memory reclamation.  A synthesizer with polyphony is usually rendering many different sounds at once.  Each sound has a starting event (its "attack") and eventually its "decay" and "release."  It's convenient to think of sounds as being allocated and deallocated.  While they are allocated, they are rendered to produce a sound.</p>
+<p>With the Synth Kit, a sound unit (called a "Voice") is dynamically allocated and configured, and then is handed to the audio thread for rendering.  After the Voice is done playing, the audio thread marks it a reclaimable.  A different background thread periodically checks for reclaimable Voices and gives them back to ARC.  This puts the memory of the Voice back in the allocation pool.</p>
+<p>These details are handled by the Synth Kit.  When you're writing an audio program using the kit, you only need to allocate and configure voices.  Once you're done with a sound, Synth Kit takes care of cleaning up.</p>
+<h2 id="objective-c-is-c">Objective-C is C</h2>
+<p>Objective-C is strictly a superset of C.  This means that C structs and functions can be used directly in Objective-C programs.  ALSA makes use of opaque C pointers as well as C structs for defining events and messages.  These things are the "language" of ALSA.  The McLaren Synth Kit exposes many of these details where it adds no value to abstract them.</p>
+<p>Objective-C objects can be referenced as C structs.  This capability can lead to dangerous programming territory, but when used carefully it is very powerful.  In the McLaren Synth Kit, we take advantage of the memory management and property capabilities of Objective-C objects, but we can (safely) pass references to these structs to low-level C functions.  C functions can access Objective-C instance variables directly, because the memory layout is known by both C and Objective-C.</p>
+<h2 id="error-handling">Error Handling</h2>
+<p>We tried to normalize errors that arise in a number of contexts.  Wherever possible, errors exposed as <code>NSError</code> objects.  Initializers that may encounter an error have an extra <code>error:(NSError**)</code> argument in which to describe the problem.</p>
+<h2 id="steptalk">StepTalk</h2>
+<p>It's interesting to think about how an interpreted language could be used to build audio interfaces and stitch together audio units to create user-defined synthesize instruments.  StepTalk is a GNUstep project that implements a Smalltalk-like interpreted language on top of the Objective-C runtime environment.</p>
+<p>We have only just begun to build demonstration programs with StepTalk, but you can see an example of how this could work in the application <code>MidiScriptDemo</code> in the <code>Applications/</code> directory.</p>
+<h2 id="a-brief-tour-of-the-components">A Brief Tour of the Components</h2>
+<p>The tool kit is divided into two layers.  The Alsa Sound Kit (ASK) provides minimal Objective-C wrappers around ALSA sound and MIDI sequencer devices.  It also encapsulates standard algorithms on these things, so that instead of writing code to play a sound or enumerate the sequencers in your system, you call a method or set up a block. </p>
+<p>The major components of the Alsa Sound Kit are described below.</p>
+<ul>
+<li>ASKPcm - open an ALSA audio device and play or capture sounds</li>
+<li>ASKPcmList - list the ALSA audio devices in your system</li>
+<li>ASKSeq - open an ALSA MIDI Sequencer device and play or capture MIDI events</li>
+<li>ASKSeqList - list the ALSA MIDI devices in your system</li>
+</ul>
+<p>The McLaren Synth Kit (MSK) further abstracts audio devices into an object called a "Audio Context."  An Audio Context can render audio pipelines that are described as a connected graph of audio elements, each of which is called a "Voice".  A Voice can be a simple oscillator, an oscillator controlled by an envelope, or a more complex graph of multiple oscillators, envelopes and filters.  A Voice can play for ever, it can stop after a specified time or it can be sent a <code>noteOff</code> message.</p>
+<p>Once created, a Voice is handed over to a Context for rendering.  The Context manages the rendering and mixing of multiple Voices.  In a typical use, a Voice is allocated for each MIDI note sounding.  When a Voice is done playing, the Context removes the Voice and arranges for the reclamation of its memory.</p>
+<p>The major components of the McLaren Synth Kit are described below.</p>
+<ul>
+<li>MSKContext - an audio context for rendering Voices or capturing sounds into a Voice</li>
+<li>MSKLinEnvelope, MSKExpEnvelope - linear and exponential envelope generators</li>
+<li>MSKSinFixedOscillator - a simple sinusoidal oscillator</li>
+<li>MSKGeneralOscillator - Sin, Squarewave, Triangle, Saw oscillator</li>
+<li>MSKPhaseDistortionOscillator - an oscillator who phase is controlled by another Voice</li>
+</ul>
+<p>The parameters of the various kinds of voices are continuously variable.  To allow multiple voices to share configuration parameters (for example, all of the notes playing in a MIDI channel to have the same "transpose" or "pitchbend" setting) the continously variable parameters of voices are separated into objects called Models. The models in the system are listed below.</p>
+<ul>
+<li>MSKEnvelopeModel</li>
+<li>MSKOscillatorModel</li>
+<li>MSKReverbModel</li>
+</ul>
+<blockquote>
+<p>Aside: Models have a special role in the system: they provide read-only "C" variables that the Voices read from the audio thread.   And for each "C" variable, they expose an Objective-C "property" for reading and writing that variable.  To the outside-world, their properties can be freely used with Cocoa controls and Cocoa bindings.  The audio thread reads the primitive "C" values behind the models to respond to value changes.</p>
+</blockquote>
+<h2 id="a-complete-example">A Complete Example</h2>
+<p>Shown below is a complete example of a program that opens a device and plays a sound using a <code>MSKContext</code>.</p>
+<p>The top of the program opens a new Audio Context, configures it and starts it running.  Dispatch queue calls are used to schedule events.  At time t=1 second, a block is launched that creates a new sound and adds it to the context.  This starts the sound playing until its release time has passed.  At time t=2 seconds, a block is launched that closes the context.  Lastly at time t=4 seconds a block is launched to exit the program.</p>
+<p>This program is available in the <code>msk-examples</code> directory and is named <code>tiny.m</code>.  You can compile it yourself and try it out.</p>
+<pre><code class="language-objc">int main(int argc, char *argv[]) {
+
+  // Desired audio context parameters
+  MSKContextRequest *request = [[MSKContextRequest alloc] init];
+  request.rate = 44000;
+  request.persize = 1024;
+  request.periods = 2;
+
+  NSString *devName = @&quot;default&quot;;
+
+  NSError *error;
+  BOOL ok;
+
+  // Create an audio context on the 'default' device for playback
+  MSKContext *ctx = [[MSKContext alloc] initWithName:devName
+                                           andStream:SND_PCM_STREAM_PLAYBACK
+                                               error:&amp;error];
+
+  if (error != nil) {
+    NSLog(@&quot;MSKContext init error:%@&quot;, error);
+    exit(1);
+  }
+
+  // Configure the context with the request
+  ok = [ctx configureForRequest:request error:&amp;error];
+  if (ok == NO) {
+    NSLog(@&quot;MSKContext configure error:%@&quot;, error);
+    exit(1);
+  }
+
+  // Start the context
+  ok = [ctx startWithError:&amp;error];
+  if (ok == NO) {
+    NSLog(@&quot;MSKContext starting error:%@&quot;, error);
+    exit(1);
+  }
+
+
+  // Create and sound a Voice after 1 second
+  dispatch_time_t attackt = dispatch_time(DISPATCH_TIME_NOW, 1.0*NSEC_PER_SEC);
+  dispatch_after(attackt, dispatch_get_main_queue(), ^{
+
+    MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] initWithName:@&quot;osc1&quot;];
+    oscmodel1.osctype = @MSK_OSCILLATOR_TYPE_TRIANGLE;
+
+    MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] initWithName:@&quot;env1&quot;];
+    envmodel1.sustain = 1.0;
+    envmodel1.rel = 1.5;
+
+    MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:ctx];
+    env.oneshot = YES;
+    env.shottime = 0.05;
+    env.model = envmodel1;
+    [env compile];
+
+    MSKGeneralOscillator *osc = [[MSKGeneralOscillator alloc] initWithCtx:ctx];
+    osc.iNote = 60;
+    osc.sEnvelope = env;
+    osc.model = oscmodel1;
+    [osc compile];
+
+    // Hand the oscillator over to the context for rendering
+    [ctx addVoice:osc];
+    });
+
+  // Close the context after two seconds
+  dispatch_time_t after = dispatch_time(DISPATCH_TIME_NOW, 2.0*NSEC_PER_SEC);
+  dispatch_after(after, dispatch_get_main_queue(), ^{
+      [ctx close];
+    });
+
+  // Exit after four seconds
+  dispatch_time_t after4 = dispatch_time(DISPATCH_TIME_NOW, 4.0*NSEC_PER_SEC);
+  dispatch_after(after4, dispatch_get_main_queue(), ^{
+      exit(0);
+    });
+
+  // Run forever
+  [[NSRunLoop currentRunLoop] run];
+
+}
+
+</code></pre>
+<h2 id="summary">Summary</h2>
+<p>This chapter gives a brief introduction to the design goals of the McLaren Synth Kit.  The kit uses the concurrency and memory management features of modern Objective-C to provide a comfortable environment for audio programming on Linux.  An example program showed how to play a synthesized sound consisting of an envelope generator and an oscillator playing a middle-C.  Hopefully this was intriguing enough that you want to find out more.</p>
+<p>We didn't explain the details of how audio objects are defined and configured using the McLaren Synth Kit, and we didn't explain the rules for how "Voices" (the audio objects of the MSK) can be combined to create more complex sounds.  We also didn't cover how to find audio devices on your computer (i.e. - external USB sound cards) and how to use them.  All of these will be covered in later chapters.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>(c) McLaren Labs 2024</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.5.3
+Build Date UTC : 2024-02-07 00:06:51.214315+00:00
+-->

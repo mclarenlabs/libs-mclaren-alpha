@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="McLaren Labs of San Francisco">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>McLaren Synth Kit - Overview - MSK</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">MSK</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../setup/" class="dropdown-item">GNUstep Setup</a>
+</li>
+                                    
+<li>
+    <a href="../ask-midi/" class="dropdown-item">Alsa Sound Kit - MIDI</a>
+</li>
+                                    
+<li>
+    <a href="../ask-pcm/" class="dropdown-item">Alsa Sound Kit - PCM</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">McLaren Synth Kit - Overview</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../conclusion/" class="nav-link">Conclusion</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../toc/" class="nav-link">Table Of Contents</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../ask-pcm/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../conclusion/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#mclaren-synth-kit-overview" class="nav-link">McLaren Synth Kit - Overview</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#msk-context" class="nav-link">MSK Context</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#msk-voice" class="nav-link">MSK Voice</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#voices-and-automatic-reference-counting-arc" class="nav-link">Voices and Automatic Reference Counting (ARC)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#how-do-voices-become-inactive" class="nav-link">How do Voices become Inactive?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#voices-and-models" class="nav-link">Voices and Models</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#an-example" class="nav-link">An Example</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#noteoff-and-decay" class="nav-link">noteOff and Decay</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#two-notes-with-shared-models" class="nav-link">Two Notes with Shared Models</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#complex-note-with-two-oscillators" class="nav-link">Complex Note with Two Oscillators</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#the-compile-method" class="nav-link">The Compile Method</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#summary" class="nav-link">Summary</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="mclaren-synth-kit-overview">McLaren Synth Kit - Overview</h1>
+<p>In the previous chapter, we saw how to work with a PCM to deliver samples to an audio device.  Working directly with an audio device exposes many of the hardware parameters to the underlying code.  Parameters such as sample rate, period size, access pattern and sample type all must be accounted for.</p>
+<p>The Mclaren Synth Kit (M.S.K.) presents a level of abstraction above that of the PCM.  It has been designed to use Objective-C to design audio generators as a connected graph of low-level audio units called Voices.  This chapter describes how to set up and use the standard components of the Mclaren Synth Kit.</p>
+<p>The <code>MSKContext</code> class is the foundation of the Synth Kit.  An <code>MSKContext</code> opens and manages a PCM.  It schedules the necessary audio callback blocks and evaluates the voices of the audio graph to generate sounds.</p>
+<p>An <code>MSKContext</code> also allocates a dispatch queue for timing and for callbacks.  As we learned earlier, it is important that the callbacks on the audio thread do not perform blocking operations.  The <code>MSKContext</code> and its voices implement a protocol for getting information <em>into</em> and <em>out-of</em> the audio thread.  By following the guidelines of this protocol you are ensured to avoid audio glitches or pops.</p>
+<h2 id="msk-context">MSK Context</h2>
+<p>The <code>MSKContext</code> does its best to find good hardware and software parameters for the specified PCM device.  Opening, configuring and running an <code>MSKContext</code> is straightfoward.  The snippet below shows how to open the PCM device named "default" for playback.</p>
+<pre><code class="language-objc">NSString *devName = @&quot;default&quot;;
+
+NSError *error;
+
+// Create an audio context on the 'default' device for playback
+MSKContext *ctx = [[MSKContext alloc] initWithName:devName
+                                         andStream:SND_PCM_STREAM_PLAYBACK
+                                             error:&amp;error];
+</code></pre>
+<p>Next, create a configuration request.  The request specifies the sample rate,  period size and number of periods.  These parameters are key for adjusting the latency of a synthesizer application.</p>
+<pre><code class="language-objc">// Desired audio context parameters
+MSKContextRequest *request = [[MSKContextRequest alloc] init];
+request.rate = 44000;
+request.persize = 1024;
+request.periods = 2;
+</code></pre>
+<p>Now, configure the Context with the Request.</p>
+<pre><code class="language-objc">BOOL ok;
+// Configure the context with the request
+ok = [ctx configureForRequest:request error:&amp;error];
+</code></pre>
+<p>If there is no error, the Context has successfully configured the underlying PCM.  You can observe the achieved Hardware and Software parameters in the <code>hwparams</code> and <code>swparams</code> property of the Context.</p>
+<pre><code class="language-objc">  NSLog(@&quot;%@&quot;, ctx.hwparams)
+  NSLog(@&quot;%@&quot;, ctx.swparams)
+</code></pre>
+<blockquote>
+<p>Aside: the Context exposes many of its internal variables as readonly properties.  One of the design decisions
+behind the Mclaren Synth Kit is that useful implementation variables should be exposed rather than hidden in 
+a private category.</p>
+</blockquote>
+<p>Before the Context produces any sound, it needs to be started.  This call does two things: it starts the underlying PCM thread, and it launches a dispatch queue timer for monitoring status information coming out of the audio callback.</p>
+<pre><code class="language-objc">// Start the context
+ok = [ctx startWithError:&amp;error];
+</code></pre>
+<h2 id="msk-voice">MSK Voice</h2>
+<p>A Voice consists of a sample buffer and some callback functions that fill the buffer with samples.  In the Mclaren Synth Kit there are voices that create sounds and voices that control the parameters of other voices.   All are children of the <code>MSKContextVoice</code> base class.</p>
+<p>The <code>compile</code> method of a Voice must be called after it is attached to other objects.</p>
+<p>A Voice can be played by a Context by adding it to the Context with the <code>addVoice:</code> method.</p>
+<pre><code class="language-objc">MSKContextVoice *v1 = [[MSKContextVoice alloc] initWithCtx:ctx];
+[v1 compile];
+[ctx addVoice:v1]
+</code></pre>
+<p>It is useful to think about the audio graph constructed by the preceding code.  A Voice referenced by the variable <code>v1</code> has been added to the Context.  The Context renders the Voice by reading its samples once every PCM period.  The Context invokes a callback function defined by the Voice to create new samples each period.</p>
+<p>A Voice is rendered by a Context until it is no longer active.  (We'll define how Voices become "inactive" in a minute.)</p>
+<p><img alt="Context with reference to Voice" src="../msk-over-figs01/msk-over-figs01.004.png" /></p>
+<h2 id="voices-and-automatic-reference-counting-arc">Voices and Automatic Reference Counting (ARC)</h2>
+<p>A Voice is an Objective-C object and is managed through ARC (Automatic Reference Counting) just like any other object.</p>
+<p>A Context retains a reference to a Voice as long as it is active.  When it is no longer active, the Context releases its reference so the Voice can be reclaimed.</p>
+<p>Consider the code below.  This creates a Voice and hands it to the Context.  After the <code>addVoice:</code> call, the variable <code>v1</code> is set to <code>nil</code>, essentially dropping the reference to the Voice.</p>
+<pre><code class="language-objc">MSKContextVoice *v1 = [[MSKContextVoice alloc] initWithCtx:ctx];
+[v1 compile];
+[ctx addVoice:v1]
+v1 = nil;
+</code></pre>
+<p>The Context still holds a reference to the Voice, however. As long as it is "active" the reference is retained.</p>
+<p><img alt="Context with only reference to Voice" src="../msk-over-figs01/msk-over-figs01.005.png" /></p>
+<p>Now, let's imagine that the Voice becomes marked "inactive".  At some point after the Voice becomes inactive, the Context will drop its reference and will stop rendering the Voice.  The reference count of the Voice will drop to zero, and ARC will reclaim the memory for the voice.</p>
+<p><img alt="Context as Voice is reclaimed" src="../msk-over-figs01/msk-over-figs01.006.png" /></p>
+<h2 id="how-do-voices-become-inactive">How do Voices become Inactive?</h2>
+<p>A Voice is "active" as long as its <code>_active</code> instance variable is set to <code>YES</code>.  A freshly initialized Voice is active.  The <code>_active</code> instance variable may be set to <code>NO</code> by a number of ways.</p>
+<ul>
+<li>
+<p>an external thread may directly mark a voice inactive by executing<br />
+<code>voice-&gt;_active = NO;</code><br />
+    This would cause the Voice to stop playing abruptly.</p>
+</li>
+<li>
+<p>a callback function in a Voice may mark itself inactive as part of the algorithm it implements</p>
+</li>
+</ul>
+<p>In the Mclaren Synth Kit, Envelope Generators are a special type of Voice that mark themselves inactive after their decay time.</p>
+<h2 id="voices-and-models">Voices and Models</h2>
+<p>A Voice is something that produces a buffer of Samples for a Context.  A Model is an Objective-C object that holds properties that affect the behavior of a Voice.  Models are designed to be updated in realtime by any number of control threads.  GUI widgets and MIDI events should update Models, but not Voices directly.</p>
+<p>Voices are designed to read values from models on each period of the audio thread.  Models may be allocated one-for-one for a voice, or can be shared among Voices.</p>
+<p>Models know how to save themselves to the <code>NSDefaults</code> system, and how to restore themselves as well.</p>
+<p><img alt="Voice and Model" src="../msk-over-figs01/msk-over-figs01.007.png" /></p>
+<h2 id="an-example">An Example</h2>
+<p>The following example illustrates how to create a SIN-wave oscillator with an Envelope generator.  We create two models: one for the envelope generator and one for an oscillator.  The name given to each model becomes part of the key the model uses when it saves itself to the <code>NSDefaults</code> system.</p>
+<p>Next, an Envelope is created.  This one is a "linear envelope."  The envelope is configured to read its realtime configuration parameters from <code>envmodel1</code>.</p>
+<p>After that, a SIN-wave oscillator is created using the <code>MSKGeneralOScillator</code> class.  This oscillator is given an initial note (<code>iNote</code>) value of middle-C (MIDI 60).  Its realtime parameters input is set to the <code>oscmodel1</code> model.</p>
+<p>In MSK, Voice properties that specify initial values begin with a lowercase 'i'.</p>
+<p>This oscillator also has an envelope input called <code>sEnvelope</code>.  In MSK, Voice properties that begin with a lowercase 's'.  The logic of the Oscillator Voice is defined such that it will mark itself "inactive" when the <code>sEnvelope</code> input becomes inactive.</p>
+<p>Adding the oscillator to the Context causes it to begin to sound.</p>
+<pre><code class="language-objc">MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] initWithName:@&quot;env1&quot;];
+envmodel1.attack = 0.01;
+envmodel1.decay = 0.05;
+envmodel.sustain = 0.90;
+envmodel.rel = 2.00;
+
+MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] initWithName:@&quot;osc1&quot;];
+oscmodel1.osctype = MSK_OSCILLATOR_TYPE_SIN;
+oscmodel1.pitchbend = 5;
+oscmodel.mod = 32;
+
+MSKExpEnvelope *env1 = [[MSKExpEnvelope alloc] initWithCtx:ctx];
+env1.model = envmodel1;
+[env1 compile];
+
+MSKGeneralOscillator *osc1 = [[MSKGeneralOscillator alloc] initWithCtx:ctx];
+osc1.iNote = 60;
+osc1.sEnvelope = env;
+osc1.model = oscmodel1;
+[osc1 compile];
+
+[ctx addVoice:osc1];
+</code></pre>
+<p>At this point, the system looks like the following figure.  Variables <code>env1</code> and <code>osc</code> hold pointers to the Envelope and the Oscillator, and the Context holds a pointer to the Oscillator.  The Oscillator, in turn, holds a pointer to the Envelope.</p>
+<p>The Context looks to the Oscillator to produce new samples.  The Oscillator, in turn, looks to the Envelope to produce new samples.  The graph tracing from the Context to the Voices and Models defines the audio being rendered by the audio thread.</p>
+<p><img alt="SIN oscillator an Linear Envelope" src="../msk-over-figs01/msk-over-figs01.008.png" /></p>
+<h2 id="noteoff-and-decay">noteOff and Decay</h2>
+<p>Envelope Voices implement a formal protocol that is shown below.</p>
+<pre><code class="language-objc">@protocol MSKContextEnvelope
+
+- (BOOL) noteOff;
+- (BOOL) noteAbort;
+- (BOOL) noteReset:(int)idx;
+
+@end
+</code></pre>
+<p>Sending the <code>noteOff</code> method to an Envelope causes it to begin its release.  After the release time, the Envelope is marked inactive.</p>
+<p>Sending the <code>noteAbort</code> method causes an Envelope to drop to 0.0 by the end of the period.  The Envelope is then marked inactive.</p>
+<p>Sending <code>noteReset</code> causes an Envelope to start all over.</p>
+<p>In our example, we could send the <code>noteOff</code> method to the envelope to tell it to begin its release.  We could also drop the references to the envelope and oscillator.  </p>
+<pre><code class="language-objc">[env1 noteOff];
+env1 = nil;
+osc1 = nil;
+</code></pre>
+<p>The resulting graph would be as shown below.  The Context would still hold a reference to the Oscillator, and the Oscillator is still holding a reference to the Envelope.  The Envelope, however, has begun its release.</p>
+<p><img alt="SIN oscillator an Linear Envelope" src="../msk-over-figs01/msk-over-figs01.009.png" /></p>
+<p>At the end of the release period, the envelope will mark itself "inactive" and then the oscillator will too.  The Context will then release its reference to the oscillator and the entire graph will be reclaimed.</p>
+<h2 id="two-notes-with-shared-models">Two Notes with Shared Models</h2>
+<p>The example of this section will explain what happens as multiple notes are sounded with shared models.  At some point in time, a thread executes the following causing the first new note to be added to the Context. Notice that we can forget the reference to <code>osc1</code>, but that we still want to hold the reference to <code>env1</code> so we can send it the <code>noteOff</code> method later.</p>
+<pre><code class="language-objc">MSKExpEnvelope *env1 = [[MSKExpEnvelope alloc] initWithCtx:ctx];
+env1.model = envmodel1;
+[env1 compile];
+
+MSKGeneralOscillator *osc1 = [[MSKGeneralOscillator alloc] initWithCtx:ctx];
+osc1.iNote = 60;
+osc1.sEnvelope = env;
+osc1.model = oscmodel1;
+[osc1 compile];
+
+[ctx addVoice:osc1];
+osc1 = nil;
+</code></pre>
+<p><img alt="Two Notes - first Note" src="../msk-over-figs01/msk-over-figs01.010.png" /></p>
+<p>Some time after the first note, a second note is started by executing the following.  We pass the oscillator to the context and hold a reference to the envelope.</p>
+<pre><code class="language-objc">MSKExpEnvelope *env2 = [[MSKExpEnvelope alloc] initWithCtx:ctx];
+env2.model = envmodel1;
+[env2 compile];
+
+MSKGeneralOscillator *osc2 = [[MSKGeneralOscillator alloc] initWithCtx:ctx];
+osc2.iNote = 64;
+osc2.sEnvelope = env;
+osc2.model = oscmodel1;
+[osc2 compile];
+
+[ctx addVoice:osc2];
+osc2 = nil;
+</code></pre>
+<p>At this point, the Context is playing two notes: each is defined by a subgraph referenced by a pointer.  The Voices of the notes are separate, but they do share Models.  In this way, the two notes are using the same realtime parameters.</p>
+<p><img alt="Two Notes - second Note arrives" src="../msk-over-figs01/msk-over-figs01.011.png" /></p>
+<p>Now, assume that it is time to release the first note.  We do that by sending the <code>noteOff</code> message to its envelope.  Since we don't need a reference to the envelope anymore, we set <code>env1</code> to <code>nil</code>, and at this point the only reference to the subgraph of the first note is being held by the Context.</p>
+<pre><code class="language-objc">[env1 noteOff];
+env1 = nil;
+</code></pre>
+<p><img alt="Two Notes - first note releases" src="../msk-over-figs01/msk-over-figs01.012.png" /></p>
+<p>After the release time of the first note, the Envelope of the first note is marked "inactive" and it stops producing samples.  Since the oscillator of the first note depends on the envelope, it too, is marked inactive.</p>
+<p>The Context drops the reference to the subgraph of the first note, and those Voices are reclaimed.</p>
+<p><img alt="Two Notes - first note reclaimed" src="../msk-over-figs01/msk-over-figs01.013.png" /></p>
+<h2 id="complex-note-with-two-oscillators">Complex Note with Two Oscillators</h2>
+<p>For our last example, we will describe a complex note built with one oscillator that modulates another.  An <code>MSKPhaseDistortionOscillator</code> has an additional input that modulates the phase of each sample.  This input may be any kind of Voice.</p>
+<p>In the example shown below there are two envelope generators that share the same model.  In this way, these two envelopes will always share the same configuration parameters.  The first envelope generator is a Linear Envelope generator and it sets the gain of the simple SIN-wave oscillator.  The output of this entire first stage, rather than being rendered through the Context, is set as the input to the <code>sPhaseDistortion</code> input of a second oscillator.  This second oscillator has its own envelope generator, but it is an Exponential Envelope generator.  The output of the phase distortion oscillator is attached to the Context, so this is the sound that is rendered.</p>
+<p><img alt="Complex Note with Two Oscillators" src="../msk-over-figs01/msk-over-figs01.014.png" /></p>
+<p>This configuration shows an interesting situation: in order to instruct both envelope generators to begin their release, our code needs to hold pointers to both of the envelopes so that it can send the <code>noteOff</code> method.</p>
+<pre><code class="language-objc">[env1 noteOff];
+[env2 noteOff];
+env1 = nil;
+env2 = nil;
+</code></pre>
+<p>As before, once the envelope has completed its release phase, it is marked "inactive" and the oscillator depending on it is marked "inactive" as well.  Then the Context releases its reference to the subgraph and the objects are reclaimed.</p>
+<h2 id="the-compile-method">The Compile Method</h2>
+<p>The <code>compile</code> method is new in 2023, and it is required after connections to other objects are made and before adding the Voice to the Context for playing.  The compile method examines the connections the Voice has made to other objects and optimizes the underlying sound generation code.  For instance, if an Oscillator has an attached Envelope, an implementation using an Envelope is chosen.  If the Oscillator has no attached envelope, then an implementation that does not read Envelope frames can be used, potentially speeding execution.</p>
+<pre><code class="language-objc">   MSKGeneralOscillator *osc = [[MSKGeneralOscillator alloc] initWithContext:ctx];
+   // ... configure the oscillator - parameters and connections to models and other voices
+   [osc compile];  // your code is done connecting the oscillator to other objects
+</code></pre>
+<p>Oscillators, Envelopes, Filters and Effects all require calling of the <code>compile</code> method.</p>
+<h2 id="summary">Summary</h2>
+<p>This chapter provided an overview of the McLaren Synth Kit focusing on its two major classes: the <code>MSKContext</code> and the <code>MSKVoice</code>.  A Context renders sounds by traversing a subgraph of Voices, each of which is a sample buffer with attached sound generator functions.</p>
+<p>The Context and the Voices cooperate to implement memory management and reclamation of Voices through a simple protocol that hides the details of how ARC is performed outside of the audio thread.    This eliminates one source of error an audio program might create that could introduce audio artifacts.  Sound design then becomes the construction of a graph and its traversal.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>(c) McLaren Labs 2024</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

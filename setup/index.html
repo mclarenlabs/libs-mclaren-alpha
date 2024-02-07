@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="McLaren Labs of San Francisco">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>GNUstep Setup - MSK</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">MSK</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">GNUstep Setup</a>
+</li>
+                                    
+<li>
+    <a href="../ask-midi/" class="dropdown-item">Alsa Sound Kit - MIDI</a>
+</li>
+                                    
+<li>
+    <a href="../ask-pcm/" class="dropdown-item">Alsa Sound Kit - PCM</a>
+</li>
+                                    
+<li>
+    <a href="../msk-over/" class="dropdown-item">McLaren Synth Kit - Overview</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../conclusion/" class="nav-link">Conclusion</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../toc/" class="nav-link">Table Of Contents</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../ask-midi/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#setting-up-your-environment" class="nav-link">Setting up your Environment</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#install-gs-desktop" class="nav-link">Install gs-desktop</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#install-gnustep" class="nav-link">Install GNUstep</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#a-minimal-objc-program" class="nav-link">A Minimal ObjC program</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="setting-up-your-environment">Setting up your Environment</h1>
+<p>This chapter gives some pointers about how to set up a GNUstep development environment on Linux.  There are two good alternatives.  Both install the <code>clang</code> compiler and build GNUstep from source.</p>
+<ul>
+<li>install gs-desktop</li>
+<li>install just GNUstep libraries</li>
+</ul>
+<h2 id="install-gs-desktop">Install gs-desktop</h2>
+<p>There is a project that resurrects the entire GNUstep experience including development environment, terminals, desktop and utilites.  It is called <a href="https://github.com/onflapp/gs-desktop">https://github.com/onflapp/gs-desktop</a>.</p>
+<p>This is an active project and here at McLaren Labs we are really liking it.</p>
+<p>To use it, create an OS image with just a minimal installation (we are using Debian 12) and follow the directions.</p>
+<p>One really nice feature of the installation is that you can select which desktop you want to use from the login screen.  Thus, you can keep a GNOME based desktop and a GNUstep desktop in the same OS and choose which one to use at login.</p>
+<h2 id="install-gnustep">Install GNUstep</h2>
+<p>If you don't want to install an entire desktop environment, you can still use GNUstep libraries on their own.</p>
+<p>The easiest way to install and build GNUstep is with scripts in the following repository:</p>
+<ul>
+<li><a href="https://github.com/plaurent/gnustep-build/">https://github.com/plaurent/gnustep-build/</a></li>
+</ul>
+<p>These scripts automate the entire process of first installing the dependencies of the <code>GNUstep</code> environment, downloading the necessary repositories from Github and building everything.</p>
+<p>First, download the build repo.</p>
+<pre><code class="language-console">$ mkdir ~/git
+$ cd ~/git
+$ git clone https://github.com/plaurent/gnustep-build
+</code></pre>
+<p>Then, make a new directory to perform the build in.</p>
+<pre><code class="language-console">$ cd ~
+$ mkdir gbuild
+</code></pre>
+<p>In the directory you just made, run the build command corresponding to your Operating System.</p>
+<pre><code class="language-console">$ cd gbuild
+$ ~/git/gnustep-build/ubuntu-20.10-clang-11.0-runtime-2.0/GNUstep-buildon-ubuntu2010.sh
+</code></pre>
+<p>After about 20 minutes on a fast laptop with a good connection, you'll have a complete <code>GNUstep</code> development environment.  The installation script writes a modification to your <code>.bashrc</code> so that new terminals get the proper environment variables configured.  Open up a new `xterm and see if it's installed.</p>
+<pre><code class="language-console">$ clang -v
+$ gnustep-config --help
+</code></pre>
+<h2 id="a-minimal-objc-program">A Minimal ObjC program</h2>
+<p>If you're new to Objective-C on Linux, try compiling this tiny program to see if everything is working correctly.</p>
+<pre><code class="language-objc">#import &lt;Foundation/Foundation.h&gt;
+#import &lt;dispatch/dispatch.h&gt;
+
+int main(int argc, char *argv[], char **env)
+{
+  NSLog(@&quot;Hello World!\n&quot;);
+
+  NSString *greeting = @&quot;Hello from a dispatch event&quot;;
+
+  dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, 2.0*NSEC_PER_SEC);
+
+  dispatch_after(delay, dispatch_get_global_queue(0,0), ^(void) {
+      NSLog(@&quot;dispatch: %@&quot;, greeting);
+      exit(0);
+    });
+
+
+  [[NSRunLoop mainRunLoop] run];
+}
+</code></pre>
+<p>Then, to compile it use <code>gnustep-config</code> to pick up all of the flags the compiler needs for GNUstep base libraries.  But note, we still have to specify <code>libdispatch</code> explicitly.</p>
+<pre><code class="language-console">$ clang -o objctest1 `gnustep-config --objc-flags` `gnustep-config --base-libs` objctest1.m -ldispatch
+</code></pre>
+<p>This program is available in the <a href="../examples-setup">../examples-setup</a> directory along with a Makefile.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>(c) McLaren Labs 2024</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
