@@ -1,0 +1,27 @@
+site_name: MSK
+site_description: Documentation from the McLaren Synth Kit Objective-C audio construction kit
+site_author: McLaren Labs of San Francisco
+copyright: (c) McLaren Labs 2024
+repo_url: https://github.com/mclarenlabs/libs-mclaren-alpha/
+edit_uri: ""
+nav:
+  - Developer:
+    - GNUstep Setup: 'setup.md'
+    - Alsa Sound Kit - MIDI: 'ask-midi.md'
+    - Alsa Sound Kit - PCM: 'ask-pcm.md'
+    - McLaren Synth Kit - Overview: 'msk-over.md'
+  - Conclusion: 'conclusion.md'
+  - Table Of Contents: 'toc.md'
+theme:
+  name: mkdocs
+  highlightjs: true
+  hljs_languages:
+    - console
+    - objc
+    - yaml
+    - smalltalk
+  shortcuts:
+    help: 191     # ?
+    next: 78      # n
+    previous: 80  # p
+    search: 83    # s
