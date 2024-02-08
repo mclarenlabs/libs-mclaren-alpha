@@ -22,6 +22,8 @@
 - (id) init {
   if (self = [super init]) {
 
+    srandom(time(NULL)); // seed pseudo-random number generator
+
     [self makeWindow];
     [self makeMenu];
   }
@@ -364,7 +366,7 @@
   env.model = _envModel;
   [env compile];
 
-  int note = arc4random_uniform(12) + 64;
+  int note = (random() % 12) + 64;
 
   MSKGeneralOscillator *osc = [[MSKGeneralOscillator alloc] initWithCtx:_ctx];
   osc.iNote = note;
