@@ -25,9 +25,8 @@ endif
 include $(GNUSTEP_MAKEFILES)/common.make
 
 SUBPROJECTS = \
-    Libraries \
-    Applications \
-    Tools
+    MskFilterDemo \
+    MskOrganDemo
 
 -include GNUMakefile.preamble
 include $(GNUSTEP_MAKEFILES)/aggregate.make

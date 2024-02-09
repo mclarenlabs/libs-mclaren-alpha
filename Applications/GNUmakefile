@@ -26,7 +26,8 @@ include $(GNUSTEP_MAKEFILES)/common.make
 
 SUBPROJECTS = \
     MidiMon \
-    MidiScriptDemo 
+    MidiScriptDemo \
+    McLarenSynthKit
 
 -include GNUMakefile.preamble
 include $(GNUSTEP_MAKEFILES)/aggregate.make
