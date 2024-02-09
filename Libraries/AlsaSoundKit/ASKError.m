@@ -68,18 +68,18 @@ NSString *ASKSeqErrorDomain = @"ASKPcm";
   NSError *under;
   NSError *underunder;
 
-  NSString *s = [NSString stringWithFormat:@"%@(%d) %@",
+  NSString *s = [NSString stringWithFormat:@"%@(%zd) %@",
                           [self domain], [self code], [self localizedDescription]];
 
   under = [self userInfo][NSUnderlyingErrorKey];
   if (under != nil) {
-    NSString *su = [NSString stringWithFormat:@"%@(%d) %@",
+    NSString *su = [NSString stringWithFormat:@"%@(%zd) %@",
                           [under domain], [under code], [under localizedDescription]];
     s = [NSString stringWithFormat:@"%@\n  %@", s, su];
     
     underunder = [under userInfo][NSUnderlyingErrorKey];
     if (underunder != nil) {
-      NSString *suu = [NSString stringWithFormat:@"%@(%d) %@",
+      NSString *suu = [NSString stringWithFormat:@"%@(%zd) %@",
                           [underunder domain], [underunder code], [underunder localizedDescription]];
       s = [NSString stringWithFormat:@"%@\n    %@", s, suu];
     
