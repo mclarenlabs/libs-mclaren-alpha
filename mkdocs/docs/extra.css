@@ -1,0 +1,11 @@
+pre code {
+  white-space: pre;
+}
+
+t1 {
+    color: red;
+}
+
+code .console {
+    white-space: pre;
+}
