@@ -428,6 +428,10 @@ static int init_queue_tempo(snd_seq_t *handle, int queue, int qtempo, int ppq) {
   return ok;
 }
 
+- (int) getResolution {
+  return _resolution;
+}
+
   
   
 

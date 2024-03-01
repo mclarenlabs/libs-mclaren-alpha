@@ -99,6 +99,7 @@ typedef void (^ASKSeqListener)(NSArray*); // receives an array of ASKSeqEvt stru
 
 // change the tempo
 - (BOOL) setTempo:(int)bpm error:(NSError**)error;
+- (int) getResolution;
 
 
 // Simple subscription (w/o exclusive and time conversion)
