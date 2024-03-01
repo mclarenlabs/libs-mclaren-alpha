@@ -8,7 +8,7 @@
         <meta name="author" content="McLaren Labs of San Francisco">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Miscellaneous - MSK</title>
+        <title>McLaren Synth Kit - Metronome - MSK</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -34,7 +34,7 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -55,7 +55,7 @@
 </li>
                                     
 <li>
-    <a href="../msk-metronome/" class="dropdown-item">McLaren Synth Kit - Metronome</a>
+    <a href="./" class="dropdown-item active">McLaren Synth Kit - Metronome</a>
 </li>
                                     
 <li>
@@ -78,6 +78,16 @@
                             </a>
                         </li>
                             <li class="nav-item">
+                                <a rel="prev" href="../msk-over/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../msk-pattern/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
                             </li>
                     </ul>
@@ -98,9 +108,29 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#miscellaneous" class="nav-link">Miscellaneous</a>
+            <li class="nav-item" data-level="1"><a href="#mclaren-synth-kit-metronome" class="nav-link">McLaren Synth Kit - Metronome</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#use-memlock" class="nav-link">Use memlock</a>
+            <li class="nav-item" data-level="2"><a href="#time-types" class="nav-link">Time Types</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#midi-clock" class="nav-link">MIDI Clock</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#the-msk-metronome" class="nav-link">The MSK Metronome</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#the-metronome-dispatch-queue" class="nav-link">The Metronome Dispatch Queue</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#controlling-the-metronome" class="nav-link">Controlling the Metronome</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#instantiating-a-metronome" class="nav-link">Instantiating a Metronome</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -111,11 +141,82 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="miscellaneous">Miscellaneous</h1>
-<h2 id="use-memlock">Use memlock</h2>
-<pre><code class="language-objc">mlockall(MCL_CURRENT | MCL_FUTURE);
+<h1 id="mclaren-synth-kit-metronome">McLaren Synth Kit - Metronome</h1>
+<p>The MSK Metronome provides a high-precision timing source that is linked to the ALSA MIDI clock.  With it, you can produce tick-accurate timing of MIDI events.</p>
+<h2 id="time-types">Time Types</h2>
+<p>The Linux ALSA Sequencer interface provides many complex functions.  In addition to sending and receiving MIDI events, the SEQ interface provides functions for manipulating how MIDI events are handled in a timing queue.</p>
+<p>There are two distinct time types in the MIDI system</p>
+<ul>
+<li>tick time</li>
+<li>realtime</li>
+</ul>
+<p>Ticks are related to the beats of music.  By default, a SEQ is set up with 120 PPQ (parts-per-quarter) note.  When playing back events in a queue, the tempo of the queue determines the rate at which ticks are replayed.</p>
+<p>Realtime maps events to absolute times (in seconds and nanoseconds) that are independent of the current tempo of the music.</p>
+<h2 id="midi-clock">MIDI Clock</h2>
+<p>There is another time base in the system: the <a href="https://en.wikipedia.org/wiki/MIDI_beat_clock">MIDI clock</a>.  By definition, there are 24 MIDI clocks per quarter note.</p>
+<p>With our default system set up, a MIDI clock occurs every 5 ticks, and a quarter note occurs every 24 clocks.</p>
+<h2 id="the-msk-metronome">The MSK Metronome</h2>
+<p>The MSK Metronome uses the timing of MIDI ticks to produce a beat-based timebase that can be used in any way you see fit.  Furthermore, the Metronome also has the notion of a time signature (4/4, 3/4, etc) to help map ticks to beats and measures.</p>
+<p>The beat callback of the Metronome looks like this when used.</p>
+<pre><code class="language-objc">metro.setTimesig:4 den:4;  // set 4/4 time
+
+[metro onBeat:^(unsigned tick, int beat, int measure) {
+   if (beat == 0)
+     NSLog(@&quot;down beat&quot;);
+   else
+     NSLog(@&quot;beat: %d&quot;, beat)
+  }]
 </code></pre>
-<p>http://tedfelix.com/linux/linux-midi.html</p></div>
+<p>When run, the metronome will start counting from beat 0 at tick 0 and will increment the measure every four beats.  The tick value returned is the running tick time with 120 PPQ.</p>
+<p>The Metronome can also produce a MIDI clock callback.</p>
+<pre><code class="language-objc">[metro onClock:^(unsigned tick, int clock, int beat, int measure) {
+   ...
+   }];
+</code></pre>
+<p>The clock will run from 0..23 for each beat.</p>
+<h2 id="the-metronome-dispatch-queue">The Metronome Dispatch Queue</h2>
+<p>Events from the Metronome are dispatched from the dispatch queue of the underlying <code>ASKSeq</code>.  By default, this is a dedicated queue called "midi" for events handled by the ASK system.</p>
+<p>It is important to be aware of the fact that callbacks from the Metronome are run on this queue.</p>
+<h2 id="controlling-the-metronome">Controlling the Metronome</h2>
+<p>The Metronome has the following methods to control its operation.</p>
+<ul>
+<li>start</li>
+<li>stop</li>
+<li>kontinue</li>
+</ul>
+<p>Each of these maps to operations on the underlying ALSA queue attached to the SEQ of the Metronome.  A side-effect of this design is that if your code is using the same queue for other things, starting and stopping the metronome will start and stop those events.  This is normally a good thing when the Metronome is the driving timebase for your system.</p>
+<h2 id="instantiating-a-metronome">Instantiating a Metronome</h2>
+<p>The <code>MSKMetronome</code> does not create an ALSA Seq on its own.  It needs to have one provided for it.</p>
+<p>The following two methods illustrate a typical way a Seq and a Metronome would be created using the McLarenSynthKit.  The <code>makeSeq</code> method creates a Seq, whose only customizatin is that it is named "metronome."  This Seq is available for regular event sending and receiving, etc.</p>
+<p>The <code>makeMetronome</code> method is initialized with the Seq previously created.  Callbacks can then be attached to the Metronome, and the start/stop/kontinue methods can be used to control its play position.</p>
+<pre><code class="language-objc">- (void) makeSeq {
+
+  ASKSeqOptions *options = [[ASKSeqOptions alloc] init];
+  options-&gt;_sequencer_name = &quot;metronome&quot;;
+
+  NSError *error;
+  _seq = [[ASKSeq alloc] initWithOptions:options error:&amp;error];
+  if (error != nil) {
+    NSLog(@&quot;Could not create sequencer.  Error:%@&quot;, error);
+    exit(1);
+  }
+}
+
+- (void) makeMetronome {
+
+  NSError *error;
+  _metro = [[MSKMetronome alloc] initWithSeq:_seq error:&amp;error];
+
+  // set tempo
+  NSError *err;
+  [_seq setTempo:90 error:&amp;err];
+
+  if (error != nil) {
+    NSLog(@&quot;Could not create metronome. Error:%@&quot;, error);
+    exit(1);
+  }
+}
+</code></pre></div>
             </div>
         </div>
 

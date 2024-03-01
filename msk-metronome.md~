@@ -1,0 +1,38 @@
+# McLaren Synth Kit - Metronome
+
+The MSK Metronome provides a high-precision timing source that is slaved to the ALSA MIDI clock.  With it, you can produce tick-accurate timing of MIDI events.
+
+## Time Types
+
+The Linux ALSA Sequencer interface provides many complex functions.  In addition to sending and receiving MIDI events, the SEQ interface provides functions for manipulating how MIDI events are handled in a timing queue.
+
+There are two distinct time types in the MIDI system
+
+* tick time
+* realtime
+
+Ticks are related to the beats of music.  By default, a SEQ is set up with 120 PPQ (parts-per-quarter) note.  When playing back events in a queue, the tempo of the queue determines the rate at which ticks are replayed.
+
+Realtime maps events to absolute times (in seconds and nanoseconds) that are independent of the current tempo of the music.
+
+## MIDI Clock
+
+There is another time base in our system: the MIDI clock.  By definition, there are 24 MIDI clocks per quarter note.
+
+With our default system set up, a MIDI clock occurs every 5 ticks, and a quarter note occurs every 24 clocks.
+
+## The MSK Metronome
+
+The MSK Metronome makes use of the timing of MIDI ticks to produce a beat-based timebase that can be used in any way you see fit.  The Metronome also has the notion of a time signature (4/4, 3/4, etc) to further help map ticks to beats and measures.
+
+The beat callback of the Metronome looks like this when used.
+
+``` objc
+[metro onBeat:^(unsigned tick, int beat, int measure) {
+   if (beat == 0)
+     NSLog(@"down beat");
+   else
+     NSLog(@"beat: %d", beat)
+}]
+```
+
