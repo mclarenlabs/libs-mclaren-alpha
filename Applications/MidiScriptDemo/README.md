@@ -81,7 +81,7 @@ Something very interesting is happening here.  There is a property called "seque
 
 There is another interesting construct illustrated in the instantiation of the ASKSeq sequencer port.
 
-``` smalltallk
+``` smalltalk
 "Configure and start the sequencer"
 errp := NSErrorPtr alloc init.
 seq := ASKSeq alloc initWithOptions:opts error:errp.
@@ -181,18 +181,22 @@ Cocoa controls and cells do not retain their target (see NSActionCell.m).  We ha
 
 Take the code example below.  It would be really nice to be able to set the target of a control to a StepTalk block.  The problem is that it is not retained.
 
-    gauge setAction:#value:.
-    gauge setTarget:[ :sender |
-	   Transcript showLine:('got value', sender doubleValue description).
-	].
+``` smalltalk
+gauge setAction:#value:.
+gauge setTarget:[ :sender |
+  Transcript showLine:('got value', sender doubleValue description).
+].
+```
 
 Instead, we have to assign the block to a (global) variable so that it is retained.
 
-    gauge setAction:#value:.
-    theBlock := [ :sender |
-	   Transcript showLine:('got value', sender getDoubleValue description).
-	].
-	gauge setTarget:theBlock.
+``` smalltalk
+gauge setAction:#value:.
+theBlock := [ :sender |
+  Transcript showLine:('got value', sender getDoubleValue description).
+].
+gauge setTarget:theBlock.
+```
 
 
 ## The Scripting environment
