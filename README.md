@@ -18,24 +18,48 @@ And a few MSK demonstration programs.
 * pdscaleplayer (tool) - play a scale with a complex oscillator and reverb
 
 
-There are also a few GUI applications that use GNUstep AppKit.
+There are also a few GUI applications that use GNUstep AppKit with only the AlsaSoundKit part of the project.
 
 * MidiMon (app) - watch the MIDI system and dump events from multiple clients
 * MidiScriptDemo (app) - a scriptable app using StepTalk that can do many things with MIDI and PCM (audio) devices by accessing the ASK library
+
+And then there are GUI applications which build on the McLarenSynthKit part of the project.
+
 * MskFilterDemo (app) - use sliders to vary the properties of a filter
 * MskOrganDemo (app) - a drawbar organ with reverb and a filter
+* MskMetroDemo (app) - a simple Metronome using oscillators for tones
+* MskPatternDemo (app) - a Musical Pattern demonstration with adjustable tempo and waveform
+
+
+## Organization of the Project
+
+The Libraries, Tools and Applications generally follow the same structure.  The AlsaSoundKit depends only on the Linux ALSA Library.  The McLarenSynthKit Library depends on the AlsaSoundKit Library.
+
+Tools are sub-divided into two categories.  The tools in `Tools/AlsaSoundKit` depend only on the AlsaSoundKit library.  Tools in `Tools/McLarenSynthKit` depend on the McLarenSynthKit library (which also depends on the AlsaSoundKit library).
+
+Applications are slightly different.  `Applications/MidiMon` depends only on the AlsaSoundKit.  `Applications/MidiScriptDemo` depends on the AlsaSoundKit and also the StepTalk project.  Applications in `Applications/McLarenSynthKit` require the McLarenSynthKit library (which also depends on the AlsaSoundKit library).
+
+``` console
+
+├── Libraries
+│   ├── AlsaSoundKit
+│   └── McLarenSynthKit
+├── Tools
+│    ├── AlsaSoundKit
+│    └── McLarenSynthKit
+├── Applications
+│   ├── McLarenSynthKit
+│   ├── MidiMon
+│   └── MidiScriptDemo
+├── README.md
+```
 
 
 ## Building
 
-The components of the project use GNUstep makefiles in a standard way.  The libraries must be built and installed first, and then the applications.  The following will compile and install the libraries, applications and tools all at once.
+The components of the project use GNUstep makefiles in a standard way.  The libraries must be built and installed first, and then the applications.
 
-``` console
-## run from the top-level of the project
-$ sudo -E make install
-```
-
-Or you can build the project in stages yourself.  Make sure the libraries are built and installed first.
+You can build pieces of the project in stages yourself.  Make sure the libraries are built and installed first.
 
 ``` console
 $ cd Libraries/AlsaSoundKit
@@ -74,6 +98,10 @@ $ cd Applications/McLarenSynthKit/MskFilterDemo
 $ make
 $ sudo -E make install
 
+$ cd Applications/McLarenSynthKit/MskMetroDemo
+$ make
+$ sudo -E make install
+
 ```
 
 ### Developing Locally
@@ -93,14 +121,19 @@ $ cd Libraries/McLarenSynthKit
 $ make
 
 ## build programs that to references the libraries where they reside
-$ cd ../../Applications/MidiMon
+$ cd Applications/MidiMon
 $ make localdev=yes
 $ openapp ./MidiMon.app
 
 ## etc.
-$ cd ../../Applications/McLarenSynthKit/MskOrganDemo
+$ cd Applications/McLarenSynthKit/MskOrganDemo
 $ make localdev=yes
 $ openapp ./MskOrganDemo
+
+$ cd Applications/McLarenSynthKit/MskMetroDemo
+$ make localdev=yes
+$ openapp ./MskMetroDemo &
+$ openapp ./MskPatternDemo &
 ```
 
 ## StepTalk
