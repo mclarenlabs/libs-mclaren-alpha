@@ -10,11 +10,9 @@ include $(GNUSTEP_MAKEFILES)/common.make
 
 LIBRARY_NAME = McLarenSynthKit
 
-#  MSKMetronome.m \
-#  model/MSKValuesModel.m \
-
 McLarenSynthKit_OBJC_FILES = \
   MSKError.m \
+  MSKMetronome.m \
   model/MSKModelBase.m \
   MSKContext.m \
   model/MSKEnvelopeModel.m \
@@ -45,6 +43,7 @@ McLarenSynthKit_CC_FILES = \
 
 McLarenSynthKit_HEADER_FILES = \
   MSKError.h \
+  MSKMetronome.h \
   model/MSKModelBase.h model/MSKModelProtocol.h \
   MSKContext.h \
   model/MSKEnvelopeModel.h \
