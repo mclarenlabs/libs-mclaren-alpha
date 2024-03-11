@@ -159,6 +159,70 @@ The tempo of the playing and the starting and stopping are controlled through th
 [_metro start];
 ```
 
+## Logging Patterns
+
+By default, the Scheduler logs the progress of Patterns using `NSLog`.  This behavior can be changed by disabling the logging facility of the scheduler.
+
+``` objc
+_sched.log = NO;
+```
+
+When enabled, a detailed description of each pattern-related callback will be printed. Some sample output is shown below.  It was collected from the `test8` test in the Tests directory.
+
+``` console
+2024-03-11 09:15:38.176 test8[106681:106681]       0    0.0 pat1 #beat
+2024-03-11 09:15:38.176 test8[106681:106681]       0    0.0    ONE
+2024-03-11 09:15:38.176 test8[106681:106681]       0    0.0 pat2 #beat
+2024-03-11 09:15:38.204 test8[106681:106683]       5    0.0 pat1 #clock
+2024-03-11 09:15:38.204 test8[106681:106683]       5    0.0    CLOCK AFTER ONE
+2024-03-11 09:15:38.843 test8[106681:106683]     120    0.1 pat2 #beat
+2024-03-11 09:15:38.843 test8[106681:106683]     120    0.1 pat1 #beat
+2024-03-11 09:15:38.843 test8[106681:106683]     120    0.1    TWO
+2024-03-11 09:15:39.510 test8[106681:106683]     240    0.2 pat2 #beat
+2024-03-11 09:15:39.510 test8[106681:106683]     240    0.2 sixt #beat
+2024-03-11 09:15:39.676 test8[106681:106683]     270    0.2 sixt ticks
+2024-03-11 09:15:39.843 test8[106681:106687]     300    0.2 sixt ticks
+2024-03-11 09:15:40.010 test8[106681:106683]     330    0.2 sixt ticks
+2024-03-11 09:15:40.176 test8[106681:106687]     360    0.3 pat2 #beat
+2024-03-11 09:15:40.176 test8[106681:106687]     360    0.3 sixt #beat
+2024-03-11 09:15:40.343 test8[106681:106683]     390    0.3 sixt ticks
+2024-03-11 09:15:40.510 test8[106681:106687]     420    0.3 sixt ticks
+2024-03-11 09:15:40.676 test8[106681:106683]     450    0.3 sixt ticks
+2024-03-11 09:15:40.676 test8[106681:106683]     450    0.3    INTRO ONE
+2024-03-11 09:15:41.143 test8[106681:106683]   2.967    1.0 pat2 seconds
+```
+
+Let's strip off the standard NSLog prefix and just look at the output of the scheduler.  The first column is the time in TICKS or SECONDS.  If the pattern event was due to a metronome synchronization or song-position time then the time is reported in ticks.  If it is a realtime event, then the time is reported in seconds.
+
+The next column is the song position in measures and beats.  Both start at 0.  Here we are in 4/4 time so the beat repeats after 3.
+
+The third column is the name of the pattern executing.  We see patterns named 'pat1', 'pat2' and 'sixt' in the example.
+
+The fourth column is the synchronization event: either an event name like "#beat" or a delay operator name like "ticks" or "seconds".
+
+``` console
+       0    0.0 pat1 #beat
+       0    0.0    ONE
+       0    0.0 pat2 #beat
+       5    0.0 pat1 #clock
+       5    0.0    CLOCK AFTER ONE
+     120    0.1 pat2 #beat
+     120    0.1 pat1 #beat
+     120    0.1    TWO
+     240    0.2 pat2 #beat
+     240    0.2 sixt #beat
+     270    0.2 sixt ticks
+     300    0.2 sixt ticks
+     330    0.2 sixt ticks
+     360    0.3 pat2 #beat
+     360    0.3 sixt #beat
+     390    0.3 sixt ticks
+     420    0.3 sixt ticks
+     450    0.3 sixt ticks
+     450    0.3    INTRO ONE
+   2.967    1.0 pat2 seconds
+```
+
 ## What can execute in blocks?
 
 As with the Metronome callbacks, the Scheduler "thunk" invocations are also performed on the MIDI dispatch queue by default.  As a programmer, you should take care to not perform operations in the thunk that could block execution or interfere with other threads.
@@ -173,5 +237,5 @@ Because Patterns are tied to the MIDI clock of the ALSA Seq, Patterns provide ti
 
 ## Postscript
 
-Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.  Additionally, they are not yeta standard part of the library.  Patterns are implemented in files `Pattern.h` and `Pattern.m` in the `MskPatternDemo` directory.
+Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.  Additionally, they are not yet a standard part of the library.  Patterns are implemented in files `Pattern.h` and `Pattern.m` in the `MskMetroDemo` directory.
 
