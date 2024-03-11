@@ -108,8 +108,13 @@ typedef void (^MLThunkBlock)();
 // keeping track of currently executing thread
 @property (readonly) long currentThreadId;
 
+// turn on or off logging
+@property (readwrite) BOOL log;
+
 // keeping track of current time
 @property (readonly) BOOL isTickTime; // ticktime or realtime
+@property (readonly) int measure;     // from metronome
+@property (readonly) int beat;	      // from metronome
 @property (readonly) long ticktime; // MIDI ticks, -1 is not yet
 @property (readonly) unsigned sec; // seconds
 @property (readonly) unsigned nsec; // nanosec
@@ -130,6 +135,7 @@ typedef void (^MLThunkBlock)();
 // what the scheduler uses to resume threads
 - (void) wakeFor:(NSString*)chan ticktime:(unsigned)ticktime; // on beat
 - (void) wakeSleeper:(long)sleepNum ticktime:(unsigned)ticktime; // on USR3
+- (void) wakeSleeper:(long)sleepNum sec:(unsigned)sec nsec:(unsigned)nsec; // USR4
 
 // obtain start/stop and timing services
 - (void) registerMetronome:(MSKMetronome*)metro;
@@ -143,6 +149,9 @@ typedef void (^MLThunkBlock)();
 
 // utility - current time of scheduler formatted for printing
 - (NSString*) fmtTime;
+
+// what the scheduler calls to log.  Can be overridden in subclass to redirect
+- (void) logger:(NSString*)fmtTime pat:(NSString*)patname msg:(NSString*)msg;
 
 @end
 
@@ -161,15 +170,16 @@ typedef void (^MLThunkBlock)();
 
 // keeping track of time
 @property (readonly) BOOL isTickTime; // ticktime or realtime
-@property (readonly) long ticktime; // MIDI ticks, -1 is not yet
-@property (readonly) unsigned sec; // seconds
-@property (readonly) unsigned nsec; // nanosec
+@property (readonly) long ticktime;   // MIDI ticks, -1 is not yet
+@property (readonly) unsigned sec;    // seconds
+@property (readonly) unsigned nsec;   // nanosec
 
 
 - (id) initWithThreadId:(NSUInteger)threadId;
 - (void) push:(Pattern*)pat;
 - (Frame*) pop;
 - (Frame*) currentFrame;
+- (NSString*) currentPatName; // internal use
 
 // if this thread has already awoken at ticktime
 - (BOOL) hasSeenTick:(unsigned)ticktime;
