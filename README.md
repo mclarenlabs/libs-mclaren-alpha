@@ -111,7 +111,7 @@ with the ASK and MSK libraries, their headers and objects are placed in a standa
 
 To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries.
 
-In the example below, the ASK library is compiled but not installed.  The MidiMon application is compiled with the "localdev" flag so that it finds the library in the project and not in a global location.  There's nothing special about the "localdev" flag, we have simply used it in a consistent way so that each sub-program finds the ASK library using relative paths.
+In the example below, the ASK library is compiled but not installed.  The MidiMon application is compiled with the "localdev" flag so that it finds the library in the project and not in a global location.  There's nothing special about the "localdev" flag, we have simply used it in a consistent way so that each sub-program finds the ASK and MSK libraries using relative paths.
 
 ``` console
 ## build the libraries but do not install
@@ -149,5 +149,5 @@ $ git clone https://github.com/gnustep/libs-steptalk
 $ cd libs-steptalk
 $ cd Frameworks/StepTalk
 $ make
-$ make install
+$ sudo -E make install
 ```
