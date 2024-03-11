@@ -326,8 +326,10 @@
 
 - (void) makeScheduler {
 
-  _sched = [[Scheduler alloc] init];
+  _sched = [[PrettyScheduler alloc] init];
   [_sched registerMetronome:_metro];
+
+  _sched.textView = self.textview;
 
 }
 
@@ -388,7 +390,7 @@
   self.oscModel.octave = -1;
 
   self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
-  self.envModel.attack = 0.5;
+  self.envModel.attack = 0.02;
   self.envModel.decay = 0.1;
   self.envModel.sustain = 0.9;
   self.envModel.rel = 0.1;
