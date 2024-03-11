@@ -19,6 +19,7 @@
     // standard time
     _num = 4;
     _den = 4;
+    _measure = -1;
     
     _seq = seq;
 
@@ -134,8 +135,11 @@
     clock++;
   }
 
+  if (beat == 0)
+    _measure++;
+
   // signal the beat
-  [self emitBeatCallback:beat ticktime:ticktime];
+  [self emitBeatCallback:beat measure:_measure ticktime:ticktime];
 
   // schedule the echo at a time in the future
   duration = _queue_resolution * (4.0 / _den);
@@ -143,7 +147,7 @@
   // have we sounded an entire measure?
   if (beat >= _num - 1) {
     [self makeEcho:0 ticks:duration];
-    _measure++;
+    // _measure++;
   }
   else {
     [self makeEcho:beat+1 ticks:duration];
@@ -184,10 +188,10 @@
  * Sound or flash a note for the beat marker given.
  */
 
-- (void) emitBeatCallback:(int)beat ticktime:(unsigned)ticktime {
+- (void) emitBeatCallback:(int)beat measure:(int)measure ticktime:(unsigned)ticktime {
   // NSLog(@"Beat:%d Measure:%d", beat, _measure);
   if (_beatBlock) {
-    _beatBlock(ticktime, beat, _measure);
+    _beatBlock(ticktime, beat, measure);
   }
 }
 

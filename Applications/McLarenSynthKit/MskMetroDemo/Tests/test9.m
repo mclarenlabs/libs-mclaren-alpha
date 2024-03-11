@@ -147,7 +147,7 @@
   [pat sync:@"beat"];
   
   [pat thunk:^{
-      NSLog(@"(%@) ONE", [_sched fmtTime]);
+      NSLog(@"%@    ONE", [_sched fmtTime]);
       [self makeNote:_root vel:1.0];
     }];
   [pat ticks:eigth];

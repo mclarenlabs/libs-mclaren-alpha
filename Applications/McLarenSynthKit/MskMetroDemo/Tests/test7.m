@@ -180,24 +180,24 @@
    
   Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
-      NSLog(@"(%@) INTRO ONE", [_sched fmtTime]);
+      NSLog(@"%@    INTRO ONE", [_sched fmtTime]);
       NSLog(@"sched:%@", _sched);
     }];
 
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"(%@) ONE", [_sched fmtTime]);
+      NSLog(@"%@    ONE", [_sched fmtTime]);
       [self makeNote:64];
     }];
   [pat sync:@"clock"];
   [pat thunk:^{
-      NSLog(@"(%@) CLOCK AFTER ONE", [_sched fmtTime]);
+      NSLog(@"%@    CLOCK AFTER ONE", [_sched fmtTime]);
     }];
 
   NSLog(@"here");
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"(%@) TWO", [_sched fmtTime]);
+      NSLog(@"%@    TWO", [_sched fmtTime]);
       [self makeNote:60];
     }];
 
@@ -207,7 +207,7 @@
 
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"(%@) FOUR", [_sched fmtTime]);
+      NSLog(@"%@    FOUR", [_sched fmtTime]);
       [self makeNote:60];
     }];
   [pat repeat:4];
@@ -227,13 +227,13 @@
   // [pat2 ticks:55];
   [pat2 seconds:0.3];
   [pat2 thunk:^{
-      double real = _sched.sec + (_sched.nsec / 1000000000.0);
-      NSLog(@"(%5.2f) DID SLEEP 1", real);
+      // double real = _sched.sec + (_sched.nsec / 1000000000.0);
+      NSLog(@"%@    DID SLEEP 1", [_sched fmtTime]);
       [self makeNote:44];
     }];
   [pat2 ticks:35];
   [pat2 thunk:^{
-      NSLog(@"(%ld) DID SLEEP 2", _sched.ticktime);
+      NSLog(@"%@    DID SLEEP 2", [_sched fmtTime]);
       [self makeNote:43];
     }];
   [pat2 ticks:85];

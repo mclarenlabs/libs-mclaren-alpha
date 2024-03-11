@@ -193,6 +193,16 @@
   return [_stack lastObject];
 }
 
+- (NSString*) currentPatName {
+  Frame *frame = [self currentFrame];
+  if (frame == nil) {
+    return @"thread-exited";
+  }
+  else {
+    return frame.pat.patname;
+  }
+}
+
 - (BOOL) hasSeenTick:(unsigned) ticktime {
   // then last time was a tick
   if (_isTickTime) {
@@ -382,6 +392,8 @@
     _sleepIdCntr = 0;
     _threadIdCntr = 0;
 
+    _log = YES;
+
     _isTickTime = YES;
     _ticktime = -1;
     _sec = 0;
@@ -454,6 +466,10 @@
   NSMutableArray *waiters = [self removeWaiters:chan ticktime:ticktime];
   if (waiters != nil) {
     for (Thread *t in waiters) {
+
+      if (_log)
+	[self logger:[self fmtTime] pat:[t currentPatName] msg:[NSString stringWithFormat:@"#%@", chan]];
+
       // execute each thread until their next sync/sleep
       _currentThreadId = t.threadId;
       [t interpret:self ticktime:ticktime];
@@ -470,6 +486,9 @@
   NSNumber *sleepId = [NSNumber numberWithLong:sleepNum];
   Thread *t = _sleepers[sleepId];
   if (t) {
+    if (_log)
+      [self logger:[self fmtTime] pat:[t currentPatName] msg:@"ticks"];
+
     [_sleepers removeObjectForKey:sleepId];
      _currentThreadId = t.threadId;
     [t interpret:self ticktime:ticktime];
@@ -481,6 +500,9 @@
   NSNumber *sleepId = [NSNumber numberWithLong:sleepNum];
   Thread *t = _sleepers[sleepId];
   if (t) {
+    if (_log)
+      [self logger:[self fmtTime] pat:[t currentPatName] msg:@"seconds"];
+
     [_sleepers removeObjectForKey:sleepId];
     _currentThreadId = t.threadId;
     [t interpret:self sec:sec nsec:nsec];
@@ -524,6 +546,8 @@
       // NSLog(@"METRO ON BEAT");
       _isTickTime = YES;
       _ticktime = ticktime;
+      _beat = beat;
+      _measure = measure;
       if (beat == 0) {
 	[self wakeFor:@"downbeat" ticktime:ticktime];
       }
@@ -534,6 +558,8 @@
       // NSLog(@"METRO ON CLOCK");
       _isTickTime = YES;
       _ticktime = ticktime;
+      _beat = beat;
+      _measure = measure;
       [self wakeFor:@"clock" ticktime:ticktime];
     }];
 
@@ -585,14 +611,20 @@
 - (NSString*) fmtTime {
   NSString *s;
   if (_isTickTime) {
-    s = [NSString stringWithFormat:@"%ld", _ticktime];
+    s = [NSString stringWithFormat:@"%7ld %4d.%1d", _ticktime, _measure, _beat];
   }
   else {
-    double real = _sec + (_nsec / 1000000000.0);
-    s = [NSString stringWithFormat:@"%5.2f", real];
+    // double real = _sec + (_nsec / 1000000000.0);
+    int msec = _nsec / 1000000;
+    s = [NSString stringWithFormat:@"%3d.%03d %4d.%1d", _sec, msec, _measure, _beat];
   }
   return s;
 }
+
+- (void) logger:(NSString*)fmtTime pat:(NSString*)patname msg:(NSString*)msg {
+  NSLog(@"%@ %@ %@", fmtTime, patname, msg);
+}
+
 
 - (NSString*) description {
 

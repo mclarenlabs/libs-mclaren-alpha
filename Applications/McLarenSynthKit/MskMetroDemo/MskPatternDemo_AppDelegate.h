@@ -8,6 +8,8 @@
 #import "AlsaSoundKit/AlsaSoundKit.h"
 #import "McLarenSynthKit/McLarenSynthKit.h"
 #import "Pattern.h"
+#import "PrettyScheduler.h"
+
 
 #include "./GSTable-MLdecls.h"
 
@@ -28,7 +30,9 @@
 
 @property (nonatomic, retain, strong) ASKSeq *seq;
 @property (nonatomic, retain, strong) MSKMetronome *metro;
-@property (readwrite) Scheduler *sched;
+// @property (readwrite) Scheduler *sched;
+@property (readwrite) PrettyScheduler *sched;
+
 @property (readwrite) NSInteger root; // root note of patttern
 @property (nonatomic, retain, strong) MSKContext *ctx;
 @property (nonatomic, retain, strong) MSKEnvelopeModel *envModel;
