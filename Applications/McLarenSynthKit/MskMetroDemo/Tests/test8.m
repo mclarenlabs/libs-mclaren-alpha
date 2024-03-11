@@ -189,23 +189,23 @@
    
   Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
-      NSLog(@"(%@) INTRO ONE", [_sched fmtTime]);
+      NSLog(@"%@    INTRO ONE", [_sched fmtTime]);
     }];
 
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"(%@) ONE", [_sched fmtTime]);
+      NSLog(@"%@    ONE", [_sched fmtTime]);
       [self makeNote:64];
     }];
   [pat sync:@"clock"];
   [pat thunk:^{
-      NSLog(@"(%@) CLOCK AFTER ONE", [_sched fmtTime]);
+      NSLog(@"%@    CLOCK AFTER ONE", [_sched fmtTime]);
     }];
 
   NSLog(@"here");
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"(%@) TWO", [_sched fmtTime]);
+      NSLog(@"%@    TWO", [_sched fmtTime]);
       [self makeNote:60];
     }];
 
@@ -236,12 +236,12 @@
     }];
   [pat2 seconds:0.3];
   [pat2 thunk:^{
-      NSLog(@"(%@) DID SLEEP 1", [_sched fmtTime]);
+      // NSLog(@"(%@) DID SLEEP 1", [_sched fmtTime]);
       [self makeNote:47];
     }];
   [pat2 seconds:0.3];
   [pat2 thunk:^{
-      NSLog(@"(%@) DID SLEEP 2", [_sched fmtTime]);
+      // NSLog(@"(%@) DID SLEEP 2", [_sched fmtTime]);
       [self makeNote:45];
     }];
   [pat2 ticks:85];
