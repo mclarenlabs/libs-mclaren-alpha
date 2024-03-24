@@ -1,0 +1,6 @@
+{
+  ApplicationDescription = "Capture samples from a mic and playback on piano keyboard";
+  ApplicationRelease = "SampleToy 0.1";
+  FullVersionID = "0.1.0";
+  Authors = ( "McLaren Labs" , ) ;
+}
