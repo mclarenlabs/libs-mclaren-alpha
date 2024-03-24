@@ -16,6 +16,8 @@ And a few MSK demonstration programs.
 
 * scaleplayer (tool)- play a scale using a simple oscillator
 * pdscaleplayer (tool) - play a scale with a complex oscillator and reverb
+* playsample (tool) - play an audio sample from a file (wav, au, etc)
+* capturesample (tool) - capture an audio sample to a file
 
 
 There are also a few GUI applications that use GNUstep AppKit with only the AlsaSoundKit part of the project.
@@ -29,11 +31,12 @@ And then there are GUI applications which build on the McLarenSynthKit part of t
 * MskOrganDemo (app) - a drawbar organ with reverb and a filter
 * MskMetroDemo (app) - a simple Metronome using oscillators for tones
 * MskPatternDemo (app) - a Musical Pattern demonstration with adjustable tempo and waveform
+* SampleToy (app) - capture a sample and play it with a keyboard
 
 
 ## Organization of the Project
 
-The Libraries, Tools and Applications generally follow the same structure.  The AlsaSoundKit depends only on the Linux ALSA Library.  The McLarenSynthKit Library depends on the AlsaSoundKit Library.
+The Libraries, Tools and Applications generally follow the same structure.  The AlsaSoundKit depends only on the Linux ALSA Library.  The McLarenSynthKit Library depends on the AlsaSoundKit Library as well as libsndfile and libresample.
 
 Tools are sub-divided into two categories.  The tools in `Tools/AlsaSoundKit` depend only on the AlsaSoundKit library.  Tools in `Tools/McLarenSynthKit` depend on the McLarenSynthKit library (which also depends on the AlsaSoundKit library).
 
@@ -49,13 +52,19 @@ Applications are slightly different.  `Applications/MidiMon` depends only on the
 │    └── McLarenSynthKit
 ├── Applications
 │   ├── McLarenSynthKit
-│   ├── MidiMon
+│   └── MidiScriptDemo
 │   └── MidiScriptDemo
 ├── README.md
 ```
 
 
 ## Building
+
+To build both ASK and MSK, install the following dependencies.
+
+* libasound2-dev
+* libsndfile1-dev
+* libresample1-dev
 
 The components of the project use GNUstep makefiles in a standard way.  The libraries must be built and installed first, and then the applications.
 
@@ -106,8 +115,9 @@ $ sudo -E make install
 
 ### Developing Locally
 
-We have provided help for working with this project "locally."  When using `make install`
-with the ASK and MSK libraries, their headers and objects are placed in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing the libraries themselves with repeated compiling it can be more convenient to leave them in place, and to also leave the tools and applications in place too.
+We have provided help for working with this project "locally."  That is, with all files remaining in the project directory.
+
+When using `make install` with the ASK and MSK libraries, their headers and objects are placed in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing the libraries themselves with repeated compiling it can be more convenient to leave them in place, and to also leave the tools and applications in place too.
 
 To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries.
 
