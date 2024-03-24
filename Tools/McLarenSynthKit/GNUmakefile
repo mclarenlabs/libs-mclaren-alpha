@@ -10,7 +10,9 @@ include $(GNUSTEP_MAKEFILES)/common.make
 TOOL_NAME = \
   scaleplayer \
   pdscaleplayer \
-  tiny
+  tiny \
+  playsample \
+  capturesample \
 
 COMMON_OBJC_FILES = 
 
@@ -35,7 +37,17 @@ tiny_OBJC_FILES = \
         $(DEBUG_FILES) \
         tiny.m
 
-ADDITIONAL_TOOL_LIBS = -lMcLarenSynthKit -lAlsaSoundKit -ldispatch
+playsample_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        playsample.m
+
+capturesample_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        capturesample.m
+
+ADDITIONAL_TOOL_LIBS = -lMcLarenSynthKit -lAlsaSoundKit -ldispatch 
 
 
 # Run makefiles with "localdev=yes" to add addl flags that find

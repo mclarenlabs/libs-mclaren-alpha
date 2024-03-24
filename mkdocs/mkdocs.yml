@@ -10,6 +10,7 @@ nav:
     - Alsa Sound Kit - MIDI: 'ask-midi.md'
     - Alsa Sound Kit - PCM: 'ask-pcm.md'
     - McLaren Synth Kit - Overview: 'msk-over.md'
+    - McLaren Synth Kit - Samples: 'msk-samples.md'
     - McLaren Synth Kit - Metronome: 'msk-metronome.md'
     - McLaren Synth Kit - Patterns: 'msk-pattern.md'
   - Conclusion: 'conclusion.md'

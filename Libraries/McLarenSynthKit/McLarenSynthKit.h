@@ -30,3 +30,8 @@
 #import "McLarenSynthKit/voice/MSKDrawbarOscillator.h"
 #import "McLarenSynthKit/voice/MSKPhaseDistortionOscillator.h"
 #import "McLarenSynthKit/voice/MSKSinFixedOscillator.h"
+
+#import "McLarenSynthKit/sample/MSKSample.h"
+#import "McLarenSynthKit/sample/MSKSampleManager.h"
+#import "McLarenSynthKit/sample/MSKSamplePlayer.h"
+#import "McLarenSynthKit/sample/MSKSampleRecorder.h"
