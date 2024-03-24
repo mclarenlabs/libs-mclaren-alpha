@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="McLaren Labs of San Francisco">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>McLaren Synth Kit - Samples - MSK</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">MSK</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../setup/" class="dropdown-item">GNUstep Setup</a>
+</li>
+                                    
+<li>
+    <a href="../ask-midi/" class="dropdown-item">Alsa Sound Kit - MIDI</a>
+</li>
+                                    
+<li>
+    <a href="../ask-pcm/" class="dropdown-item">Alsa Sound Kit - PCM</a>
+</li>
+                                    
+<li>
+    <a href="../msk-over/" class="dropdown-item">McLaren Synth Kit - Overview</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">McLaren Synth Kit - Samples</a>
+</li>
+                                    
+<li>
+    <a href="../msk-metronome/" class="dropdown-item">McLaren Synth Kit - Metronome</a>
+</li>
+                                    
+<li>
+    <a href="../msk-pattern/" class="dropdown-item">McLaren Synth Kit - Patterns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../conclusion/" class="nav-link">Conclusion</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../toc/" class="nav-link">Table Of Contents</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../msk-over/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../msk-metronome/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/mclarenlabs/libs-mclaren-alpha/" class="nav-link"><i class="fa fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#mclaren-synth-kit-samples" class="nav-link">McLaren Synth Kit - Samples</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#capturing-a-sample" class="nav-link">Capturing a Sample</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#playing-a-sample" class="nav-link">Playing a Sample</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resampling" class="nav-link">Resampling</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#reading-a-sample" class="nav-link">Reading a Sample</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#finding-a-sample-the-sample-manager" class="nav-link">Finding a Sample - the Sample Manager</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#writing-a-sample" class="nav-link">Writing a Sample</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="mclaren-synth-kit-samples">McLaren Synth Kit - Samples</h1>
+<p>An <code>MSKSample</code> is the class that can read, write and manipulate audio samples.  It has an array of PCM values of type <code>float</code>.  It can contain one, two or more channels.</p>
+<p>An <code>MSKSample</code> has a <code>capacity</code> property that is the maximum number of frames it can hold.  It also has an integer property called <code>frames</code> that is a count of the number of frames that actually hold data.  It also stores the <code>samplerate</code> of the audio data.</p>
+<p>With the McLaren Synth Kit, it is possible to capture samples from a Capture Context, or to play samples on an Playback Context.   This section will demonstrate some of these capabilities.</p>
+<h2 id="capturing-a-sample">Capturing a Sample</h2>
+<p>An <code>MSKContext</code> is used to interact with an ALSA PCM device.  So far, we have shown how to use a Playback context.  But it is also possible to create a Capture context.</p>
+<p>A capture context grabs audio from an input source, and the voices of its graph process the captured audio.</p>
+<p>In the example below, we show how to open a Context with stream <code>SND_PCM_STREAM_CAPTURE</code>.  The steps followed are exactly the same as for a Playback context except for the stream direction.</p>
+<pre><code class="language-objc">// Desired audio context parameters
+MSKContextRequest *request = [[MSKContextRequest alloc] init];
+request.rate = 44100;
+request.persize = 1024;
+request.periods = 2;
+
+NSString *devName = @&quot;default&quot;;
+
+NSError *error;
+BOOL ok;
+
+// Create an audio context on the 'default' device for recording
+MSKContext *rec = [[MSKContext alloc] initWithName: devName
+                                         andStream: SND_PCM_STREAM_CAPTURE
+                                             error: &amp;error];
+
+if (error != nil) {
+  NSLog(@&quot;MSKContext init error:%@&quot;, error);
+  exit(EXIT_FAILURE);
+}
+
+// Configure the context with the request
+ok = [rec configureForRequest:request error:&amp;error];
+if (ok == NO) {
+  NSLog(@&quot;MSKContext configure error:%@&quot;, error);
+  exit(EXIT_FAILURE);
+}
+
+// Start the context
+ok = [rec startWithError:&amp;error];
+if (ok == NO) {
+  NSLog(@&quot;MSKContext starting error:%@&quot;, error);
+  exit(EXIT_FAILURE);
+}
+
+</code></pre>
+<p>Next, we want to allocate a Sample to hold recorded audio.  The following allocates a Sample with a capaccity to hold up to four seconds of 44100 rate stereo audio.</p>
+<pre><code class="language-objc">// Create an empty sample to hold four seconds
+MSKSample *samp = [[MSKSample alloc] initWithCapacity:(44100*4) channels:2];
+</code></pre>
+<p>An <code>MSKSampleRecorder</code> is a voice that can be used in a Capture Context to record audio to a sample.  Allocate one and connect it to the Context and the Sample.  The following shows how.  The recorder has two properties that must be connected.</p>
+<ul>
+<li>sample: the sample to record into</li>
+<li>sInput: the signal input.  A Capture Context exposes its recording buffer "voice" as property <code>rbuf</code>.</li>
+</ul>
+<pre><code class="language-objc">MSKSampleRecorder *recorder = [[MSKSampleRecorder alloc] initWithCtx:rec];
+recorder.sample = samp;
+recorder.sInput = rec.rbuf;
+[recorder compile];
+</code></pre>
+<p>Next, add the recorder "voice" to the context.  This adds the recorder to the audio thread of the Capture Context in a safe way.</p>
+<pre><code class="language-objc">[rec addVoice:recorder];
+</code></pre>
+<p>Now, start the recorder.</p>
+<pre><code class="language-objc">[recorder recOn];
+</code></pre>
+<p>And after some amount of time, stop the recording.</p>
+<pre><code class="language-objc">[recorder recOff];
+</code></pre>
+<p>The recorder will stop when <code>recOff</code> is invoked, or when the Sample runs out of capacity: whichever comes first.  At this point, <code>samp</code> contains audio with the number of captured frames given by <code>samp.frames</code>.</p>
+<h2 id="playing-a-sample">Playing a Sample</h2>
+<p>A sample can be passed to a Playback Context for playing.  Recall that the voices and operators of a Playback Context work on small chunks of audio data at a time: a single period of PCM data.  Generally, these are 1024 or 2048 sized chunks.  An <code>MSKSample</code> can hold many more frames than this.</p>
+<p>For playing a sample, the McLaren Synth Kit provides an <code>MSKSamplePlayer</code> for handing out the samples in chunks in the audio thread of a Playback Context.</p>
+<p>Assuming we have created a Playback Context called <code>ctx</code> and we have the Sample <code>samp</code> created above, we can play it back using the code below.</p>
+<pre><code>// Create a player for the sample
+MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx:ctx];
+[player setSample:samp];
+[player compile];
+
+// Ask the context to play it
+[ctx addVoice:player];
+</code></pre>
+<p>This is pretty straightforward.  After the "player" is done playing the sample, it will exit and be reclaimed by ARC reference counting when there are no more references to it.</p>
+<blockquote>
+<p>Note:  As the player progresses through the sample contents, the player's <code>position</code> property will be incremented.  An observer timer loop could watch this value to advance an on-screen display of the current position in the sample.</p>
+</blockquote>
+<h3 id="sample-rate">Sample Rate</h3>
+<p>It is worth noting that in the above example there was no attempt to determine if the sample rate of the Playback Context matched that of the Capture Context.  The Contexts themselves do not adjust sample rate, and if they are different you will hear that.  If you want to preserve the pitch, then you may need to resample.</p>
+<h2 id="resampling">Resampling</h2>
+<p>An <code>MSKSample</code> can produce a copy of itself resampled by a ratio, or to a new sample rate.  The McLaren Synth Kit makes use of <code>libresample</code> to perform this function.  The github repo for this library is at the link below.</p>
+<ul>
+<li><a href="https://github.com/minorninth/libresample">https://github.com/minorninth/libresample</a></li>
+</ul>
+<p>If we wanted to ensure that the recorded sample was resampled appropriately for playback the following code would do it.</p>
+<pre><code class="language-objc">// Resample for playback context
+MSKSample *playsamp = [samp resampleTo:ctx.rate];
+
+// Create a player for the sample
+MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx:ctx];
+[player setSample:playsamp];
+[player compile];
+
+// Ask the context to play it
+[ctx addVoice:player];
+</code></pre>
+<h2 id="reading-a-sample">Reading a Sample</h2>
+<p>Reading and writing of samples is provided by <code>libsndfile</code> which is included in most Linux distributions.  There is a good overview of the library maintained at the link below.</p>
+<ul>
+<li><a href="https://libsndfile.github.io/libsndfile/">https://libsndfile.github.io/libsndfile/</a></li>
+</ul>
+<p>Given the pathname of the file, an <code>MSKSample</code> can be initialized with its contents.  The <code>libsndfile</code> library recognizes .au, .wav, .ogg, .aiff and more.</p>
+<pre><code class="language-objc">NError *err;
+MSKSample *samp = [[MSKSample alloc] initWithFilePath:filepath error:&amp;err];
+</code></pre>
+<p>If there is a problem opening the file or reading its contents, the <code>err</code> value will hold an <code>NSError</code>.</p>
+<h2 id="finding-a-sample-the-sample-manager">Finding a Sample - the Sample Manager</h2>
+<p>To make it easier to bundle samples with programs, or to maintain a collection of samples, the <code>MSKSampleManager</code> looks in common places with common filename suffixes.</p>
+<pre><code class="language-objc">MSKSampleManager *mgr = [MSKSampleManager defaultManager];
+NSString *path = [mgr sampleWithName:@&quot;beep&quot;];
+MSKSample *samp = [MSKSample alloc] initWithFilePath:path error:&amp;err];
+</code></pre>
+<p>The sample  manager would look for files named "beep.wav", "beep.au", "beep.aiff", etc in a set of standard places.  Currently, these are the following.</p>
+<ul>
+<li><gnustep-library-paths>/McLarenSynthKit/Samples/</li>
+<li><gnustep-library-paths>/Samples/</li>
+<li>paths to Resource/Samples in all loaded bundles including the main bundle.</li>
+</ul>
+<h2 id="writing-a-sample">Writing a Sample</h2>
+<p>There is one method to write a Sample to a file.</p>
+<pre><code class="language-objc">MSKSample *samp = ...
+NSError *err;
+[samp writeToFilePath:path error:&amp;err];
+</code></pre>
+<p>This method looks at the suffix of the filename to deduce the format.  For instance, if the path ends in ".wav" it will be written in WAV format.</p>
+<p>If there is a problem writing the file, and <code>NSError</code> describing the condition will be placed in <code>err</code>.</p>
+<p>Currently, the suffix determines the file container format and the sample format is set to single-precision float.  In the future there may be an option to specify the sample format to be used for saving.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>(c) McLaren Labs 2024</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
