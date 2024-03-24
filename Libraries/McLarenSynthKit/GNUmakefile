@@ -25,7 +25,11 @@ McLarenSynthKit_OBJC_FILES = \
   voice/MSKFMPhaseEnvelopeOscillator.m \
   model/MSKFilterModel.m \
   model/MSKReverbModel.m \
-  fifo/MSKOFifo.m
+  fifo/MSKOFifo.m \
+  sample/MSKSample.m \
+  sample/MSKSampleManager.m \
+  sample/MSKSamplePlayer.m \
+  sample/MSKSampleRecorder.m
 
 McLarenSynthKit_OBJCC_FILES = \
   voice/MSKGeneralOscillator.mm \
@@ -62,7 +66,11 @@ McLarenSynthKit_HEADER_FILES = \
   model/MSKFilterModel.h \
   model/MSKReverbModel.h \
   fx/MSKFreeverbReverb.h \
-  fifo/MSKOFifo.h
+  fifo/MSKOFifo.h \
+  sample/MSKSample.h \
+  sample/MSKSampleManager.h \
+  sample/MSKSamplePlayer.h \
+  sample/MSKSampleRecorder.h 
 
 McLarenSynthKit_HEADER_FILES += McLarenSynthKit.h
 
@@ -74,7 +82,7 @@ ADDITIONAL_OBJCCFLAGS = -fblocks -fobjc-arc
 
 McLarenSynthKit_HEADER_FILES_DIR = $(HEADER_DIR)
 
-McLarenSynthKit_LIBRARIES_DEPEND_UPON += -lasound -lgnustep-base -lobjc -ldispatch
+McLarenSynthKit_LIBRARIES_DEPEND_UPON += -lasound -lsndfile -lresample -lgnustep-base -lobjc -ldispatch
 
 ifeq ($(check),yes)
     ADDITIONAL_OBJCFLAGS += -Werror
