@@ -11,7 +11,7 @@ A Pattern is a repeating sequence of instructions, some of which specify the pas
 In the snippet below, assume that there is Synthesizer object named `synth` that has a method `playNote:`.  The following defines a pattern that executes four times and then exits.
 
 ``` objc
-Pattern *pat = [[Pattern alloc] initWithName:'pat1'];
+MSKPattern *pat = [[MSKPattern alloc] initWithName:'pat1'];
 
 [pat sync:@"beat"];
 [pat thunk:^{
@@ -41,7 +41,7 @@ The Pattern methods are a little-language for specifying how to synchronize with
 A Pattern can also specify the passage of time in ways other than synchronizing with events.  A Pattern can spcify the passage of time in "ticks" or "realtime".
 
 ``` objc
-Pattern *pat2 = [[Pattern alloc] initWithName:'pat2'];
+MSKPattern *pat2 = [[MSKPattern alloc] initWithName:'pat2'];
 
 [pat2 sync:@"beat"];
 [pat2 thunk:^{ doSomething(); }];
@@ -73,7 +73,7 @@ Patterns can call other patterns, which execute as subroutines.  The Pattern `pa
 Consider the following pattern.  It plays four sixteenth notes, synchronized with the next beat.
 
 ``` objc
-Pattern *pat3 = [[Pattern alloc] initWithName:@"pat3"];
+MSKPattern *pat3 = [[MSKPattern alloc] initWithName:@"pat3"];
 [pat3 sync:@"beat"];
 [pat3 thunk:^{ [synth playNote:70; ]}];
 [pat ticks:30];
@@ -87,7 +87,7 @@ Pattern *pat3 = [[Pattern alloc] initWithName:@"pat3"];
 This pattern could be incorporated into a parent pattern.  The pattern below plays a note on beat 0 and beat 1, on beat 2 it plays four sixteenths, and then on beat 3 it plays a note.  The pattern then repeats 4 times.
 
 ``` objc
-Pattern *pat4 = [[Pattern alloc] initWithName:@"pat4"];
+MSKPattern *pat4 = [[MSKPattern alloc] initWithName:@"pat4"];
 
 [pat4 sync:@"beat"];
 [pat4 thunk:^{ [synth playNote:64; ]}];
@@ -109,7 +109,7 @@ StepTalk is a Smalltalk-dialect interpreter that can call Objective-C classes an
 With StepTalk, the first example of this chapter looks like the following.
 
 ``` smalltalk
-pat := Pattern alloc initWithName:'pat1'.
+pat := MSKPattern alloc initWithName:'pat1'.
 
 pat
   sync: #beat;
@@ -136,7 +136,7 @@ So far, we have shown how to create patterns, but we haven't shown how to start 
 Assume that we have previously created a Metronome named `_metro`.  Then the following creates a Scheduler.
 
 ``` objc
-@property Scheduler *sched;
+@property MSKScheduler *sched;
 
 - (void) makeScheduler {
 
@@ -237,5 +237,5 @@ Because Patterns are tied to the MIDI clock of the ALSA Seq, Patterns provide ti
 
 ## Postscript
 
-Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.  Additionally, they are not yet a standard part of the library.  Patterns are implemented in files `Pattern.h` and `Pattern.m` in the `MskMetroDemo` directory.
+Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.
 
