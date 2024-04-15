@@ -1,4 +1,4 @@
-# import "MskPatternDemo_AppDelegate.h"
+# import "MskMetroDemo_AppDelegate.h"
 
 #import <AlsaSoundKit/AlsaSoundKit.h>
 #import "NSObject+MLBlocks.h"
@@ -6,7 +6,6 @@
 
 @implementation AppDelegate {
   GSHbox *tempoHbox;
-  GSHbox *osctypeHbox;
   GSVbox *vbox;
   GSHbox *hbox;
 
@@ -39,7 +38,7 @@
 		 options:nil];
 
   [self.tempoSlider setMinValue:30];
-  [self.tempoSlider setMaxValue:150];
+  [self.tempoSlider setMaxValue:120];
   [self.tempoSlider setContinuous:YES];
   [self.tempoSlider setAutoresizingMask: NSViewWidthSizable];
 
@@ -65,41 +64,6 @@
   // pack into row
   [tempoHbox addView:self.tempoSlider enablingXResizing:YES];
   [tempoHbox addView:tempoText enablingXResizing:NO withMinXMargin:10.0];
-
-}
-
-- (void) makeOsctypeRow {
-  osctypeHbox = [GSHbox new];
-  [osctypeHbox setAutoresizingMask: NSViewWidthSizable];
-  
-  self.osctypeSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
-  [self.osctypeSlider setTitle:@"Oscillator Type"];
-  
-  // use bindings
-  [self.osctypeSlider bind:@"value"
-		toObject:self
-	     withKeyPath:@"oscModel.osctype"
-		 options:nil];
-
-  [self.osctypeSlider setMinValue:0];
-  [self.osctypeSlider setMaxValue:5];
-  [self.osctypeSlider setNumberOfTickMarks:6];
-  [self.osctypeSlider setAllowsTickMarkValuesOnly:YES];
-  [self.osctypeSlider setAutoresizingMask: NSViewWidthSizable];
-
-  // make text
-  NSTextField *osctypeText = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
-
-  [osctypeText bind:@"value"
-	 toObject:self
-      withKeyPath:@"oscModel.osctype"
-			 options: @{
-    NSValueTransformerBindingOption: [MSKOscillatorTypeValueTransformer new]
-	}];
-
-  // pack into row
-  [osctypeHbox addView:self.osctypeSlider enablingXResizing:YES];
-  [osctypeHbox addView:osctypeText enablingXResizing:NO withMinXMargin:10.0];
 
 }
 
@@ -154,20 +118,6 @@
   [hbox addView: _stopButton withMinXMargin:5.0];
 
 
-  /* Continue Button */
-  _continueButton = [NSButton new];
-  [_continueButton setBordered: YES];
-  [_continueButton setButtonType: NSMomentaryPushButton];
-  [_continueButton setTitle: @"Continue"];
-  [_continueButton setImagePosition: NSNoImage];
-  [_continueButton setTarget: self];
-  [_continueButton setAction: @selector(continueMetronome:)];
-  // [_continueButton setAutoresizingMask: NSViewMaxXMargin];
-  [_continueButton sizeToFit];
-
-  [hbox addView: _continueButton withMinXMargin:5.0];
-
-
   vbox = [GSVbox new];
   [vbox setDefaultMinYMargin: 5];
   [vbox setBorder: 5];
@@ -189,10 +139,6 @@
   [self makeTempoRow];
   [vbox addView: tempoHbox enablingYResizing:NO withMinYMargin:10];
  
-  // Make the osctype slider
-  [self makeOsctypeRow];
-  [vbox addView: osctypeHbox enablingYResizing:NO withMinYMargin:10];
- 
   [vbox addView: hbox enablingYResizing: NO];
 }
 
@@ -202,10 +148,6 @@
   
 - (void) stopMetronome:(id)sender {
   [_metro stop];
-}
-  
-- (void) continueMetronome:(id)sender {
-  [_metro kontinue];
 }
   
 
@@ -245,7 +187,7 @@
 				  backing:NSBackingStoreBuffered
 				    defer:NO];
 
-  [self.win setTitle: @"MSK Pattern Demo"];
+  [self.win setTitle: @"MSK Metronome Demo"];
   // [self.win setReleasedWhenClosed: NO];
 
   // automatically save/restore window position by AppKit
@@ -322,16 +264,27 @@
     NSLog(@"Could not create metronome. Error:%@", error);
     exit(1);
   }
+  
+  MSKMetronomeBeatListener block = ^(unsigned ticktime, int beat, int measure) {
+      [self appendLog:[NSString stringWithFormat:@"onBeat - beat:%d meas:%d", beat, measure]];
+
+      if (beat == 0) {
+	[self makeNote:64];
+      }
+      else {
+	[self makeNote:60];
+      }
+
+  };
+
+  [_metro onBeat:block];
+
+  [_metro onClock:^(unsigned ticktime, int clock, int beat, int measure) {
+      [self appendLog:[NSString stringWithFormat:@"onClock - clock:%d beat:%d measure:%d", clock, beat, measure]];
+    }];
+
 }
-
-- (void) makeScheduler {
-
-  _sched = [[PrettyScheduler alloc] init];
-  [_sched registerMetronome:_metro];
-
-  _sched.textView = self.textview;
-
-}
+    
 
 
 
@@ -383,24 +336,18 @@
   [_ctx addFx:filt];
 }
 
-- (void) makeModels {
+- (void) makeNote:(int)note {
 
   self.oscModel = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
   self.oscModel.osctype = MSK_OSCILLATOR_TYPE_SQUARE;
-  self.oscModel.octave = -1;
 
   self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
-  self.envModel.attack = 0.02;
+  self.envModel.attack = 0.5;
   self.envModel.decay = 0.1;
   self.envModel.sustain = 0.9;
   self.envModel.rel = 0.1;
 
-}
-
-- (void) makeNote:(int)note vel:(double)vel {
-
   MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:_ctx];
-  env.iGain = vel;
   env.oneshot = YES;
   env.shottime = 0.1;		// 10 seconds
   env.model = _envModel;
@@ -427,104 +374,12 @@
 
 }
 
-/*
- * This is the figure that is going to play with different root notes
- * and different repetition counts.
- */
-
-- (MSKPattern*) makePat:(int)howManyTimes {
-  int eigth = 55;		// ahead of the beat slightly
-  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
-  [pat sync:@"beat"];
-  
-  [pat thunk:^{
-      [self makeNote:_root vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
-
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+2 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
-
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+3 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
-
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+5 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root+3 vel:0.5];
-    }];
-  [pat repeat:howManyTimes];
-  return pat;
-}
-
-- (MSKPattern*) makeSongPattern {
-
-  MSKPattern *patOnce = [self makePat:1];
-  MSKPattern *patTwice = [self makePat:2];
-   
-  // Now change the root note value
-  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
-  [pat2 thunk:^{
-      self.root = 64; // middle-E
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 69;
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 64;
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 71; // middle-E
-    }];
-  [pat2 pat:patOnce]; // play the figure once
-
-  [pat2 thunk:^{
-      self.root = 69; // middle-E
-    }];
-  [pat2 pat:patOnce]; // play the figure once
-
-  [pat2 thunk:^{
-      self.root = 64; // middle-E
-    }];
-  [pat2 pat:patTwice]; // play the figure  twice
-
-  [pat2 repeat:2];
-
-  return pat2;
-}
-
-
-
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
 {
   ASKError_linker_function(); // cause NSError category to be linked
   MSKError_linker_function();
 
-  [self appendLog:@"Welcome to MSK PATTERN Demo"];
+  [self appendLog:@"Welcome to MSK Metronome1 Demo"];
   
   [self makeWidgets];
   [vbox sizeToFit];
@@ -540,18 +395,8 @@
 
   [self makeSeq];
   [self makeMetronome];
-  [self makeScheduler];
   [self makeContext];
-  [self makeModels];
   [self makeFxPath];
-
-  // Create the song pattern
-  MSKPattern *songPat = [self makeSongPattern];
-
-  NSLog(@"songPat:%@", songPat);
-
-  // Add it to the scheduler
-  [_sched addLaunch:songPat];
 
   [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 

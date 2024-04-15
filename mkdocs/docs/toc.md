@@ -21,7 +21,10 @@
 [McLaren Synth Kit - Metronome](msk-metronome.md)
 : An introduction to the beat-keeper in the McLaren Synth Kit - the Metronome.
 
-[McLaren Synth Kit - Patterns](msk-patterns.md)
+[McLaren Synth Kit - Patterns](msk-pattern.md)
+: An explanation of how to use Patterns with the Metronome to make beats and songs.
+
+[McLaren Synth Kit - Liveloops](msk-liveloop.md)
 : An explanation of how to use Patterns with the Metronome to make beats and songs.
 
 [Conclusion](conclusion.md)

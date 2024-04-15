@@ -14,10 +14,15 @@ TOOL_NAME = \
   test6 \
   test7 \
   test8 \
-  test9
+  test9 \
+  testlive1 \
+  testlive2 \
+  testlive3 \
+  testlive4 \
+  testlive5 \
 
 COMMON_OBJC_FILES = \
-  ../Pattern.m
+
 
 test1_OBJC_FILES = \
         $(COMMON_OBJC_FILES) \
@@ -63,6 +68,31 @@ test9_OBJC_FILES = \
         $(COMMON_OBJC_FILES) \
         $(DEBUG_FILES) \
         test9.m
+
+testlive1_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        testlive1.m
+
+testlive2_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        testlive2.m
+
+testlive3_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        testlive3.m
+
+testlive4_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        testlive4.m
+
+testlive5_OBJC_FILES = \
+        $(COMMON_OBJC_FILES) \
+        $(DEBUG_FILES) \
+        testlive5.m
 
 ADDITIONAL_TOOL_LIBS = -lAlsaSoundKit -lMcLarenSynthKit -ldispatch
 

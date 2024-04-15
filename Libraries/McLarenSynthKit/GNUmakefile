@@ -29,7 +29,8 @@ McLarenSynthKit_OBJC_FILES = \
   sample/MSKSample.m \
   sample/MSKSampleManager.m \
   sample/MSKSamplePlayer.m \
-  sample/MSKSampleRecorder.m
+  sample/MSKSampleRecorder.m \
+  MSKPattern.m
 
 McLarenSynthKit_OBJCC_FILES = \
   voice/MSKGeneralOscillator.mm \
@@ -70,7 +71,8 @@ McLarenSynthKit_HEADER_FILES = \
   sample/MSKSample.h \
   sample/MSKSampleManager.h \
   sample/MSKSamplePlayer.h \
-  sample/MSKSampleRecorder.h 
+  sample/MSKSampleRecorder.h \
+  MSKPattern.h
 
 McLarenSynthKit_HEADER_FILES += McLarenSynthKit.h
 

@@ -6,21 +6,20 @@
 include $(GNUSTEP_MAKEFILES)/common.make
 
 APP_NAME = \
-  MskMetroDemo \
-  MskPatternDemo
+  LiveloopToy
 
 COMMON_OBJC_FILES = 
 
-MskMetroDemo_OBJC_FILES = \
-  MskMetroDemo_main.m \
-  NSObject+MLBlocks.m \
-  MskMetroDemo_AppDelegate.m
-
-MskPatternDemo_OBJC_FILES = \
+LiveloopToy_OBJC_FILES = \
   PrettyScheduler.m \
-  MskPatternDemo_main.m \
+  LiveloopToy_main.m \
   NSObject+MLBlocks.m \
-  MskPatternDemo_AppDelegate.m
+  PatternManager.m \
+  LiveloopToy_AppDelegate.m
+
+LiveloopToy_RESOURCE_FILES = \
+  Resources/Info-gnustep.plist \
+  Samples
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc
 ADDITIONAL_LDFLAGS = -ldispatch

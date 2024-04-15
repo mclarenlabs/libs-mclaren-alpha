@@ -4,7 +4,7 @@
  * patterns.  Inspired by Smalltalk syntax.  An example pattern to play
  * four beats and repeat 2 times could be specified like this in StepTalk.
  *
- *   pat := Pattern alloc initWithName:'pat1'.
+ *   pat := MSKPattern alloc initWithName:'pat1'.
  *   pat
  *     sync: #beat;
  *     play: [ synth makeNote:64. ];
@@ -19,51 +19,73 @@
  * McLaren Labs 2024
  */
 
-#import "Pattern.h"
+#import "MSKPattern.h"
 
-@implementation Instruction
-- (id) initWithKind:(InstructionKind)kind {
+@implementation MSKInstruction
+- (id) initWithKind:(MSKInstructionKind)kind {
   if (self = [super init]) {
     _kind = kind;
   }
   return self;
 }
+
+- (BOOL) isTimeConsuming {
+  [self doesNotRecognizeSelector: _cmd];
+  return NO;
+}
+
 @end
 
-@implementation Sync
+@implementation MSKSync
 - (id) init {
-  if (self = [super initWithKind:INSTRUCTION_KIND_SYNC]) {
+  if (self = [super initWithKind:MSK_INSTRUCTION_KIND_SYNC]) {
   }
   return self;
 }
-@end
 
-@implementation Ticks
-- (id) init {
-  if (self = [super initWithKind:INSTRUCTION_KIND_TICKS]) {
-  }
-  return self;
+- (BOOL) isTimeConsuming {
+  return YES;
 }
 @end
 
-@implementation Seconds
+@implementation MSKTicks
 - (id) init {
-  if (self = [super initWithKind:INSTRUCTION_KIND_SECONDS]) {
+  if (self = [super initWithKind:MSK_INSTRUCTION_KIND_TICKS]) {
   }
   return self;
 }
-@end
 
-@implementation Thunk
-- (id) init {
-  if (self = [super initWithKind:INSTRUCTION_KIND_THUNK]) {
-  }
-  return self;
+- (BOOL) isTimeConsuming {
+  return YES;
 }
 @end
 
-@implementation Frame
-- (id) initWithPat:(Pattern*)pat andThreadId:(NSUInteger)threadId {
+@implementation MSKSeconds
+- (id) init {
+  if (self = [super initWithKind:MSK_INSTRUCTION_KIND_SECONDS]) {
+  }
+  return self;
+}
+
+- (BOOL) isTimeConsuming {
+  return YES;
+}
+@end
+
+@implementation MSKThunk
+- (id) init {
+  if (self = [super initWithKind:MSK_INSTRUCTION_KIND_THUNK]) {
+  }
+  return self;
+}
+
+- (BOOL) isTimeConsuming {
+  return NO;
+}
+@end
+
+@implementation MSKFrame
+- (id) initWithPat:(MSKPattern*)pat andThreadId:(NSUInteger)threadId {
   if (self = [super init]) {
     _pat = pat;
     _ip = 0;
@@ -104,10 +126,10 @@
 
 @end
 
-@implementation Pattern
+@implementation MSKPattern
 
 - (id) initWithName:(NSString*)name {
-  if (self = [super initWithKind:INSTRUCTION_KIND_PAT]) {
+  if (self = [super initWithKind:MSK_INSTRUCTION_KIND_PAT]) {
 
     _patname = name;
     _instructions = [[NSMutableArray alloc] init];
@@ -119,13 +141,13 @@
 }
 
 - (void) sync:(NSString*)waitchan {
-  Sync *s = [[Sync alloc] init];
+  MSKSync *s = [[MSKSync alloc] init];
   s.chan = waitchan;
   [_instructions addObject:s];
 }
 
 - (void) ticks:(long)ticks {
-  Ticks *t = [[Ticks alloc] init];
+  MSKTicks *t = [[MSKTicks alloc] init];
   t.ticks = ticks;
   [_instructions addObject:t];
 }
@@ -133,19 +155,19 @@
 - (void) seconds:(double)sec {
   unsigned tv_sec = trunc(sec);
   unsigned tv_nsec = (sec - tv_sec) * 1000000000;
-  Seconds *s = [[Seconds alloc] init];
+  MSKSeconds *s = [[MSKSeconds alloc] init];
   s.sec = tv_sec;
   s.nsec = tv_nsec;
   [_instructions addObject:s];
 }
 
-- (void) thunk:(MLThunkBlock)thunk {
-  Thunk *t = [[Thunk alloc] init];
+- (void) thunk:(MSKThunkBlock)thunk {
+  MSKThunk *t = [[MSKThunk alloc] init];
   t.thunkblock = thunk;
   [_instructions addObject:t];
 }
 
-- (void) pat:(Pattern*)pat {
+- (void) pat:(MSKPattern*)pat {
   [_instructions addObject:pat];
 }
 
@@ -157,6 +179,17 @@
   _introEndsAt = [_instructions count]; // mark current position as end of intro
 }
 
+// a pattern is time-consuming if any of its instructions is time-consuming
+- (BOOL) isTimeConsuming {
+  BOOL res = NO;
+  for (MSKPattern *p in _instructions) {
+    if ([p isTimeConsuming] == YES) {
+	res = YES;
+      }
+  }
+  return res;
+}
+
 - (NSString*)description {
   NSMutableString *s = [NSMutableString stringWithFormat:@"pat:%@<%ld>\n", _patname, _repeatSpec];
   [s appendString:[_instructions description]];
@@ -165,7 +198,7 @@
 
 @end
 
-@implementation Thread
+@implementation MSKThread
 
 - (id) initWithThreadId:(NSUInteger)threadId {
   if (self = [super init]) {
@@ -174,27 +207,45 @@
 
     _isTickTime = YES;
     _ticktime = -1;
+
+    // liveloop
+    _isLiveloop = NO;
   }
   return self;
 }
 
-- (void) push:(Pattern*)pat {
-  Frame *frame = [[Frame alloc] initWithPat:pat andThreadId:_threadId];
+- (id) initLiveloopWithThreadId:(NSUInteger)threadId andName:(NSString*)name {
+  if (self = [super init]) {
+    _threadId = threadId;
+    _stack = [[NSMutableArray alloc] init];
+
+    _isTickTime = YES;
+    _ticktime = -1;
+
+    // liveloop
+    _isLiveloop = YES;
+    _liveloopName = name;
+  }
+  return self;
+}
+
+- (void) push:(MSKPattern*)pat {
+  MSKFrame *frame = [[MSKFrame alloc] initWithPat:pat andThreadId:_threadId];
   [_stack addObject:frame];
 }
 
-- (Frame*) pop {
-  Frame *frame = [_stack lastObject];
+- (MSKFrame*) pop {
+  MSKFrame *frame = [_stack lastObject];
   [_stack removeLastObject];
   return frame;
 }
 
-- (Frame*) currentFrame {
+- (MSKFrame*) currentFrame {
   return [_stack lastObject];
 }
 
 - (NSString*) currentPatName {
-  Frame *frame = [self currentFrame];
+  MSKFrame *frame = [self currentFrame];
   if (frame == nil) {
     return @"thread-exited";
   }
@@ -219,8 +270,8 @@
 // NOTE: this is an old version that is not right
 - (id) XXgetNextInstruction
 {
-  Frame *frame;
-  Instruction *instruction;
+  MSKFrame *frame;
+  MSKInstruction *instruction;
 
   frame = [self currentFrame];
   
@@ -229,7 +280,7 @@
 
     BOOL isStillAlive = [frame incrIP];
     if (isStillAlive == NO) {
-      Frame *deadFrame = [self pop];
+      MSKFrame *deadFrame = [self pop];
       (void) deadFrame;
     }
   }    
@@ -242,8 +293,8 @@
 
 - (id) getNextInstruction
 {
-  Frame *frame;
-  Instruction *instruction;
+  MSKFrame *frame;
+  MSKInstruction *instruction;
 
   frame = [self currentFrame];
   
@@ -253,7 +304,7 @@
 
     BOOL isStillAlive = [frame incrIP];
     if (isStillAlive == NO) {
-      Frame *deadFrame = [self pop];
+      MSKFrame *deadFrame = [self pop];
       (void) deadFrame;
     }
   }    
@@ -264,22 +315,56 @@
   return instruction;
 }
 
-- (void) interpret:(Scheduler*)scheduler ticktime:(long)ticktime
+- (void) interpret:(MSKScheduler*)scheduler ticktime:(long)ticktime
 {
   // set current time
   _isTickTime = YES;
   _ticktime = ticktime;
 
-  [self _doInterpret:scheduler];
+  BOOL res = [self _doInterpret:scheduler];
+  if (res == NO) {
+    if (_isLiveloop == NO) {
+      NSLog(@"thread exited");
+    }
+    else {
+      // replenish the thread with the pat if there is one
+      if (scheduler.log) {
+	NSLog(@"looping:%@", _liveloopName);
+      }
+      // MSKPattern *p = scheduler.liveloopSpec[_liveloopName];
+      MSKLiveloop *loop = scheduler.liveloopSpec[_liveloopName];
+      MSKPattern *p = [loop replenishOrStop];
+      if (p != nil) {
+	[self push:p];
+	[self interpret:scheduler ticktime:ticktime];
+      }
+    }
+  }
 }
 
-- (void) interpret:(Scheduler*)scheduler sec:(unsigned)sec nsec:(unsigned)nsec {
+- (void) interpret:(MSKScheduler*)scheduler sec:(unsigned)sec nsec:(unsigned)nsec {
   // set current time
   _isTickTime = NO;
   _sec = sec;
   _nsec = nsec;
 
-  [self _doInterpret:scheduler];
+  BOOL res = [self _doInterpret:scheduler];
+  if (res == NO) {
+    if (_isLiveloop == NO) {
+      NSLog(@"thread exited");
+    }
+    else {
+      // replenish the thread with the pat if there is one
+      NSLog(@"looping:%@", _liveloopName);
+      // MSKPattern *p = scheduler.liveloopSpec[_liveloopName];
+      MSKLiveloop *loop = scheduler.liveloopSpec[_liveloopName];
+      MSKPattern *p = [loop replenishOrStop];
+      if (p != nil) {
+	[self push:p];
+	[self interpret:scheduler sec:sec nsec:nsec];
+      }
+    }
+  }
 }
 
 - (NSString*) _getTime {
@@ -292,28 +377,29 @@
   }
 }
 
-- (void) _doInterpret:(Scheduler*)scheduler {
+- (BOOL) _doInterpret:(MSKScheduler*)scheduler {
 
   BOOL done = NO;
   while (done == NO) {
 
-    Instruction *instruction = [self getNextInstruction];
+    MSKInstruction *instruction = [self getNextInstruction];
 
     // for Debugging
     // NSLog(@"(%@)interpret: %@", [self _getTime], instruction);
 
     if (instruction == nil) {
-      done = YES;
+      // done = YES;
+      return NO; // thread exited
     }
     else {
 
       switch (instruction.kind) {
-      case INSTRUCTION_KIND_NONE:
+      case MSK_INSTRUCTION_KIND_NONE:
 	break;
 
-      case INSTRUCTION_KIND_SYNC:
+      case MSK_INSTRUCTION_KIND_SYNC:
 	{
-	  Sync *sync = (Sync*)instruction;
+	  MSKSync *sync = (MSKSync*)instruction;
 	  NSString *chan = sync.chan;
 
 	  [scheduler syncOn:chan thread:self];
@@ -321,18 +407,18 @@
 	}
 	break;
 
-      case INSTRUCTION_KIND_TICKS:
+      case MSK_INSTRUCTION_KIND_TICKS:
 	{
-	  Ticks *sleep = (Ticks*)instruction;
+	  MSKTicks *sleep = (MSKTicks*)instruction;
 	  long ticks = sleep.ticks;
 	  [scheduler sleepFor:ticks thread:self];
 	  done = YES; // this thread is blocked
 	}
 	break;
 	
-      case INSTRUCTION_KIND_SECONDS:
+      case MSK_INSTRUCTION_KIND_SECONDS:
 	{
-	  Seconds *sleep = (Seconds*)instruction;
+	  MSKSeconds *sleep = (MSKSeconds*)instruction;
 	  unsigned tv_sec = sleep.sec;
 	  unsigned tv_nsec = sleep.nsec;
 	  [scheduler sleepFor:tv_sec nsec:tv_nsec thread:self];
@@ -340,21 +426,21 @@
 	}
 	break;
 	
-      case INSTRUCTION_KIND_THUNK:
+      case MSK_INSTRUCTION_KIND_THUNK:
 	{
-	  Thunk *thunk = (Thunk*)instruction;
+	  MSKThunk *thunk = (MSKThunk*)instruction;
 	  thunk.thunkblock();
 	}
 	break;
 
-      case INSTRUCTION_KIND_STBLOCK:
+      case MSK_INSTRUCTION_KIND_STBLOCK:
 	// STBlock *block = (STBlock*)instruction;
 	// id val = [block value:nil];
 	break;
 
-      case INSTRUCTION_KIND_PAT:
+      case MSK_INSTRUCTION_KIND_PAT:
 	{
-	  Pattern *pat = (Pattern*)instruction;
+	  MSKPattern *pat = (MSKPattern*)instruction;
 	  [self push:pat];
 	}
 	break;
@@ -365,6 +451,7 @@
       }
     }
   }
+  return YES; // thread is not dead
 }
 
 - (NSString*) description {
@@ -381,13 +468,14 @@
 @end
   
 
-@implementation Scheduler
+@implementation MSKScheduler
 
 - (id) init {
   if (self = [super init]) {
     _waiters = [[NSMutableDictionary alloc] init];
     _sleepers = [[NSMutableDictionary alloc] init];
     _launchSpec = [[NSMutableArray alloc] init];
+    _liveloopSpec = [[NSMutableDictionary alloc] init];
 
     _sleepIdCntr = 0;
     _threadIdCntr = 0;
@@ -413,7 +501,7 @@
 }
 
 
-- (void) addWaiter:(NSString*)chan obj:(Thread*)what
+- (void) addWaiter:(NSString*)chan obj:(MSKThread*)what
 {
   NSMutableArray *waitlist = _waiters[chan];
   if (waitlist == nil) {
@@ -426,7 +514,7 @@
   }
 }
 
-- (void) addSleeper:(NSNumber*)sleepId obj:(Thread*)what
+- (void) addSleeper:(NSNumber*)sleepId obj:(MSKThread*)what
 {
   _sleepers[sleepId] = what;
 }
@@ -440,7 +528,7 @@
   NSMutableArray *anxiousWaiters = [[NSMutableArray alloc] init];
   NSMutableArray *servicedWaiters = [[NSMutableArray alloc] init];
 
-  for (Thread *t in waitlist) {
+  for (MSKThread *t in waitlist) {
     if ([t hasSeenTick:ticktime]) {
       // NSLog(@"HAS SEEN SEVICED WAITER:%@", t);
       [servicedWaiters addObject:t];
@@ -465,7 +553,7 @@
 {
   NSMutableArray *waiters = [self removeWaiters:chan ticktime:ticktime];
   if (waiters != nil) {
-    for (Thread *t in waiters) {
+    for (MSKThread *t in waiters) {
 
       if (_log)
 	[self logger:[self fmtTime] pat:[t currentPatName] msg:[NSString stringWithFormat:@"#%@", chan]];
@@ -478,13 +566,13 @@
 }
 
 // for a pattern to put itself to sleep
-- (void) syncOn:(NSString*)chan thread:(Thread*)thread {
+- (void) syncOn:(NSString*)chan thread:(MSKThread*)thread {
   [self addWaiter:chan obj:thread];
 }
 
 - (void) wakeSleeper:(long)sleepNum ticktime:(unsigned)ticktime {
   NSNumber *sleepId = [NSNumber numberWithLong:sleepNum];
-  Thread *t = _sleepers[sleepId];
+  MSKThread *t = _sleepers[sleepId];
   if (t) {
     if (_log)
       [self logger:[self fmtTime] pat:[t currentPatName] msg:@"ticks"];
@@ -498,7 +586,7 @@
 
 - (void) wakeSleeper:(long)sleepNum sec:(unsigned)sec nsec:(unsigned)nsec {
   NSNumber *sleepId = [NSNumber numberWithLong:sleepNum];
-  Thread *t = _sleepers[sleepId];
+  MSKThread *t = _sleepers[sleepId];
   if (t) {
     if (_log)
       [self logger:[self fmtTime] pat:[t currentPatName] msg:@"seconds"];
@@ -516,7 +604,7 @@
 }
 
 // for a thread to put itself to sleep
-- (void) sleepFor:(NSUInteger)ticks thread:(Thread*)thread {
+- (void) sleepFor:(NSUInteger)ticks thread:(MSKThread*)thread {
 
   NSNumber *sleepId = [self _makeSleepId];
   // NSLog(@"SLEEPTICKS ID:%ld ticks:%ld", [sleepId longValue], ticks);
@@ -526,7 +614,7 @@
 }
 
 // for a thread to put itself to sleep
-- (void) sleepFor:(unsigned)sec nsec:(unsigned)nsec thread:(Thread*)thread {
+- (void) sleepFor:(unsigned)sec nsec:(unsigned)nsec thread:(MSKThread*)thread {
 
   NSNumber *sleepId = [self _makeSleepId];
   // NSLog(@"SLEEPREAL ID:%ld secs:%u,%u", [sleepId longValue], sec, nsec);
@@ -592,9 +680,23 @@
  * Start all threads from the beginning and run each until their first block.
  */
 - (void) launchAll {
-  for (Pattern *p in _launchSpec) {
+
+  // launch plain patterns
+  for (MSKPattern *p in _launchSpec) {
     NSLog(@"launch:%@", p);
-    Thread *t = [[Thread alloc] initWithThreadId: _threadIdCntr++];
+    MSKThread *t = [[MSKThread alloc] initWithThreadId: _threadIdCntr++];
+    [t push:p];
+    _currentThreadId = t.threadId;
+    [t interpret:self ticktime:-1]; // BEAT 0 is at 0
+  }
+
+  // launch liveloops
+  for (NSString *name in _liveloopSpec) {
+    // MSKPattern *p = _liveloopSpec[name];
+    MSKLiveloop *loop = _liveloopSpec[name];
+    loop.isRunning = YES;
+    MSKPattern *p = loop.pat;
+    MSKThread *t = [[MSKThread alloc] initLiveloopWithThreadId: _threadIdCntr++ andName:name];
     [t push:p];
     _currentThreadId = t.threadId;
     [t interpret:self ticktime:-1]; // BEAT 0 is at 0
@@ -604,8 +706,146 @@
 /*
  * Add a pattern to the auto-launcher
  */
-- (void) addLaunch:(Pattern*)pat {
+- (void) addLaunch:(MSKPattern*)pat {
   [_launchSpec addObject:pat];
+}
+
+/*
+ * Helper for launch - performed serially in Scheduler queue
+ */
+
+- (void) _launchHelper:(MSKPattern*)pat {
+  MSKThread *t = [[MSKThread alloc] initWithThreadId: _threadIdCntr++];
+  [t push:pat];
+  _currentThreadId = t.threadId;
+
+  // start interpreting at "current" time
+  if (_isTickTime == YES) {
+    NSLog(@"launching at ticktime:%ld", _ticktime);
+    [t interpret:self ticktime:_ticktime];
+  }
+  else {
+    NSLog(@"launching at sec:%d nsec:%d", _sec, _nsec);
+    [t interpret:self sec:_sec nsec:_nsec];
+  }
+}
+  
+  
+/*
+ * Launch a pattern in a new thread ASAP
+ */
+- (void) launch:(MSKPattern*)pat {
+  NSLog(@"launch:%@", pat);
+  [self dispatchAsync:^{
+      [self _launchHelper:pat];
+    }];
+}
+
+/*
+ * Set or replace named pattern in the liveloop dict
+ */
+- (void) setLiveloop:(NSString*)name pat:(MSKPattern*)pat
+{
+  if ([pat isTimeConsuming] == NO) {
+    NSLog(@"Liveloop with pat:%@ will creat infinite loop since it is not time-consuming", pat.patname);
+    exit(1);
+  }
+  
+  MSKLiveloop *loop = _liveloopSpec[name];
+  if (loop == nil) {
+    MSKLiveloop *loop = [[MSKLiveloop alloc] initWithPattern:pat];
+    [_liveloopSpec setObject:loop forKey:name];
+  }
+  else {
+    loop.pat = pat;
+  }
+}
+
+/*
+ * Enable or Disable a liveloop
+ */
+- (BOOL) disableLiveloop:(NSString*)name {
+  MSKLiveloop *loop = _liveloopSpec[name];
+  if (loop != nil) {
+    loop.isEnabled = NO; // will not be replenished
+    return YES;
+  }
+  else {
+    return NO;
+  }
+}
+
+// internal helper - run on metronome queue
+- (void) dispatchAsync:(void(^)())block {
+  [_metro.seq dispatchAsync:block];
+}
+
+// internal helper - launch liveloop if needed
+// performed on metro queue to avoid race condition
+
+- (void) _launchIfNeeded:(NSString*)name liveloop:(MSKLiveloop*)loop {
+  if (loop.isRunning == YES) {
+    NSLog(@"loop is still running");
+  }
+  else {
+    loop.isRunning = YES;
+    MSKPattern *p = loop.pat;
+    MSKThread *t = [[MSKThread alloc] initLiveloopWithThreadId: _threadIdCntr++ andName:name];
+    [t push:p];
+    _currentThreadId = t.threadId;
+
+    // start interpreting at "current" time
+    if (_isTickTime == YES) {
+      NSLog(@"launching at ticktime:%ld", _ticktime);
+      [t interpret:self ticktime:_ticktime];
+    }
+    else {
+      NSLog(@"launching at sec:%d nsec:%d", _sec, _nsec);
+      [t interpret:self sec:_sec nsec:_nsec];
+    }
+  }
+}
+
+- (BOOL) enableLiveloop:(NSString*)name {
+  MSKLiveloop *loop = _liveloopSpec[name];
+  if (loop != nil) {
+    loop.isEnabled = YES;
+    [self dispatchAsync:^{
+	[self _launchIfNeeded:name liveloop:loop];
+      }];
+    return YES;
+  }
+  else {
+    return NO;
+  }
+}
+
+- (void) XXXsetLiveloopIsEnabled:(NSString*)name val:(BOOL)val {
+  MSKLiveloop *loop = _liveloopSpec[name];
+  if (loop) {
+    if (loop.isRunning) {
+      loop.isEnabled = val;
+    }
+    else {
+      loop.isEnabled = val;
+      if (val == YES) {
+	// then we have to launch it in a new thread
+	loop.isRunning = YES;
+	MSKPattern *p = loop.pat;
+	MSKThread *t = [[MSKThread alloc] initLiveloopWithThreadId: _threadIdCntr++ andName:name];
+	[t push:p];
+	_currentThreadId = t.threadId;
+
+	// TOM: not clear this is the right way to launch pat
+	dispatch_async([ASKSeq sharedQueue], ^{
+	    [t interpret:self ticktime:-1]; // BEAT 0 is at 0
+	  });
+      }
+    }
+  }
+  else {
+    NSLog(@"Liveloop %@ is not found.", name);
+  }
 }
 
 - (NSString*) fmtTime {
@@ -641,5 +881,25 @@
 
 @end
 
+@implementation MSKLiveloop
 
+- (id) initWithPattern:(MSKPattern*)pat {
+  if (self = [super init]) {
+    _pat = pat;
+    _isEnabled = YES;
+    _isRunning = NO;
+  }
+  return self;
+}
 
+- (MSKPattern*) replenishOrStop {
+  if (_isEnabled) {
+    return _pat;
+  }
+  else {
+    _isRunning = NO;
+    return nil;
+  }
+}
+
+@end

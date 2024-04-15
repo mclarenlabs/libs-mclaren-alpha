@@ -8,7 +8,7 @@
 #import "AlsaSoundKit/AlsaSoundKit.h"
 #import "McLarenSynthKit/McLarenSynthKit.h"
 #import "PrettyScheduler.h"
-
+#import "PatternManager.h"
 
 #include "./GSTable-MLdecls.h"
 
@@ -24,15 +24,21 @@
 @property (nonatomic) int tempo;
 @property (nonatomic, retain, strong) NSTextView *textview;
 
-@property (nonatomic, retain, strong) NSSlider *osctypeSlider;
-
-
 @property (nonatomic, retain, strong) ASKSeq *seq;
 @property (nonatomic, retain, strong) MSKMetronome *metro;
 // @property (readwrite) Scheduler *sched;
 @property (readwrite) PrettyScheduler *sched;
 
-@property (readwrite) NSInteger root; // root note of patttern
+// Load the samples and create the patterns
+@property (readwrite) PatternManager *mgr;
+
+// Liveloop1 controls
+@property (nonatomic, retain, strong) NSButton *loop1EnableButton;
+@property (nonatomic, retain, strong) NSSlider *loop1Slider;
+@property (readwrite) int loop1Selection;
+@property (nonatomic, retain, strong) NSTextField *loop1Text;
+
+@property (readwrite) NSInteger root; // root note of pattern
 @property (nonatomic, retain, strong) MSKContext *ctx;
 @property (nonatomic, retain, strong) MSKEnvelopeModel *envModel;
 @property (nonatomic, retain, strong) MSKOscillatorModel *oscModel;

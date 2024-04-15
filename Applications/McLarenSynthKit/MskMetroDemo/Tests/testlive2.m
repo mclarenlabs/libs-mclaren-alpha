@@ -1,6 +1,6 @@
 /*
- * This will use patterns in a musical way where the third beat
- * has a sequence of sixteenths notes.
+ * Degenerate test: what happens with an empty pattern.
+ * Does it recurse forever?
  */
 
 #import <Foundation/Foundation.h>
@@ -142,112 +142,30 @@
   NSLog(@"creating pattern");
 
   /*
-   * Four sixteenth notes with a high note
-   */
-
-  MSKPattern *sixt = [[MSKPattern alloc] initWithName:@"sixt"];
-  [sixt sync:@"beat"];
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  // [sixt repeat:1];
-       
-      
-
-  /*
    * A one-measure pattern with beats 1 and 2 normal, beat 3 is the sixteenth
    * note pattern above and beat 4 is normal. Repeats 4 times.
    */
    
+  MSKPattern *subpat = [[MSKPattern alloc] initWithName:@"pat2"];
+  [subpat thunk:^{
+      NSLog(@"%@    INTRO TWO", [_sched fmtTime]);
+    }];
+  
   MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
       NSLog(@"%@    INTRO ONE", [_sched fmtTime]);
-      NSLog(@"sched:%@", _sched);
     }];
+  [pat pat:subpat];
 
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      NSLog(@"%@    ONE", [_sched fmtTime]);
-      [self makeNote:64];
-    }];
-  [pat sync:@"clock"];
-  [pat thunk:^{
-      NSLog(@"%@    CLOCK AFTER ONE", [_sched fmtTime]);
-    }];
+  // [pat ticks:30];
 
-  NSLog(@"here");
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      NSLog(@"%@    TWO", [_sched fmtTime]);
-      [self makeNote:60];
-    }];
-
-  // The THIRD beat is a subroutine
-  // [pat sync:@"beat"];
-  [pat pat:sixt];
-
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      NSLog(@"%@    FOUR", [_sched fmtTime]);
-      [self makeNote:60];
-    }];
-  [pat repeat:4];
-
-  [_sched addLaunch:pat];
-
-  /*
-   * Play another pattern that is not rhythmically related to the first
-   */
-
-  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
-  [pat2 sync:@"beat"];
-  [pat2 thunk:^{
-      NSLog(@"sched:%@", _sched);
-      [self makeNote:45];
-    }];
-  // [pat2 ticks:55];
-  [pat2 seconds:0.3];
-  [pat2 thunk:^{
-      // double real = _sched.sec + (_sched.nsec / 1000000000.0);
-      NSLog(@"%@    DID SLEEP 1", [_sched fmtTime]);
-      [self makeNote:44];
-    }];
-  [pat2 ticks:35];
-  [pat2 thunk:^{
-      NSLog(@"%@    DID SLEEP 2", [_sched fmtTime]);
-      [self makeNote:43];
-    }];
-  [pat2 ticks:85];
-  [pat2 repeat:3];
-
-  [_sched addLaunch:pat2];
-
+  [_sched setLiveloop:@"loop1" pat:pat];
 
   NSLog(@"sched:%@", _sched);
 
   [_metro start];
 
   sleep(12);
-
-
 }
 
 @end

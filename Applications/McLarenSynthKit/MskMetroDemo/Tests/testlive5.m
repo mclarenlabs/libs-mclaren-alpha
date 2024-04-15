@@ -1,6 +1,13 @@
 /*
- * This will use patterns in a musical way where the third beat
- * has a sequence of sixteenths notes.
+ * This test plays a syncopated beat with a bass note and a drum sound.
+ * The ContextRequest parameters have been adjust to a very short period
+ * size of 128 frames.  The syncopation of the pattern becomes quantized
+ * incorrectly with a period size of 1024.  Try both and listen to the
+ * difference.
+ *
+ * Note: on some lower-performance computers (RPi3) such a small period
+ * size may be challenging for the CPU.
+ * 
  */
 
 #import <Foundation/Foundation.h>
@@ -38,7 +45,7 @@
 
   // set tempo
   NSError *err;
-  [_seq setTempo:90 error:&err];
+  [_seq setTempo:120 error:&err];
 
   if (error != nil) {
     NSLog(@"Could not create metronome. Error:%@", error);
@@ -52,15 +59,26 @@
   _sched = [[MSKScheduler alloc] init];
   [_sched registerMetronome:_metro];
 
+  _sched.log = YES;
+
 }
 
 - (void) makeContext {
   MSKContextRequest *request = [[MSKContextRequest alloc] init];
   request.rate = 44000;
+
+#define MOREPRECISE 1
+
+#if MOREPRECISE
+  request.persize = 128;
+  request.periods = 4;
+#else
   request.persize = 1024;
   request.periods = 2;
+#endif
 
   NSString *devName = @"default";
+  // NSString *devName = @"hw:0,0";
 
   NSError *error;
   BOOL ok;
@@ -85,6 +103,8 @@
     NSLog(@"MSKContext starting error:%@", error);
     exit(1);
   }
+
+  _ctx.gain = 1.0;
 }
 
 - (void) makeModels {
@@ -98,9 +118,9 @@
 
   self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
   self.envModel.attack = 0.01;
-  self.envModel.decay = 0.05;
   self.envModel.sustain = 0.8;
-  self.envModel.rel = 0.05;
+  // self.envModel.rel = 0.05;
+  self.envModel.rel = 0.25;
 }
 
 - (void) makeNote:(int)note {
@@ -129,6 +149,12 @@
 
 }
 
+- (void) playSample:(MSKSample*)samp {
+  MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx:_ctx];
+  player.sample = samp;
+  [_ctx addVoice:player];
+}
+
 
 - (void) run {
 
@@ -139,115 +165,99 @@
   [self makeContext];
   [self makeModels];
 
+  NSError *err;
+  MSKSample *spat = [[MSKSample alloc] initWithFilePath:@"./spat1.wav" error:&err];
+  if (err != nil) {
+    NSLog(@"could not load sample 'spat1.wav'");
+    exit(1);
+  }
+
+  MSKSample *tom = [[MSKSample alloc] initWithFilePath:@"./lidtom1.wav" error:&err];
+  if (err != nil) {
+    NSLog(@"could not load sample 'lidtom1.wav'");
+    exit(1);
+  }
+
+  MSKSample *lowtom = [tom resampleBy:1.5];
+  NSLog(@"_lowtom %@", lowtom);
+  // _hitom = [_tom resampleBy:2.0/3.0];
+  MSKSample *hitom = [tom resampleBy:1.0/3.0];
+  NSLog(@"hi %@", hitom);
+  
+
+  MSKSample *clap = [[MSKSample alloc] initWithFilePath:@"./clap1.wav" error:&err];
+  if (err != nil) {
+    NSLog(@"could not load sample 'clap1.wav'");
+    exit(1);
+  }
+
+  MSKSample *clack = [[MSKSample alloc] initWithFilePath:@"./spoonclack1.wav" error:&err];
+  if (err != nil) {
+    NSLog(@"could not load sample 'spoonclack1.wav'");
+    exit(1);
+  }
+
   NSLog(@"creating pattern");
-
-  /*
-   * Four sixteenth notes with a high note
-   */
-
-  MSKPattern *sixt = [[MSKPattern alloc] initWithName:@"sixt"];
-  [sixt sync:@"beat"];
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  for (int i = 0; i < 6; i++) {
-    [sixt sync:@"clock"];
-  }
-  [sixt thunk:^{
-      [self makeNote:80];
-    }];
-  // [sixt repeat:1];
-       
-      
 
   /*
    * A one-measure pattern with beats 1 and 2 normal, beat 3 is the sixteenth
    * note pattern above and beat 4 is normal. Repeats 4 times.
    */
+
+  int note = 40;
    
   MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
+  [pat sync:@"downbeat"];
   [pat thunk:^{
-      NSLog(@"%@    INTRO ONE", [_sched fmtTime]);
-      NSLog(@"sched:%@", _sched);
+      [self makeNote:note];
     }];
+
+  [pat ticks:60];
+  [pat thunk:^{
+      // [self makeNote:note];
+    }];
+  
+  [pat ticks:30];
+  [pat thunk:^{
+      [self makeNote:note];
+    }];
+  
 
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"%@    ONE", [_sched fmtTime]);
-      [self makeNote:64];
-    }];
-  [pat sync:@"clock"];
-  [pat thunk:^{
-      NSLog(@"%@    CLOCK AFTER ONE", [_sched fmtTime]);
+      [self makeNote:note];
+      [self playSample:hitom];
     }];
 
-  NSLog(@"here");
+  [pat ticks:60];
+  [pat thunk:^{
+      [self makeNote:note];
+    }];
+  
+  [pat ticks:30];
+  [pat thunk:^{
+      [self makeNote:note];
+    }];
+  
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"%@    TWO", [_sched fmtTime]);
-      [self makeNote:60];
+      [self makeNote:note];
     }];
 
-  // The THIRD beat is a subroutine
-  // [pat sync:@"beat"];
-  [pat pat:sixt];
 
   [pat sync:@"beat"];
   [pat thunk:^{
-      NSLog(@"%@    FOUR", [_sched fmtTime]);
-      [self makeNote:60];
+      [self playSample:hitom];
     }];
-  [pat repeat:4];
 
-  [_sched addLaunch:pat];
 
-  /*
-   * Play another pattern that is not rhythmically related to the first
-   */
-
-  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
-  [pat2 sync:@"beat"];
-  [pat2 thunk:^{
-      NSLog(@"sched:%@", _sched);
-      [self makeNote:45];
-    }];
-  // [pat2 ticks:55];
-  [pat2 seconds:0.3];
-  [pat2 thunk:^{
-      // double real = _sched.sec + (_sched.nsec / 1000000000.0);
-      NSLog(@"%@    DID SLEEP 1", [_sched fmtTime]);
-      [self makeNote:44];
-    }];
-  [pat2 ticks:35];
-  [pat2 thunk:^{
-      NSLog(@"%@    DID SLEEP 2", [_sched fmtTime]);
-      [self makeNote:43];
-    }];
-  [pat2 ticks:85];
-  [pat2 repeat:3];
-
-  [_sched addLaunch:pat2];
-
+  [_sched setLiveloop:@"loop1" pat:pat];
 
   NSLog(@"sched:%@", _sched);
 
   [_metro start];
 
-  sleep(12);
-
-
+  sleep(20);
 }
 
 @end

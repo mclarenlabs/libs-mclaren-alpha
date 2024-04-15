@@ -13,6 +13,7 @@ nav:
     - McLaren Synth Kit - Samples: 'msk-samples.md'
     - McLaren Synth Kit - Metronome: 'msk-metronome.md'
     - McLaren Synth Kit - Patterns: 'msk-pattern.md'
+    - McLaren Synth Kit - Liveloops: 'msk-liveloop.md'
   - Conclusion: 'conclusion.md'
   - Table Of Contents: 'toc.md'
 theme:
@@ -21,6 +22,7 @@ theme:
   hljs_languages:
     - console
     - objc
+    - objectivec
     - yaml
     - smalltalk
   shortcuts:

@@ -8,6 +8,7 @@
 #import "McLarenSynthKit/MSKContext.h"
 #import "McLarenSynthKit/MSKError.h"
 #import "McLarenSynthKit/MSKMetronome.h"
+#import "McLarenSynthKit/MSKPattern.h"
 
 #import "McLarenSynthKit/env/MSKEnvelopeFanout.h"
 #import "McLarenSynthKit/env/MSKExpEnvelope.h"

@@ -1,12 +1,14 @@
-# import "MskPatternDemo_AppDelegate.h"
+#import "LiveloopToy_AppDelegate.h"
 
 #import <AlsaSoundKit/AlsaSoundKit.h>
 #import "NSObject+MLBlocks.h"
 #import "GSTable-MLdecls.h"
+#import "PatternManager.h"
 
 @implementation AppDelegate {
   GSHbox *tempoHbox;
   GSHbox *osctypeHbox;
+  GSHbox *loop1Hbox;
   GSVbox *vbox;
   GSHbox *hbox;
 
@@ -68,38 +70,98 @@
 
 }
 
-- (void) makeOsctypeRow {
-  osctypeHbox = [GSHbox new];
-  [osctypeHbox setAutoresizingMask: NSViewWidthSizable];
+- (void) loop1EnableToggle:(NSButton*)sender {
+
+  long val = [sender integerValue];
+  NSLog(@"loop1Enable:%ld", val);
+
+  if (val == 0) {
+    [_sched disableLiveloop:@"loop1"];
+  }
   
-  self.osctypeSlider = [[NSSlider alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
-  [self.osctypeSlider setTitle:@"Oscillator Type"];
+  if (val == 1) {
+    [_sched enableLiveloop:@"loop1"];
+  }
   
-  // use bindings
-  [self.osctypeSlider bind:@"value"
+
+}
+
+- (void) loop1PatternChanged:(NSSlider*)sender {
+
+  NSLog(@"loop1PatternChanged:%d", _loop1Selection);
+
+  if (_loop1Selection == 1) {
+    [_sched setLiveloop:@"loop1" pat:_mgr.pat1];
+  }
+
+  if (_loop1Selection == 2) {
+    [_sched setLiveloop:@"loop1" pat:_mgr.pat2];
+  }
+
+  if (_loop1Selection == 3) {
+    [_sched setLiveloop:@"loop1" pat:_mgr.pat3];
+  }
+
+}
+
+- (void) makeLoop1Row {
+  loop1Hbox = [GSHbox new];
+  [loop1Hbox setAutoresizingMask: NSViewWidthSizable];
+
+  self.loop1EnableButton = [NSButton new];
+  [self.loop1EnableButton setBordered: YES];
+  // [self.loop1EnableButton setButtonType: NSToggleButton];
+  [self.loop1EnableButton setButtonType: NSPushOnPushOffButton];
+  [self.loop1EnableButton setTitle:@"Enabled"];
+  [self.loop1EnableButton setIntegerValue:1];
+  [self.loop1EnableButton setTarget: self];
+  [self.loop1EnableButton setAction: @selector(loop1EnableToggle:)];
+  
+  // [self.loop1EnableButton setImagePosition: NSNoImage];
+  [self.loop1EnableButton sizeToFit];
+  [self.loop1EnableButton setTag: 2];
+
+  _loop1Selection = 1; // initial value
+
+  self.loop1Slider = [[NSSlider alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
+  [self.loop1Slider setTitle:@"Loop1 Pattern"];
+  [self.loop1Slider setMinValue:1];
+  [self.loop1Slider setMaxValue:3];
+  [self.loop1Slider setNumberOfTickMarks:3];
+  [self.loop1Slider setAllowsTickMarkValuesOnly:YES];
+  [self.loop1Slider setContinuous:NO];
+  [self.loop1Slider setAutoresizingMask: NSViewWidthSizable];
+  [self.loop1Slider setTarget: self];
+  [self.loop1Slider setAction: @selector(loop1PatternChanged:)];
+
+  // bind value
+  [self.loop1Slider bind:@"value"
 		toObject:self
-	     withKeyPath:@"oscModel.osctype"
+	     withKeyPath:@"loop1Selection"
 		 options:nil];
 
-  [self.osctypeSlider setMinValue:0];
-  [self.osctypeSlider setMaxValue:5];
-  [self.osctypeSlider setNumberOfTickMarks:6];
-  [self.osctypeSlider setAllowsTickMarkValuesOnly:YES];
-  [self.osctypeSlider setAutoresizingMask: NSViewWidthSizable];
-
   // make text
-  NSTextField *osctypeText = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
+  self.loop1Text = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
 
-  [osctypeText bind:@"value"
-	 toObject:self
-      withKeyPath:@"oscModel.osctype"
-			 options: @{
-    NSValueTransformerBindingOption: [MSKOscillatorTypeValueTransformer new]
-	}];
+  [self.loop1Text bind:@"value"
+	      toObject:self
+	   withKeyPath:@"loop1Selection"
+	       options:nil];
+
+  // number formatter
+  NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+
+  [numberFormatter setPositivePrefix:@"Pattern "];
+  [numberFormatter setFormat:@"###"];
+  [numberFormatter setMinimumFractionDigits:0];
+  [numberFormatter setMaximumFractionDigits:0];
+  [self.loop1Text setFormatter:numberFormatter];
 
   // pack into row
-  [osctypeHbox addView:self.osctypeSlider enablingXResizing:YES];
-  [osctypeHbox addView:osctypeText enablingXResizing:NO withMinXMargin:10.0];
+  [loop1Hbox addView:self.loop1EnableButton enablingXResizing:NO];
+  [loop1Hbox addView:self.loop1Slider enablingXResizing:YES withMinXMargin:10.0];
+  [loop1Hbox addView:self.loop1Text enablingXResizing:NO withMinXMargin:10.0];
+
 
 }
 
@@ -189,9 +251,9 @@
   [self makeTempoRow];
   [vbox addView: tempoHbox enablingYResizing:NO withMinYMargin:10];
  
-  // Make the osctype slider
-  [self makeOsctypeRow];
-  [vbox addView: osctypeHbox enablingYResizing:NO withMinYMargin:10];
+  // Make the loop1 row
+  [self makeLoop1Row];
+  [vbox addView: loop1Hbox enablingYResizing:NO withMinYMargin:10];
  
   [vbox addView: hbox enablingYResizing: NO];
 }
@@ -245,7 +307,7 @@
 				  backing:NSBackingStoreBuffered
 				    defer:NO];
 
-  [self.win setTitle: @"MSK Pattern Demo"];
+  [self.win setTitle: @"Liveloop Toy"];
   // [self.win setReleasedWhenClosed: NO];
 
   // automatically save/restore window position by AppKit
@@ -315,8 +377,8 @@
 
   // synchronize metro tempo with control
   NSError *err;
-  self.tempo = 60;
-  [_seq setTempo:60 error:&err];
+  self.tempo = 120;
+  [_seq setTempo:120 error:&err];
 
   if (error != nil) {
     NSLog(@"Could not create metronome. Error:%@", error);
@@ -338,10 +400,19 @@
 - (void) makeContext {
   MSKContextRequest *request = [[MSKContextRequest alloc] init];
   request.rate = 44000;
+
+#define HIGHRESOLUTION 1
+
+#if HIGHRESOLUTION
+  request.persize = 128;
+  request.periods = 4;
+#else
   request.persize = 1024;
   request.periods = 2;
+#endif
 
   NSString *devName = @"default";
+  // NSString *devName = @"hw:MGXU";
 
   NSError *error;
   BOOL ok;
@@ -402,7 +473,7 @@
   MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:_ctx];
   env.iGain = vel;
   env.oneshot = YES;
-  env.shottime = 0.1;		// 10 seconds
+  env.shottime = 0.1;
   env.model = _envModel;
   [env compile];
 
@@ -428,96 +499,16 @@
 }
 
 /*
- * This is the figure that is going to play with different root notes
- * and different repetition counts.
+ * Use the pattern manager to load the samples and patterns
  */
+- (void) makePatterns {
 
-- (MSKPattern*) makePat:(int)howManyTimes {
-  int eigth = 55;		// ahead of the beat slightly
-  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
-  [pat sync:@"beat"];
-  
-  [pat thunk:^{
-      [self makeNote:_root vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
+  _mgr = [[PatternManager alloc] initWithCtx:_ctx andSched:_sched];
+  [_mgr initialize];
 
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+2 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
+  [_sched setLiveloop:@"loop1" pat:_mgr.pat1];
 
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+3 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root vel:0.5];
-    }];
-
-  [pat sync:@"beat"];
-  [pat thunk:^{
-      [self makeNote:_root+5 vel:1.0];
-    }];
-  [pat ticks:eigth];
-  [pat thunk:^{
-      [self makeNote:_root+3 vel:0.5];
-    }];
-  [pat repeat:howManyTimes];
-  return pat;
 }
-
-- (MSKPattern*) makeSongPattern {
-
-  MSKPattern *patOnce = [self makePat:1];
-  MSKPattern *patTwice = [self makePat:2];
-   
-  // Now change the root note value
-  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
-  [pat2 thunk:^{
-      self.root = 64; // middle-E
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 69;
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 64;
-    }];
-  [pat2 pat:patTwice]; // play the figure twice
-
-  [pat2 thunk:^{
-      self.root = 71; // middle-E
-    }];
-  [pat2 pat:patOnce]; // play the figure once
-
-  [pat2 thunk:^{
-      self.root = 69; // middle-E
-    }];
-  [pat2 pat:patOnce]; // play the figure once
-
-  [pat2 thunk:^{
-      self.root = 64; // middle-E
-    }];
-  [pat2 pat:patTwice]; // play the figure  twice
-
-  [pat2 repeat:2];
-
-  return pat2;
-}
-
-
 
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
 {
@@ -545,13 +536,8 @@
   [self makeModels];
   [self makeFxPath];
 
-  // Create the song pattern
-  MSKPattern *songPat = [self makeSongPattern];
-
-  NSLog(@"songPat:%@", songPat);
-
-  // Add it to the scheduler
-  [_sched addLaunch:songPat];
+  // load the samples and patterns
+  [self makePatterns];
 
   [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 
