@@ -7,7 +7,6 @@
 #import <AppKit/AppKit.h>
 #import "AlsaSoundKit/AlsaSoundKit.h"
 #import "McLarenSynthKit/McLarenSynthKit.h"
-#import "Pattern.h"
 #import "PrettyScheduler.h"
 
 

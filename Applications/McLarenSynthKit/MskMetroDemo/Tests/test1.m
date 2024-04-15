@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "../Pattern.h"
+#import "McLarenSynthKit/MSKPattern.h"
 
 #import "Testing.h" // Simplified report message
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
   NSArray *expectedValues = @[ @0, @1, @2 ];
   NSMutableArray *actualValues = [[NSMutableArray alloc] init];
 
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
       NSLog(@"ZERO");
       [actualValues addObject:@0];
@@ -36,9 +36,9 @@ int main(int argc, char *argv[]) {
 
   NSLog(@"pat:%@", pat);
 
-  Scheduler *sched = [[Scheduler alloc] init];
+  MSKScheduler *sched = [[MSKScheduler alloc] init];
 
-  Thread *t = [[Thread alloc] initWithThreadId:45];
+  MSKThread *t = [[MSKThread alloc] initWithThreadId:45];
   [t push:pat];
 
   NSLog(@"thread:%@", t);

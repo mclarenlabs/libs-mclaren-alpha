@@ -7,12 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import "McLarenSynthKit/McLarenSynthKit.h"
-#import "../Pattern.h"
 
 @interface Test : NSObject
 @property (readwrite) ASKSeq *seq;
 @property (readwrite) MSKMetronome *metro;
-@property (readwrite) Scheduler *sched;
+@property (readwrite) MSKScheduler *sched;
 @property (readwrite) MSKContext *ctx;
 @property (readwrite) MSKOscillatorModel *osc1Model;
 @property (readwrite) MSKOscillatorModel *osc2Model;
@@ -54,7 +53,7 @@
 
 - (void) makeScheduler {
 
-  _sched = [[Scheduler alloc] init];
+  _sched = [[MSKScheduler alloc] init];
   [_sched registerMetronome:_metro];
 
 }
@@ -141,9 +140,9 @@
  * and different repetition counts.
  */
 
-- (Pattern*) makePat:(int)howManyTimes {
+- (MSKPattern*) makePat:(int)howManyTimes {
   int eigth = 55;		// ahead of the beat slightly
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat sync:@"beat"];
   
   [pat thunk:^{
@@ -197,11 +196,11 @@
 
   NSLog(@"creating pattern");
 
-  Pattern *patOnce = [self makePat:1];
-  Pattern *patTwice = [self makePat:2];
+  MSKPattern *patOnce = [self makePat:1];
+  MSKPattern *patTwice = [self makePat:2];
    
   // Now change the root note value
-  Pattern *pat2 = [[Pattern alloc] initWithName:@"pat2"];
+  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
   [pat2 thunk:^{
       self.root = 64; // middle-E
     }];

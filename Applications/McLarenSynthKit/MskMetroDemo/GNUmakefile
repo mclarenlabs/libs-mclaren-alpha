@@ -17,7 +17,6 @@ MskMetroDemo_OBJC_FILES = \
   MskMetroDemo_AppDelegate.m
 
 MskPatternDemo_OBJC_FILES = \
-  Pattern.m \
   PrettyScheduler.m \
   MskPatternDemo_main.m \
   NSObject+MLBlocks.m \

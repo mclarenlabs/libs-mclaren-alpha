@@ -10,12 +10,11 @@
 
 #import <Foundation/Foundation.h>
 #import "McLarenSynthKit/McLarenSynthKit.h"
-#import "../Pattern.h"
 
 @interface Test : NSObject
 @property (readwrite) ASKSeq *seq;
 @property (readwrite) MSKMetronome *metro;
-@property (readwrite) Scheduler *sched;
+@property (readwrite) MSKScheduler *sched;
 @end
 
 @implementation Test
@@ -51,7 +50,7 @@
 
 - (void) makeScheduler {
 
-  _sched = [[Scheduler alloc] init];
+  _sched = [[MSKScheduler alloc] init];
   [_sched registerMetronome:_metro];
 
 }
@@ -65,7 +64,7 @@
 
   NSLog(@"creating pattern");
 
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
       NSLog(@"INTRO ONE");
     }];

@@ -5,12 +5,11 @@
 
 #import <Foundation/Foundation.h>
 #import "McLarenSynthKit/McLarenSynthKit.h"
-#import "../Pattern.h"
 
 @interface Test : NSObject
 @property (readwrite) ASKSeq *seq;
 @property (readwrite) MSKMetronome *metro;
-@property (readwrite) Scheduler *sched;
+@property (readwrite) MSKScheduler *sched;
 @property (readwrite) MSKContext *ctx;
 @property (readwrite) MSKOscillatorModel *oscModel;
 @property (readwrite) MSKEnvelopeModel *envModel;
@@ -50,7 +49,7 @@
 
 - (void) makeScheduler {
 
-  _sched = [[Scheduler alloc] init];
+  _sched = [[MSKScheduler alloc] init];
   [_sched registerMetronome:_metro];
 
 }
@@ -143,7 +142,7 @@
 
   NSLog(@"creating pattern");
 
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
       NSLog(@"(%ld) INTRO ONE", _sched.ticktime);
       NSLog(@"sched:%@", _sched);
@@ -182,7 +181,7 @@
   [_sched addLaunch:pat];
 
   // Add a delay
-  Pattern *pat2 = [[Pattern alloc] initWithName:@"pat2"];
+  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
   // [pat2 sync:@"beat"];
   [pat2 thunk:^{
       NSLog(@"sched:%@", _sched);

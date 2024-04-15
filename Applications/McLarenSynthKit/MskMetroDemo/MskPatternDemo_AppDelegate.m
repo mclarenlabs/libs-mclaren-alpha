@@ -432,9 +432,9 @@
  * and different repetition counts.
  */
 
-- (Pattern*) makePat:(int)howManyTimes {
+- (MSKPattern*) makePat:(int)howManyTimes {
   int eigth = 55;		// ahead of the beat slightly
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat sync:@"beat"];
   
   [pat thunk:^{
@@ -475,13 +475,13 @@
   return pat;
 }
 
-- (Pattern*) makeSongPattern {
+- (MSKPattern*) makeSongPattern {
 
-  Pattern *patOnce = [self makePat:1];
-  Pattern *patTwice = [self makePat:2];
+  MSKPattern *patOnce = [self makePat:1];
+  MSKPattern *patTwice = [self makePat:2];
    
   // Now change the root note value
-  Pattern *pat2 = [[Pattern alloc] initWithName:@"pat2"];
+  MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@"pat2"];
   [pat2 thunk:^{
       self.root = 64; // middle-E
     }];
@@ -546,7 +546,7 @@
   [self makeFxPath];
 
   // Create the song pattern
-  Pattern *songPat = [self makeSongPattern];
+  MSKPattern *songPat = [self makeSongPattern];
 
   NSLog(@"songPat:%@", songPat);
 

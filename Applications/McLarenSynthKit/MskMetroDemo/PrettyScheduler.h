@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#import "Pattern.h"
+#import "McLarenSynthKit/MSKPattern.h"
 
-@interface PrettyScheduler : Scheduler
+@interface PrettyScheduler : MSKScheduler
 
 @property (readwrite) NSTextView *textView; // the textview to use
 

@@ -5,13 +5,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "../Pattern.h"
+#import "McLarenSynthKit/MSKPattern.h"
 
 #import "Testing.h" // Simplified report message
 
 int main(int argc, char *argv[]) {
 
-  Pattern *pat = [[Pattern alloc] initWithName:@"pat1"];
+  MSKPattern *pat = [[MSKPattern alloc] initWithName:@"pat1"];
   [pat thunk:^{
       NSLog(@"ZERO");
     }];
@@ -42,9 +42,9 @@ int main(int argc, char *argv[]) {
   /****************/
 
 
-  Scheduler *sched = [[Scheduler alloc] init];
+  MSKScheduler *sched = [[MSKScheduler alloc] init];
 
-  Thread *t = [[Thread alloc] initWithThreadId:45];
+  MSKThread *t = [[MSKThread alloc] initWithThreadId:45];
   [t push:pat];
 
   NSLog(@"thread:%@", t);
