@@ -8,7 +8,7 @@
         <meta name="author" content="McLaren Labs of San Francisco">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>McLaren Synth Kit - Metronome - MSK</title>
+        <title>McLaren Synth Kit - Liveloops - MSK</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -60,7 +60,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">McLaren Synth Kit - Metronome</a>
+    <a href="../msk-metronome/" class="dropdown-item">McLaren Synth Kit - Metronome</a>
 </li>
                                     
 <li>
@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="../msk-liveloop/" class="dropdown-item">McLaren Synth Kit - Liveloops</a>
+    <a href="./" class="dropdown-item active">McLaren Synth Kit - Liveloops</a>
 </li>
                                 </ul>
                             </li>
@@ -87,12 +87,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../msk-samples/" class="nav-link">
+                                <a rel="prev" href="../msk-pattern/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../msk-pattern/" class="nav-link">
+                                <a rel="next" href="../conclusion/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -117,29 +117,21 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#mclaren-synth-kit-metronome" class="nav-link">McLaren Synth Kit - Metronome</a>
+            <li class="nav-item" data-level="1"><a href="#mclaren-synth-kit-liveloops" class="nav-link">McLaren Synth Kit - Liveloops</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#time-types" class="nav-link">Time Types</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#midi-clock" class="nav-link">MIDI Clock</a>
+            <li class="nav-item" data-level="2"><a href="#a-simple-liveloop" class="nav-link">A Simple Liveloop</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#the-msk-metronome" class="nav-link">The MSK Metronome</a>
+            <li class="nav-item" data-level="2"><a href="#other-operations-on-liveloops" class="nav-link">Other Operations on Liveloops</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#the-metronome-dispatch-queue" class="nav-link">The Metronome Dispatch Queue</a>
+            <li class="nav-item" data-level="2"><a href="#example" class="nav-link">Example</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#controlling-the-metronome" class="nav-link">Controlling the Metronome</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#instantiating-a-metronome" class="nav-link">Instantiating a Metronome</a>
+            <li class="nav-item" data-level="2"><a href="#contrasting-patterns-and-liveloops" class="nav-link">Contrasting Patterns and Liveloops</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -150,82 +142,109 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="mclaren-synth-kit-metronome">McLaren Synth Kit - Metronome</h1>
-<p>The MSK Metronome provides a high-precision timing source that is linked to the ALSA MIDI clock.  With it, you can produce tick-accurate timing of MIDI events.</p>
-<h2 id="time-types">Time Types</h2>
-<p>The Linux ALSA Sequencer interface provides many complex functions.  In addition to sending and receiving MIDI events, the SEQ interface provides functions for manipulating how MIDI events are handled in a timing queue.</p>
-<p>There are two distinct time types in the MIDI system</p>
+<h1 id="mclaren-synth-kit-liveloops">McLaren Synth Kit - Liveloops</h1>
+<p>We previously described Patterns: a sequence of instructions, possibly with some amount of repetition.  Patterns are of finite length, and cannot be changed while playing.  Liveloops are an extension to Patterns that allows them to be altered while playing --- that is why they are called "live."  A Liveloop can be re-defined and the new definition takes over the next measure so that the music is not interrupted.]</p>
+<p>The reason a Liveloop is called what it is comes from two important qualities.</p>
 <ul>
-<li>tick time</li>
-<li>realtime</li>
+<li>"live" - the definition can be changed while it is running</li>
+<li>"loop" - it repeats automatically (and forever)</li>
 </ul>
-<p>Ticks are related to the beats of music.  By default, a SEQ is set up with 120 PPQ (parts-per-quarter) note.  When playing back events in a queue, the tempo of the queue determines the rate at which ticks are replayed.</p>
-<p>Realtime maps events to absolute times (in seconds and nanoseconds) that are independent of the current tempo of the music.</p>
-<h2 id="midi-clock">MIDI Clock</h2>
-<p>There is another time base in the system: the <a href="https://en.wikipedia.org/wiki/MIDI_beat_clock">MIDI clock</a>.  By definition, there are 24 MIDI clocks per quarter note.</p>
-<p>With our default system set up, a MIDI clock occurs every 5 ticks, and a quarter note occurs every 24 clocks.</p>
-<h2 id="the-msk-metronome">The MSK Metronome</h2>
-<p>The MSK Metronome uses the timing of MIDI ticks to produce a beat-based timebase that can be used in any way you see fit.  Furthermore, the Metronome also has the notion of a time signature (4/4, 3/4, etc) to help map ticks to beats and measures.</p>
-<p>The beat callback of the Metronome looks like this when used.</p>
-<pre><code class="language-objc">metro.setTimesig:4 den:4;  // set 4/4 time
-
-[metro onBeat:^(unsigned tick, int beat, int measure) {
-   if (beat == 0)
-     NSLog(@&quot;down beat&quot;);
-   else
-     NSLog(@&quot;beat: %d&quot;, beat)
-  }]
-</code></pre>
-<p>When run, the metronome will start counting from beat 0 at tick 0 and will increment the measure every four beats.  The tick value returned is the running tick time with 120 PPQ.</p>
-<p>The Metronome can also produce a MIDI clock callback.</p>
-<pre><code class="language-objc">[metro onClock:^(unsigned tick, int clock, int beat, int measure) {
-   ...
-   }];
-</code></pre>
-<p>The clock will run from 0..23 for each beat.</p>
-<h2 id="the-metronome-dispatch-queue">The Metronome Dispatch Queue</h2>
-<p>Events from the Metronome are dispatched from the dispatch queue of the underlying <code>ASKSeq</code>.  By default, this is a dedicated queue called "midi" for events handled by the ASK system.</p>
-<p>It is important to be aware of the fact that callbacks from the Metronome are run on this queue.</p>
-<h2 id="controlling-the-metronome">Controlling the Metronome</h2>
-<p>The Metronome has the following methods to control its operation.</p>
-<ul>
-<li>start</li>
-<li>stop</li>
-<li>kontinue</li>
-</ul>
-<p>Each of these maps to operations on the underlying ALSA queue attached to the SEQ of the Metronome.  A side-effect of this design is that if your code is using the same queue for other things, starting and stopping the metronome will start and stop those events.  This is normally a good thing when the Metronome is the driving timebase for your system.</p>
-<h2 id="instantiating-a-metronome">Instantiating a Metronome</h2>
-<p>The <code>MSKMetronome</code> does not create an ALSA Seq on its own.  It needs to have one provided for it.</p>
-<p>The following two methods illustrate a typical way a Seq and a Metronome would be created using the McLarenSynthKit.  The <code>makeSeq</code> method creates a Seq, whose only customizatin is that it is named "metronome."  This Seq is available for regular event sending and receiving, etc.</p>
-<p>The <code>makeMetronome</code> method is initialized with the Seq previously created.  Callbacks can then be attached to the Metronome, and the start/stop/kontinue methods can be used to control its play position.</p>
-<pre><code class="language-objc">- (void) makeSeq {
-
-  ASKSeqOptions *options = [[ASKSeqOptions alloc] init];
-  options-&gt;_sequencer_name = &quot;metronome&quot;;
-
-  NSError *error;
-  _seq = [[ASKSeq alloc] initWithOptions:options error:&amp;error];
-  if (error != nil) {
-    NSLog(@&quot;Could not create sequencer.  Error:%@&quot;, error);
-    exit(1);
-  }
+<p>Regular patterns don't have either of these characteristics.</p>
+<h2 id="a-simple-liveloop">A Simple Liveloop</h2>
+<p>In this section we are going to create a simple pattern, start it playing as a Liveloop, and then alter it while it is running.  Our initial pattern will play a low-tom on beats 1 and 3 and a clap on beats 2 and 4.  (See Applications/McLarenSynthKit/MskMetroDemo/Tests/testlive5.m for more details.)</p>
+<p>First, we'll load some samples.</p>
+<pre><code class="language-objc">MSKSample *tom = [[MSKSample alloc] initWithFilePath:@&quot;./lidtom1.wav&quot; error:&amp;err];
+if (err != nil) {
+  NSLog(@&quot;could not load sample 'lidtom1.wav'&quot;);
+  exit(1);
 }
 
-- (void) makeMetronome {
+MSKSample *lowtom = [tom resampleBy:1.5]; // lower the pitch
 
-  NSError *error;
-  _metro = [[MSKMetronome alloc] initWithSeq:_seq error:&amp;error];
-
-  // set tempo
-  NSError *err;
-  [_seq setTempo:90 error:&amp;err];
-
-  if (error != nil) {
-    NSLog(@&quot;Could not create metronome. Error:%@&quot;, error);
-    exit(1);
-  }
+MSKSample *clap = [[MSKSample alloc] initWithFilePath:@&quot;./clap1.wav&quot; error:&amp;err];
+if (err != nil) {
+  NSLog(@&quot;could not load sample 'clap1.wav'&quot;);
+  exit(1);
 }
-</code></pre></div>
+
+</code></pre>
+<p>Then we'll create our simple 4-beat pattern.</p>
+<pre><code class="language-objc">MSKPattern *pat = [[MSKPattern alloc] initWithName:@&quot;pat1&quot;];
+
+[pat sync:@&quot;downbeat&quot;];
+[pat thunk:^{
+  [playSample:lowtom];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:clap];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:lowtom];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:clap];
+  }];
+</code></pre>
+<p>When played, the pattern above first synchronizes with the next downbeat (waiting if it needs to), and then it will play the lowtom/clap/lowtom/clap pattern.  To play it as a live loop we add it to the scheduler with a name.</p>
+<pre><code class="language-objc">[_sched Liveloop:@&quot;liveloop1&quot; pat:pat];
+</code></pre>
+<p>Now, start it playing by using the metronome transport controls.</p>
+<pre><code class="language-objc">[_metro start];
+</code></pre>
+<p>Now let's suppose we would like to replace "pat1" with a different pattern that plays two hand-claps on the "and" of 3 and four.  Call this "pat2".</p>
+<pre><code class="language-objc">MSKPattern *pat2 = [[MSKPattern alloc] initWithName:@&quot;pat2&quot;];
+
+[pat sync:@&quot;downbeat&quot;];
+[pat thunk:^{
+  [playSample:lowtom];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:clap];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:lowtom];
+  }];
+
+[pat ticks:60]; // 60 ticks is an eight note duration
+[pat thunk:^{
+  [playSample:clap];
+  }];
+
+[pat sync:@&quot;beat&quot;];
+[pat thunk:^{
+  [playSample:clap];
+  }];
+</code></pre>
+<p>The metronome is still running, and the scheduler is still playing the first pattern.  We can replace it while it's running.</p>
+<pre><code class="language-objc">[_sched setLiveloop:&quot;liveloop1&quot; pat:pat2];
+</code></pre>
+<p>Replacing the named liveloop called "liveloop1" causes the following things to happen.  The initial pattern (named "pat1") will play to completion.  The scheduler will then look for the <em>current</em> definition of "liveloop1" from an internal table and it will find "pat2".</p>
+<p>The new pattern "pat2" also waits for the next "downbeat" and synchronizes with the metronome and begins its four-beat sequence.  So what we will hear is the transition from "pat1" to "pat2" without any breaks in the rhythm.</p>
+<h2 id="other-operations-on-liveloops">Other Operations on Liveloops</h2>
+<p>Liveloops can be replaced while they are playing (or when they are not playing).  And they can also be paused and re-enabled.  This is accomplished with the following methods.</p>
+<pre><code class="language-objc">[_sched disableLiveloop:@&quot;liveloop1&quot;];
+
+[_sched enableLiveloop:@&quot;liveloop1&quot;];
+</code></pre>
+<p><strong>DISABLE</strong>
+: Disabling a Liveloop sets a flag that instructs the scheduler to <em>not</em> re-start the named liveloop when it finishes playing.  The pattern in the named liveloop will finish what its doing and then stop.</p>
+<p><strong>ENABLE</strong>
+: Enabling a Liveloop causes it to get launched again.  If the Liveloop is currently playing, then when it reaches the end it will start over.  If it had previously ended, it will be restarted.  The pattern of the liveloop will again synchronize with the metronome using the named events so that no beats will be dropped.</p>
+<h2 id="example">Example</h2>
+<p>An example of a GUI application that allows starting, stopping, changing, disabling and re-enabling liveloops is in <a href="/Applications/McLarenSynthKit/LiveloopToy">Applications/McLarenSynthKit/LiveloopToy</a>.</p>
+<h2 id="contrasting-patterns-and-liveloops">Contrasting Patterns and Liveloops</h2>
+<p>[_sched addPattern:pat1];
+[_sched setLiveloop:@"loop1" pat:pat1];</p></div>
             </div>
         </div>
 

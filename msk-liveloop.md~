@@ -1,0 +1,3 @@
+# McLaren Synth Kit - Liveloops
+
+We previously described Patterns: a sequence of instructions, possibly with some amount of repetition.  Patterns are of finite length, and cannot be changed while playing.  Liveloops are an extension to Patterns that allows alteration while playing.  A Liveloop can be re-defined and the new definition takes over the next "downbeat."

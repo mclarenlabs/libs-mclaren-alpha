@@ -16,6 +16,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/console.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objc.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/objectivec.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/smalltalk.min.js"></script>
         <script>hljs.highlightAll();</script> 
@@ -65,6 +66,10 @@
 <li>
     <a href="./" class="dropdown-item active">McLaren Synth Kit - Patterns</a>
 </li>
+                                    
+<li>
+    <a href="../msk-liveloop/" class="dropdown-item">McLaren Synth Kit - Liveloops</a>
+</li>
                                 </ul>
                             </li>
                             <li class="navitem">
@@ -87,7 +92,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../conclusion/" class="nav-link">
+                                <a rel="next" href="../msk-liveloop/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -163,7 +168,7 @@
 <h2 id="what-is-a-pattern">What is a Pattern?</h2>
 <p>A Pattern is a repeating sequence of instructions, some of which specify the passage of time, others execute code.  Patterns are built up by calling methods on a Pattern object.</p>
 <p>In the snippet below, assume that there is Synthesizer object named <code>synth</code> that has a method <code>playNote:</code>.  The following defines a pattern that executes four times and then exits.</p>
-<pre><code class="language-objc">Pattern *pat = [[Pattern alloc] initWithName:'pat1'];
+<pre><code class="language-objc">MSKPattern *pat = [[MSKPattern alloc] initWithName:'pat1'];
 
 [pat sync:@&quot;beat&quot;];
 [pat thunk:^{
@@ -189,7 +194,7 @@
 </code></pre>
 <p>The Pattern methods are a little-language for specifying how to synchronize with the Metronome.  This pattern says synchronize with a beat (beat 0) and then play note 64.  Then synchronize with the next beat (beat 1) and play note 60.  Because there are fourr <code>sync:</code> calls, the pattern synchronizes with each beat in a 4/4 measure.  The <code>repeat:</code> call is an annotation on the pattern that specifies its repeat factor.</p>
 <p>A Pattern can also specify the passage of time in ways other than synchronizing with events.  A Pattern can spcify the passage of time in "ticks" or "realtime".</p>
-<pre><code class="language-objc">Pattern *pat2 = [[Pattern alloc] initWithName:'pat2'];
+<pre><code class="language-objc">MSKPattern *pat2 = [[MSKPattern alloc] initWithName:'pat2'];
 
 [pat2 sync:@&quot;beat&quot;];
 [pat2 thunk:^{ doSomething(); }];
@@ -213,7 +218,7 @@
 <h2 id="sub-patterns">Sub-patterns</h2>
 <p>Patterns can call other patterns, which execute as subroutines.  The Pattern <code>pat:</code> method specifies a sub-pattern.  A sub-pattern blocks its parent until it is done.</p>
 <p>Consider the following pattern.  It plays four sixteenth notes, synchronized with the next beat.</p>
-<pre><code class="language-objc">Pattern *pat3 = [[Pattern alloc] initWithName:@&quot;pat3&quot;];
+<pre><code class="language-objc">MSKPattern *pat3 = [[MSKPattern alloc] initWithName:@&quot;pat3&quot;];
 [pat3 sync:@&quot;beat&quot;];
 [pat3 thunk:^{ [synth playNote:70; ]}];
 [pat ticks:30];
@@ -224,7 +229,7 @@
 [pat3 thunk:^{ [synth playNote:70; ]}];
 </code></pre>
 <p>This pattern could be incorporated into a parent pattern.  The pattern below plays a note on beat 0 and beat 1, on beat 2 it plays four sixteenths, and then on beat 3 it plays a note.  The pattern then repeats 4 times.</p>
-<pre><code class="language-objc">Pattern *pat4 = [[Pattern alloc] initWithName:@&quot;pat4&quot;];
+<pre><code class="language-objc">MSKPattern *pat4 = [[MSKPattern alloc] initWithName:@&quot;pat4&quot;];
 
 [pat4 sync:@&quot;beat&quot;];
 [pat4 thunk:^{ [synth playNote:64; ]}];
@@ -240,7 +245,7 @@
 <h2 id="patterns-in-steptalk">Patterns in StepTalk</h2>
 <p>StepTalk is a Smalltalk-dialect interpreter that can call Objective-C classes and methods.  Using Smalltalk syntax with Patterns is slightly prettier because of the "cascade" operator (operator semicolon ";" in Smalltalk).</p>
 <p>With StepTalk, the first example of this chapter looks like the following.</p>
-<pre><code class="language-smalltalk">pat := Pattern alloc initWithName:'pat1'.
+<pre><code class="language-smalltalk">pat := MSKPattern alloc initWithName:'pat1'.
 
 pat
   sync: #beat;
@@ -261,7 +266,7 @@ pat
 <h2 id="running-patterns">Running Patterns</h2>
 <p>So far, we have shown how to create patterns, but we haven't shown how to start them or stop them.  For that we need to create a Scheduler and attach it to a Metronome.  Once attached, the Scheduler TAKES OVER all of the callbacks of the Metronome and is controlled by the start/stop/kontinue methods of the Metronome.</p>
 <p>Assume that we have previously created a Metronome named <code>_metro</code>.  Then the following creates a Scheduler.</p>
-<pre><code class="language-objc">@property Scheduler *sched;
+<pre><code class="language-objc">@property MSKScheduler *sched;
 
 - (void) makeScheduler {
 
@@ -335,7 +340,7 @@ pat
 <p>The Pattern mechanism abstracts the calllbacks of the Metronome and provides a little-language for specifying rhythmic phrases.  The pattern mechanism only specifies the passage of time in varying ways and leaves the execution of what to do at an instant up to an open-ended block invocation.  This leaves open the option to launch context sounds, control model parameters, or do other things.</p>
 <p>Because Patterns are tied to the MIDI clock of the ALSA Seq, Patterns provide tick-accurate timing in a user-friendly way.</p>
 <h2 id="postscript">Postscript</h2>
-<p>Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.  Additionally, they are not yet a standard part of the library.  Patterns are implemented in files <code>Pattern.h</code> and <code>Pattern.m</code> in the <code>MskMetroDemo</code> directory.</p></div>
+<p>Patterns are a very recent addition to the McLaren Synth Kit, and are more likely subject to change more than other parts of the kit.</p></div>
             </div>
         </div>
 
