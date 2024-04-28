@@ -11,7 +11,7 @@
 
 #define MSK_DRAWBAR_OSCILLATOR_MAXTONES 10		// for organ overtones
 
-@interface MSKDrawbarOscillatorModel : MSKOscillatorModel {
+@interface MSKDrawbarModel : NSObject < NSCoding > {
   @public
     // for reading in the audio loop
   int _organ;			// YES,NO
@@ -21,7 +21,6 @@
 
   // continuous updates
   double _amplitudes[MSK_DRAWBAR_OSCILLATOR_MAXTONES];
-  double _modulation;
 }
 
 @property (nonatomic, readwrite) int organ;
