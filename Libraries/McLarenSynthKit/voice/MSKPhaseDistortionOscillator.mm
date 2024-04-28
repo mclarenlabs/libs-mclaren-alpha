@@ -21,8 +21,6 @@ extern "C" {
   pdosc *pdosc;
 }
 
-@dynamic model; // superclass will implement
-
 - (id) initWithCtx:(MSKContext*)c {
   if (self = [super initWithCtx:c]) {
 
@@ -41,14 +39,16 @@ extern "C" {
 
   if (_model != nil) {
     // help compiler understand _model holds a specialized model
-    MSKModulatedOscillatorModel *m = (MSKModulatedOscillatorModel*) _model;
-    pdosc->osctype.setRef(m->_osctype);
-    pdosc->octave.setRef(m->_octave);
-    pdosc->transpose.setRef(m->_transpose);
-    pdosc->cents.setRef(m->_cents);
-    pdosc->bendwidth.setRef(m->_bendwidth);
-    pdosc->bend.setRef(m->_pitchbend);
-    pdosc->modulation.setRef(m->_modulation);
+    pdosc->osctype.setRef(_model->_osctype);
+    pdosc->octave.setRef(_model->_octave);
+    pdosc->transpose.setRef(_model->_transpose);
+    pdosc->cents.setRef(_model->_cents);
+    pdosc->bendwidth.setRef(_model->_bendwidth);
+    pdosc->bend.setRef(_model->_pitchbend);
+  }
+
+  if (_modulationModel != nil) {
+    pdosc->modulation.setRef(_modulationModel->_modulation);
   }
 
   return YES;

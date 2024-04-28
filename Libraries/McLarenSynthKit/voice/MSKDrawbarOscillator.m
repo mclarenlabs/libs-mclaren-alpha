@@ -89,12 +89,15 @@ static double GAIN = 1.0;
     _pw = _model->_pw;
     // _modulation = _model->_modulation;
 
+  }
+
+  if (_drawbarModel != nil) {
     // Organ controls
-    _overtones = _model->_overtones;
+    _overtones = _drawbarModel->_overtones;
     for (int i=0; i < MSK_DRAWBAR_OSCILLATOR_MAXTONES; i++) {
-      _numerators[i] = _model->_numerators[i];
-      _denominators[i] = _model->_denominators[i];
-      _amplitudes[i] = _model->_amplitudes[i];
+      _numerators[i] = _drawbarModel->_numerators[i];
+      _denominators[i] = _drawbarModel->_denominators[i];
+      _amplitudes[i] = _drawbarModel->_amplitudes[i];
     }
       
   }
@@ -239,10 +242,12 @@ static inline double compute_sound(double phi, double modulo, int osctype, doubl
     exit(1);
   }
 
-  for (int o = 0; o < _overtones; o++) {
-    amp[o] = _amplitudes[o];
-    aincr[o] = (_model->_amplitudes[o] - _amplitudes[o]) / nframes;
-    _amplitudes[o] = _model->_amplitudes[o];
+  if (_drawbarModel != nil) {
+    for (int o = 0; o < _overtones; o++) {
+      amp[o] = _amplitudes[o];
+      aincr[o] = (_drawbarModel->_amplitudes[o] - _amplitudes[o]) / nframes;
+      _amplitudes[o] = _drawbarModel->_amplitudes[o];
+    }
   }
 
   if (_sEnvelope == nil) {
