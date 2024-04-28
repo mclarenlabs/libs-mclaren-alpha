@@ -20,9 +20,8 @@
 
 #import "McLarenSynthKit/model/MSKEnvelopeModel.h"
 // #import "McLarenSynthKit/model/MSKMetronomeModel.h"
-#import "McLarenSynthKit/model/MSKModelBase.h"
-#import "McLarenSynthKit/model/MSKModelProtocol.h"
 #import "McLarenSynthKit/model/MSKOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKDrawbarModel.h"
 #import "McLarenSynthKit/model/MSKReverbModel.h"
 // #import "McLarenSynthKit/model/MSKValuesModel.h"
 
