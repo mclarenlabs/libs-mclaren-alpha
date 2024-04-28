@@ -183,15 +183,15 @@
   [_v7.titleTextField setStringValue:@"1 1/3"];
   [_v8.titleTextField setStringValue:@"1"];
 
-  [self configureDrawbar:_v0 path:@"oscModel.amp0"];
-  [self configureDrawbar:_v1 path:@"oscModel.amp1"];
-  [self configureDrawbar:_v2 path:@"oscModel.amp2"];
-  [self configureDrawbar:_v3 path:@"oscModel.amp3"];
-  [self configureDrawbar:_v4 path:@"oscModel.amp4"];
-  [self configureDrawbar:_v5 path:@"oscModel.amp5"];
-  [self configureDrawbar:_v6 path:@"oscModel.amp6"];
-  [self configureDrawbar:_v7 path:@"oscModel.amp7"];
-  [self configureDrawbar:_v8 path:@"oscModel.amp8"];
+  [self configureDrawbar:_v0 path:@"drawbarModel.amp0"];
+  [self configureDrawbar:_v1 path:@"drawbarModel.amp1"];
+  [self configureDrawbar:_v2 path:@"drawbarModel.amp2"];
+  [self configureDrawbar:_v3 path:@"drawbarModel.amp3"];
+  [self configureDrawbar:_v4 path:@"drawbarModel.amp4"];
+  [self configureDrawbar:_v5 path:@"drawbarModel.amp5"];
+  [self configureDrawbar:_v6 path:@"drawbarModel.amp6"];
+  [self configureDrawbar:_v7 path:@"drawbarModel.amp7"];
+  [self configureDrawbar:_v8 path:@"drawbarModel.amp8"];
   
 }
 
@@ -741,21 +741,23 @@
 }
 
 - (void) makeModels {
-  self.oscModel = [[MSKDrawbarOscillatorModel alloc] initWithName:@"osc1"];
+  self.oscModel = [[MSKOscillatorModel alloc] init];
   self.oscModel.osctype = MSK_OSCILLATOR_TYPE_SQUARE;
 
-  self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  self.drawbarModel = [[MSKDrawbarModel alloc] init];
+
+  self.envModel = [[MSKEnvelopeModel alloc] init];
   self.envModel.attack = 0.05;
   self.envModel.decay = 0.1;
   self.envModel.sustain = 0.8;
   self.envModel.rel = 0.2;
 
-  self.filtModel = [[MSKFilterModel alloc] initWithName:@"filt1"];
+  self.filtModel = [[MSKFilterModel alloc] init];
   self.filtModel.filtertype = MSK_FILTER_MOOG;
   self.filtModel.fc = 2500;
   self.filtModel.q = 2.0;
 
-  self.reverbModel = [[MSKReverbModel alloc] initWithName:@"reverb1"];
+  self.reverbModel = [[MSKReverbModel alloc] init];
   self.reverbModel.on = YES; // ToDo: make a GUI switch
 }
 
@@ -773,6 +775,7 @@
   osc.iNote = note;
   osc.sEnvelope = env;
   osc.model = _oscModel;
+  osc.drawbarModel = _drawbarModel;
   [osc compile];
 
   [_ctx addVoice:osc];

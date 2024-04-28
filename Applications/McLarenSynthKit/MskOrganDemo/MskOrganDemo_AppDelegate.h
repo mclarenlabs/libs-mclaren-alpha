@@ -21,7 +21,8 @@
 
 @property (nonatomic, retain, strong) MSKContext *ctx;
 @property (nonatomic, retain, strong) MSKEnvelopeModel *envModel;
-@property (nonatomic, retain, strong) MSKDrawbarOscillatorModel *oscModel;
+@property (nonatomic, retain, strong) MSKOscillatorModel *oscModel;
+@property (nonatomic, retain, strong) MSKDrawbarModel *drawbarModel;
 @property (nonatomic, retain, strong) MSKReverbModel *reverbModel;
 @property (nonatomic, retain, strong) MSKFilterModel *filtModel;
 

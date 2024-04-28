@@ -53,15 +53,17 @@
 }
 
 - (void) makeModels {
-  self.oscModel = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
+  self.oscModel = [[MSKOscillatorModel alloc] init];
   self.oscModel.osctype = MSK_OSCILLATOR_TYPE_SQUARE;
   self.oscModel.pw = 25;
 
-  self.pdModel = [[MSKModulatedOscillatorModel alloc] initWithName:@"osc2"];
-  self.pdModel.osctype = MSK_OSCILLATOR_TYPE_SIN;
-  self.pdModel.modulation = 1.5;
+  self.pdoscModel = [[MSKOscillatorModel alloc] init];
+  self.pdoscModel.osctype = MSK_OSCILLATOR_TYPE_SIN;
 
-  self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  self.pdmodModel = [[MSKModulationModel alloc] init];
+  self.pdmodModel.modulation = 1.5;
+
+  self.envModel = [[MSKEnvelopeModel alloc] init];
   self.envModel.attack = 0.01;
   self.envModel.decay = 0.05;
   self.envModel.sustain = 0.8;
@@ -85,7 +87,8 @@
   MSKPhaseDistortionOscillator *pd = [[MSKPhaseDistortionOscillator alloc] initWithCtx:_ctx];
   pd.iNote = note;
   pd.sEnvelope = env;
-  pd.model = _pdModel;
+  pd.model = _pdoscModel;
+  pd.modulationModel = _pdmodModel;
   pd.sPhasedistortion = osc;
   [pd compile];
   
