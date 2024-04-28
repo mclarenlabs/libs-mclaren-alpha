@@ -11,14 +11,7 @@
 #import "McLarenSynthKit/MSKContext.h"
 #import "McLarenSynthKit/model/MSKOscillatorModel.h"
 
-@interface MSKGeneralOscillator : MSKContextVoice {
-
-  // allow access to these for MSKPhaseDistortionOscillator
-  @protected
-  MSKContextEnvelope *_sEnvelope;
-  MSKOscillatorModel *_model;
-
-}
+@interface MSKGeneralOscillator : MSKContextVoice
 
 // the initial Note
 @property (nonatomic, readwrite) unsigned iNote;

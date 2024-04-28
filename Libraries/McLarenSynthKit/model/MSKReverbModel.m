@@ -8,9 +8,9 @@
 
 @implementation MSKReverbModel
 
-- (id) initWithName:(NSString*)name {
+- (id) init {
 
-  if (self = [super initWithName:name]) {
+  if (self = [super init]) {
 
     // init values
     _on = NO;

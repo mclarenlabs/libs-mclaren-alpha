@@ -7,7 +7,8 @@
  */
 
 #import "McLarenSynthKit/MSKContext.h"
-#import "McLarenSynthKit/model/MSKDrawbarOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKDrawbarModel.h"
 
 @interface MSKDrawbarOscillator : MSKContextVoice {
 
@@ -31,8 +32,11 @@
 // the Note
 @property (nonatomic, readwrite) unsigned iNote;
 
-// override the model
-@property (nonatomic, readwrite) MSKDrawbarOscillatorModel *model;
+// the oscillator model
+@property (nonatomic, readwrite) MSKOscillatorModel *model;
+
+// the drawbar model
+@property (nonatomic, readwrite) MSKDrawbarModel *drawbarModel;
 
 // the envelope
 @property (nonatomic, readwrite, ) MSKContextEnvelope *sEnvelope;

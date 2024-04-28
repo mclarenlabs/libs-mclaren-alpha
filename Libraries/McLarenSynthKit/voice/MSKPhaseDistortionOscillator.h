@@ -8,16 +8,24 @@
 
 #import "McLarenSynthKit/MSKContext.h"
 #import "McLarenSynthKit/voice/MSKGeneralOscillator.h"
-#import "McLarenSynthKit/model/MSKModulatedOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKModulationModel.h"
 
-@interface MSKPhaseDistortionOscillator : MSKGeneralOscillator {
-}
+@interface MSKPhaseDistortionOscillator : MSKContextVoice
 
-// override the model type
-@property (nonatomic, readwrite) MSKModulatedOscillatorModel *model;
+// the initial Note
+@property (nonatomic, readwrite) unsigned iNote;
 
+// the oscillator model
+@property (nonatomic, readwrite) MSKOscillatorModel *model;
 
-// the phasedistortion
+// the envelope
+@property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;
+
+// the modulation model
+@property (nonatomic, readwrite) MSKModulationModel *modulationModel;
+
+// the phasedistortion input
 @property (nonatomic, readwrite) MSKContextVoice *sPhasedistortion;
 
 @end

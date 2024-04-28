@@ -12,15 +12,19 @@
 
 #import <Foundation/Foundation.h>
 #import "McLarenSynthKit/MSKContext.h"
-#import "McLarenSynthKit/model/MSKModulatedOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKModulationModel.h"
 
 @interface MSKFMPhaseEnvelopeOscillator : MSKContextVoice
 
 // the Note
 @property (nonatomic, readwrite) unsigned iNote;
 
-// the model
-@property (nonatomic, readwrite) MSKModulatedOscillatorModel *model;
+// the oscillator model
+@property (nonatomic, readwrite) MSKOscillatorModel *model;
+
+// the modulation model
+@property (nonatomic, readwrite) MSKModulationModel *modulationModel;
 
 // the envelope
 @property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;

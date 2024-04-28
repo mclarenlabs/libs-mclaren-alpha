@@ -7,14 +7,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "McLarenSynthKit/model/MSKModelBase.h"
-#import "McLarenSynthKit/model/MSKModelProtocol.h"
 
 /*
  * An Envelope Model holds parameters that envelope generators use.
  */
 
-@interface MSKEnvelopeModel : MSKModelBase<MSKModelProtocol> {
+@interface MSKEnvelopeModel : NSObject {
 @public
   double _attack;
   double _decay;
@@ -30,7 +28,7 @@
 @property (nonatomic, readwrite) double rel; // 'release' is a reserved word
 @property (nonatomic, readwrite) double sens; // sensitivity of gain to velocity
 
-- (id) initWithName:(NSString*)name;
+- (id) init;
 
 // utility: compute envelope iGain [0..1.0] as a function of note velocity [0..127] and sens
 - (double) iGainForVel:(uint8_t)vel;

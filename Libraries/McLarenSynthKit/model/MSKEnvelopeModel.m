@@ -9,9 +9,9 @@
 
 @implementation MSKEnvelopeModel
 
-- (id) initWithName:(NSString*)name {
+- (id) init {
 
-  if (self = [super initWithName:name]) {
+  if (self = [super init]) {
     _attack = 0.001;
     _decay = 0.01;
     _sustain = 0.9;

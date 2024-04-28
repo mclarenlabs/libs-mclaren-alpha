@@ -13,13 +13,12 @@ LIBRARY_NAME = McLarenSynthKit
 McLarenSynthKit_OBJC_FILES = \
   MSKError.m \
   MSKMetronome.m \
-  model/MSKModelBase.m \
   MSKContext.m \
   model/MSKEnvelopeModel.m \
   env/MSKEnvelopeFanout.m \
   model/MSKOscillatorModel.m \
-  model/MSKModulatedOscillatorModel.m \
-  model/MSKDrawbarOscillatorModel.m \
+  model/MSKModulationModel.m \
+  model/MSKDrawbarModel.m \
   voice/MSKSinFixedOscillator.m \
   voice/MSKDrawbarOscillator.m \
   voice/MSKFMPhaseEnvelopeOscillator.m \
@@ -49,14 +48,13 @@ McLarenSynthKit_CC_FILES = \
 McLarenSynthKit_HEADER_FILES = \
   MSKError.h \
   MSKMetronome.h \
-  model/MSKModelBase.h model/MSKModelProtocol.h \
   MSKContext.h \
   model/MSKEnvelopeModel.h \
   env/MSKLinEnvelope.h \
   env/MSKExpEnvelope.h \
   env/MSKEnvelopeFanout.h \
   model/MSKOscillatorModel.h \
-  model/MSKModulatedOscillatorModel.h \
+  model/MSKModulationModel.h \
   model/MSKDrawbarOscillatorModel.h \
   voice/MSKSinFixedOscillator.h \
   voice/MSKGeneralOscillator.h \

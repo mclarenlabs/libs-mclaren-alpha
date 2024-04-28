@@ -7,10 +7,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "McLarenSynthKit/model/MSKModelBase.h"
-#import "McLarenSynthKit/model/MSKModelProtocol.h"
 
-@interface MSKReverbModel : MSKModelBase<MSKModelProtocol> {
+@interface MSKReverbModel : NSObject {
   @public
   int _on;			// reverb on/off
   double _dry;
@@ -26,6 +24,6 @@
 @property (nonatomic, readwrite) double roomsize;
 @property (nonatomic, readwrite) double damp;
 
-- (id) initWithName:(NSString*)name; // for save/restore
+- (id) init;
 
 @end

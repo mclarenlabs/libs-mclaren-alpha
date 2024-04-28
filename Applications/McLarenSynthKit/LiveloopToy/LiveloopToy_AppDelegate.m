@@ -441,7 +441,7 @@
 
 - (void) makeFxPath {
 
-  self.filtModel = [[MSKFilterModel alloc] initWithName:@"filt1"];
+  self.filtModel = [[MSKFilterModel alloc] init];
   self.filtModel.filtertype = MSK_FILTER_MOOG;
   self.filtModel.fc = 2000;
   self.filtModel.q = 2.0;
@@ -456,11 +456,11 @@
 
 - (void) makeModels {
 
-  self.oscModel = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
+  self.oscModel = [[MSKOscillatorModel alloc] init];
   self.oscModel.osctype = MSK_OSCILLATOR_TYPE_SQUARE;
   self.oscModel.octave = -1;
 
-  self.envModel = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  self.envModel = [[MSKEnvelopeModel alloc] init];
   self.envModel.attack = 0.02;
   self.envModel.decay = 0.1;
   self.envModel.sustain = 0.9;

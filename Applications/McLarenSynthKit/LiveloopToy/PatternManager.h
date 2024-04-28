@@ -14,7 +14,8 @@
 
 @property (readwrite) MSKOscillatorModel *oscModel;
 @property (readwrite) MSKEnvelopeModel *envModel;
-@property (readwrite) MSKModulatedOscillatorModel *pdModel;
+@property (readwrite) MSKOscillatorModel *pdoscModel;
+@property (readwrite) MSKModulationModel *pdmodModel;
 @property (readonly) MSKContext *ctx;
 
 @property (readonly) MSKScheduler *sched;

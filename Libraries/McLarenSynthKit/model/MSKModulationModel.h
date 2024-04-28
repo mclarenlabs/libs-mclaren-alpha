@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "McLarenSynthKit/model/MSKOscillatorModel.h"
 
-@interface MSKModulatedOscillatorModel : MSKOscillatorModel {
+@interface MSKModulationModel : NSObject< NSCoding > {
   @public
+
   // for reading in the audio loop
   double _modulation;
 }

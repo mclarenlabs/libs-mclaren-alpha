@@ -77,7 +77,8 @@ void CFMSKFMPhaseEnvelopeOscillatorCalcDelta(__unsafe_unretained MSKFMPhaseEnvel
 
 BOOL CFMSKFMPhaseEnvelopeOscillatorControls(__unsafe_unretained MSKFMPhaseEnvelopeOscillator *v, uint64_t now, snd_pcm_sframes_t nframes) {
 
-  __unsafe_unretained MSKModulatedOscillatorModel *model = v->_model;
+  __unsafe_unretained MSKOscillatorModel *model = v->_model;
+  __unsafe_unretained MSKModulationModel *modModel = v->_modulationModel;
  
   if (model) {
     v->_osctype = model->_osctype;
@@ -87,9 +88,13 @@ BOOL CFMSKFMPhaseEnvelopeOscillatorControls(__unsafe_unretained MSKFMPhaseEnvelo
     v->_bendwidth = model->_bendwidth;
     v->_bend = model->_pitchbend;
 
-    v->_modulation = model->_modulation;
+    // FM controls in Osc model
     v->_harmonic = model->_harmonic;
     v->_subharmonic = model->_subharmonic;
+  }
+
+  if (modModel) {
+    v->_modulation = modModel->_modulation;
   }
   
   CFMSKFMPhaseEnvelopeOscillatorCalcFreq(v);
