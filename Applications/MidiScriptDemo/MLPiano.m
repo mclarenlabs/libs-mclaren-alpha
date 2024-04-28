@@ -314,6 +314,12 @@ static int cnoteForOctave[] = {12, 24, 36, 48, 60, 72, 84, 96, 108, 120 };
   float x = point.x;
   float y = point.y;
 
+  // 2024-04-30 don't drag outside bounds
+  if (x < 0) x = 0;
+  if (y < 0) y = 0;
+  if (x > self.bounds.size.width-1) { x = self.bounds.size.width-1; }
+  if (y > self.bounds.size.height-1) { y = self.bounds.size.height-1; }
+
   int idx = 0; // which key position
   int midiNote = -1;
 
