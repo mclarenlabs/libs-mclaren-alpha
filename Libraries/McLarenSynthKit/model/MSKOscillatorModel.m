@@ -42,10 +42,9 @@
 
 @implementation MSKOscillatorModel
 
-- (id) initWithName:(NSString*)name {
+- (id) init {
 
-  if (self = [super initWithName:name]) {
-    self.modified = NO;
+  if (self = [super init]) {
 
     _osctype = MSK_OSCILLATOR_TYPE_SIN;
     _octave = 0;

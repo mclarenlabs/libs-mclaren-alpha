@@ -50,10 +50,8 @@
 
 @implementation MSKFilterModel
 
-- (id) initWithName:(NSString*)name {
-  if (self = [super initWithName:name]) {
-    self.modified = NO;
-
+- (id) init {
+  if (self = [super init]) {
     _fc = 10000; // FILTER_FC_DEFAULT
     _q = 1.0; // 1.0 .. 10.0
     _fcmod = 0.0; // realtime control

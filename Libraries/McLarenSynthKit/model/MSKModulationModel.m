@@ -5,17 +5,32 @@
  * Copyright (c) McLaren Labs 2024
  */
 
-#import "McLarenSynthKit/model/MSKModulatedOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKModulationModel.h"
 
-@implementation MSKModulatedOscillatorModel
+@implementation MSKModulationModel
 
-- (id) initWithName:(NSString*)name {
+- (id) init {
 
-  if (self = [super initWithName:name]) {
+  if (self = [super init]) {
     _modulation = 0.0;
   }
   return self;
-
 }
+
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _modulation = [coder decodeDoubleForKey:@"modulation"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeDouble:_modulation forKey:@"modulation"];
+}
+
 
 @end

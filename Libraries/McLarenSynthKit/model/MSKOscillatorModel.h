@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "McLarenSynthKit/model/MSKModelBase.h"
-#import "McLarenSynthKit/model/MSKModelProtocol.h"
-
 typedef enum msk_oscillator_type {
   MSK_OSCILLATOR_TYPE_SIN,
   MSK_OSCILLATOR_TYPE_SAW,
@@ -24,7 +21,7 @@ typedef enum msk_oscillator_type {
 // translates from ENUM to STRING for GUI elements
 @end
 
-@interface MSKOscillatorModel : MSKModelBase<MSKModelProtocol> {
+@interface MSKOscillatorModel : NSObject {
 
   @public
   // for reading in the audio loop
@@ -61,7 +58,5 @@ typedef enum msk_oscillator_type {
 
 @property (nonatomic, readwrite) double harmonic;
 @property (nonatomic, readwrite) double subharmonic;
-
-- (id) initWithName:(NSString*)name; // for save/restore
 
 @end

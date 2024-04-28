@@ -6,8 +6,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "McLarenSynthKit/model/MSKModelBase.h"
-#import "McLarenSynthKit/model/MSKModelProtocol.h"
 
 typedef enum msk_filter_type  {
   MSK_FILTER_NONE,
@@ -26,7 +24,7 @@ typedef enum msk_filter_type  {
   // translates from ENUM to STRING for GUI elements
 @end
 
-@interface MSKFilterModel : MSKModelBase<MSKModelProtocol> {
+@interface MSKFilterModel : NSObject {
   @public
   msk_filter_type_enum _filtertype; // for reading in the audio loop
   double _fc;                   // cutoff 80 Hz - 18KHz
@@ -40,7 +38,7 @@ typedef enum msk_filter_type  {
 @property (nonatomic, readwrite) double q;
 @property (nonatomic, readwrite) double fcmod;
 
-- (id) initWithName:(NSString*)name;
+- (id) init;
 
 @end
 
