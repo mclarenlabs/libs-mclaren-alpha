@@ -160,6 +160,11 @@ NSError *errorFromSndFile(int code) {
     sf_close(dstfile);
   }
 
+  // fix up metadata with successful save
+  _path = path;
+  _basename = [[path lastPathComponent] stringByDeletingPathExtension];
+  _ext = [path pathExtension];
+
   return YES;
 }
 
