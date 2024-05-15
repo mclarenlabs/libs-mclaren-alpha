@@ -58,6 +58,19 @@
   [ctx restoreGraphicsState];
 }
 
+- (void) drawBasename:(NSRect)rect {
+
+  NSString *str = _sample.basename;
+  NSColor *color = [NSColor blackColor];
+  NSDictionary *attrs = @{
+  NSForegroundColorAttributeName: color
+  };
+
+  double ypos = (rect.size.height / 2.0) - 6.0;
+  [str drawAtPoint:NSMakePoint(10, ypos) withAttributes: attrs];
+
+}
+
 
 /*
  * Draw samples to each x-pixel position and draw vertical lines.
@@ -65,7 +78,7 @@
  * For each position, draw the max and min and rms values of the samples in that region.
  */
 
-- (void) drawSamples:(float*)samples num:(int)num cap:(int)cap stride:(int)stride rect:(NSRect)rect {
+- (void) drawSamples:(float*)samples num:(int)num cap:(int)cap stride:(int)stride offset:(int)offset rect:(NSRect)rect {
 
   double x = rect.origin.x;
   double y = rect.origin.y;
@@ -89,7 +102,7 @@
 
   for (int i = 0; i < num; i+= 1) {
     float fi = i;
-    float samp = samples[i*2 + stride];
+    float samp = samples[i*stride + offset];
     double xval=  x + (width * (fi / cap));
     double yval = y + ((samp + 1.0) * (height / 2.0));
 
@@ -147,16 +160,21 @@
   
 
   [self drawBackground:rect];
-
   if (_sample) {
 
-    [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:2 rect:top];
+    int stride = _sample.channels;
 
-    [self drawSamples:[_sample frame:1] num:[_sample frames] cap:[_sample capacity] stride:2 rect:bot];
+    [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:stride offset:0 rect:top];
+
+    if (stride > 1) {
+      [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:stride offset:1 rect:bot];
+    }
 
   }
 
+  [self drawBasename:rect];
+
 }
-  
+ 
 
 @end
