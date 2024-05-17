@@ -40,20 +40,18 @@
   // Draw background - use inset to allow view of focus ring
   [ctx saveGraphicsState];
 
-  [[NSBezierPath bezierPathWithRoundedRect:rect
-				   xRadius:roundedRadius
-				   yRadius:roundedRadius] setClip];
-  // [[_bgColor darkenColorByValue:0.12f] setFill];
+  NSBezierPath *path;
+  path = [NSBezierPath bezierPathWithRoundedRect:_bounds
+					 xRadius:roundedRadius
+					 yRadius:roundedRadius];
   [[NSColor darkGrayColor] setFill];
-  NSRectFillUsingOperation(rect, NSCompositeSourceOver);
+  [path fill];
 
-  // TOM: 202309-16 was rect, change to self.bounds to avoid artifact
-  [[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(self.bounds, 1.0f, 1.0f)
-				   xRadius:roundedRadius
-				   yRadius:roundedRadius] setClip];
+  path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(self.bounds, 1.0f, 1.0f)
+					 xRadius:roundedRadius
+					 yRadius:roundedRadius];
   [_bgColor setFill];
-
-  NSRectFillUsingOperation(self.bounds, NSCompositeSourceOver);
+  [path fill];
 
   [ctx restoreGraphicsState];
 }
@@ -66,7 +64,7 @@
   NSForegroundColorAttributeName: color
   };
 
-  double ypos = (rect.size.height / 2.0) - 6.0;
+  double ypos = (_bounds.size.height / 2.0) - 6.0;
   [str drawAtPoint:NSMakePoint(10, ypos) withAttributes: attrs];
 
 }
@@ -147,19 +145,20 @@
 }
 
 - (void) drawRect:(NSRect)rect {
+  NSLog(@"MLSampleView drawRect:%@ %@", NSStringFromRect(rect), NSStringFromRect(_bounds));
 
-  float midy = NSMidY(rect);
-  float newheight = NSHeight(rect) / 2.0;
+  float midy = NSMidY(_bounds);
+  float newheight = NSHeight(_bounds) / 2.0;
 
   // split the rect into top/bot regions for the left/right channels
-  NSRect bot = NSMakeRect(rect.origin.x, rect.origin.y,
-   			  rect.size.width, newheight);
+  NSRect bot = NSMakeRect(_bounds.origin.x, _bounds.origin.y,
+   			  _bounds.size.width, newheight);
   
-  NSRect top = NSMakeRect(rect.origin.x, midy,
-			  rect.size.width, newheight);
+  NSRect top = NSMakeRect(_bounds.origin.x, midy,
+			  _bounds.size.width, newheight);
   
 
-  [self drawBackground:rect];
+  [self drawBackground:_bounds];
   if (_sample) {
 
     int stride = _sample.channels;
@@ -172,7 +171,7 @@
 
   }
 
-  [self drawBasename:rect];
+  [self drawBasename:_bounds];
 
 }
  
