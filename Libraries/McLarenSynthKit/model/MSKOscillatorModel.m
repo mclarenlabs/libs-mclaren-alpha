@@ -51,7 +51,7 @@
     _transpose = 0;
     _cents = 0;
     _bendwidth = 12;
-    _pitchbend = 0.0;
+    // _pitchbend = 0.0;
     _pw = 50;			// pulse-width or duty-cycle
     _noise = 0;
     _cutoff = 20000;
@@ -68,4 +68,36 @@
 
 }
 
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _osctype = [coder decodeIntegerForKey:@"osctype"];
+    _octave =  [coder decodeIntegerForKey:@"octave"];
+    _transpose =  [coder decodeIntegerForKey:@"transpose"];
+    _cents =  [coder decodeIntegerForKey:@"cents"];
+    _bendwidth = [coder decodeIntegerForKey:@"bendwidth"];
+    _pw =  [coder decodeIntegerForKey:@"pw"];
+    _noise = [coder decodeIntegerForKey:@"noise"];
+
+    _harmonic =  [coder decodeDoubleForKey:@"harmonic"];
+    _subharmonic = [coder decodeDoubleForKey:@"subharmonic"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeInteger:_osctype forKey:@"osctype"];
+  [coder encodeInteger:_octave forKey:@"octave"];
+  [coder encodeInteger:_transpose forKey:@"transpose"];
+  [coder encodeInteger:_cents forKey:@"cents"];
+  [coder encodeInteger:_bendwidth forKey:@"bendwidth"];
+  [coder encodeInteger:_pw forKey:@"pw"];
+  [coder encodeInteger:_noise forKey:@"noise"];
+
+  [coder encodeDouble:_harmonic forKey:@"harmonic"];
+  [coder encodeDouble:_subharmonic forKey:@"subharmonic"];
+}
 @end

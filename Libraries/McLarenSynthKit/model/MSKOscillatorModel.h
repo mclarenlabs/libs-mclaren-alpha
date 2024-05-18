@@ -21,7 +21,7 @@ typedef enum msk_oscillator_type {
 // translates from ENUM to STRING for GUI elements
 @end
 
-@interface MSKOscillatorModel : NSObject {
+@interface MSKOscillatorModel : NSObject < NSCoding > {
 
   @public
   // for reading in the audio loop
@@ -30,7 +30,7 @@ typedef enum msk_oscillator_type {
   int _transpose;
   int _cents;
   int _bendwidth;
-  double _pitchbend;
+  // double _pitchbend;
   int _pw;			// 5..95
   int _noise;                   // 0..100
   double _cutoff;               // freq
@@ -51,7 +51,7 @@ typedef enum msk_oscillator_type {
 @property (nonatomic, readwrite) int cents;
 @property (nonatomic, readwrite) int bendwidth;
 // @property (nonatomic, readwrite) int pitchbendsw;
-@property (nonatomic, readwrite) double pitchbend;
+// @property (nonatomic, readwrite) double pitchbend;
 @property (nonatomic, readwrite) int pw;
 @property (nonatomic, readwrite) int noise;
 @property (nonatomic, readwrite) double cutoff;

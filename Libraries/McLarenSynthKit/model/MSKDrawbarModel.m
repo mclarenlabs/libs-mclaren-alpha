@@ -37,7 +37,7 @@
 
     _amplitudes[0] = 0.5;
     _amplitudes[1] = 0.5;
-    _amplitudes[2] = 0.8;
+    _amplitudes[2] = 0.75;
     _amplitudes[3] = 0.5;
     _amplitudes[4] = 0.0;
     _amplitudes[5] = 0.0;

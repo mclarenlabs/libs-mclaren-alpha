@@ -27,4 +27,26 @@
   NSLog(@"setNilValueForKey:%@", key);
 }
 
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _on = [coder decodeIntegerForKey:@"on"];
+    _dry =  [coder decodeDoubleForKey:@"dry"];
+    _wet =  [coder decodeDoubleForKey:@"wet"];
+    _roomsize =  [coder decodeDoubleForKey:@"roomsize"];
+    _damp = [coder decodeDoubleForKey:@"damp"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeInteger:_on forKey:@"on"];
+  [coder encodeDouble:_dry forKey:@"dry"];
+  [coder encodeDouble:_wet forKey:@"wet"];
+  [coder encodeDouble:_roomsize forKey:@"roomsize"];
+  [coder encodeDouble:_damp forKey:@"damp"];
+}
 @end

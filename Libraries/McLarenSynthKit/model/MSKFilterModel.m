@@ -64,5 +64,25 @@
   NSLog(@"setNilValueForKey:%@", key);
 }
 
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _filtertype = [coder decodeIntegerForKey:@"filtertype"];
+    _fc =  [coder decodeDoubleForKey:@"fc"];
+    _q =  [coder decodeDoubleForKey:@"q"];
+    _fcmod = [coder decodeDoubleForKey:@"fcmod"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeInteger:_filtertype forKey:@"filtertype"];
+  [coder encodeDouble:_fc forKey:@"fc"];
+  [coder encodeDouble:_q forKey:@"q"];
+  [coder encodeDouble:_fcmod forKey:@"fcmod"];
+}
 @end
 
