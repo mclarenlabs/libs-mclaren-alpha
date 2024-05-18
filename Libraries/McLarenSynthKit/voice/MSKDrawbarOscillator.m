@@ -85,10 +85,13 @@ static double GAIN = 1.0;
     _transpose = _model->_transpose;
     _cents = _model->_cents;
     _bendwidth = _model->_bendwidth;
-    _bend = _model->_pitchbend;
     _pw = _model->_pw;
     // _modulation = _model->_modulation;
 
+  }
+
+  if (_modulationModel != nil) {
+    _bend = _modulationModel->_pitchbend;
   }
 
   if (_drawbarModel != nil) {
@@ -109,8 +112,10 @@ static double GAIN = 1.0;
 
 BOOL CFMSKDrawbarOscillatorControls(__unsafe_unretained MSKDrawbarOscillator *v, uint64_t now, snd_pcm_sframes_t nframes) {
   __unsafe_unretained MSKOscillatorModel *model = v->_model;
+  __unsafe_unretained MSKModulationModel *modulationModel = v->_modulationModel;
+  BOOL recalc = NO;
+
   if (model) {
-    BOOL recalc = NO;
 
     int oct = model->_octave;
     if (oct != v->_octave) {
@@ -136,22 +141,24 @@ BOOL CFMSKDrawbarOscillatorControls(__unsafe_unretained MSKDrawbarOscillator *v,
       recalc = YES;
     }
 
-    double pb = model->_pitchbend;
-    if (pb != v->_bend) {
-      v->_bend = pb;
-      recalc = YES;
-    }
-
     //    double mod = model->_modulation;
     //    if (mod != v->_modulation) {
     //      v->_modulation = mod;
     //    }
-
-    if (recalc) {
-      CFMSKDrawbarOscillatorCalcFreq(v);
-    }
-   
   }
+
+  if (modulationModel) {
+    double pb = modulationModel->_pitchbend;
+    if (pb != v->_bend) {
+      v->_bend = pb;
+      recalc = YES;
+    }
+  }
+
+  if (recalc) {
+    CFMSKDrawbarOscillatorCalcFreq(v);
+  }
+  
   return YES;
 }
 

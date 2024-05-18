@@ -86,7 +86,6 @@ BOOL CFMSKFMPhaseEnvelopeOscillatorControls(__unsafe_unretained MSKFMPhaseEnvelo
     v->_transpose = model->_transpose;
     v->_cents = model->_cents;
     v->_bendwidth = model->_bendwidth;
-    v->_bend = model->_pitchbend;
 
     // FM controls in Osc model
     v->_harmonic = model->_harmonic;
@@ -95,6 +94,7 @@ BOOL CFMSKFMPhaseEnvelopeOscillatorControls(__unsafe_unretained MSKFMPhaseEnvelo
 
   if (modModel) {
     v->_modulation = modModel->_modulation;
+    v->_bend = modModel->_pitchbend;
   }
   
   CFMSKFMPhaseEnvelopeOscillatorCalcFreq(v);

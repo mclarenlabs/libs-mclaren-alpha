@@ -9,6 +9,7 @@
 #import "McLarenSynthKit/MSKContext.h"
 #import "McLarenSynthKit/model/MSKOscillatorModel.h"
 #import "McLarenSynthKit/model/MSKDrawbarModel.h"
+#import "McLarenSynthKit/model/MSKModulationModel.h"
 
 @interface MSKDrawbarOscillator : MSKContextVoice {
 
@@ -34,6 +35,9 @@
 
 // the oscillator model
 @property (nonatomic, readwrite) MSKOscillatorModel *model;
+
+// the modulation model
+@property (nonatomic, readwrite) MSKModulationModel *modulationModel;
 
 // the drawbar model
 @property (nonatomic, readwrite) MSKDrawbarModel *drawbarModel;
