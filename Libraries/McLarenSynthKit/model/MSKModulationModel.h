@@ -14,8 +14,13 @@
 
   // for reading in the audio loop
   double _modulation;
+  double _pitchbend;
 }
 
 @property (nonatomic, readwrite) double modulation;
+@property (nonatomic, readwrite) double pitchbend;
+
+- (void) setModulationRealtime:(double)modulation;
+- (void) setPitchbendRealtime:(double)pitchbend;
 
 @end
