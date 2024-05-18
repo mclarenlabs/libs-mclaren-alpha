@@ -19,11 +19,13 @@ McLarenSynthKit_OBJC_FILES = \
   model/MSKOscillatorModel.m \
   model/MSKModulationModel.m \
   model/MSKDrawbarModel.m \
+  model/MSKSampleModel.m \
   voice/MSKSinFixedOscillator.m \
   voice/MSKDrawbarOscillator.m \
   voice/MSKFMPhaseEnvelopeOscillator.m \
   model/MSKFilterModel.m \
   model/MSKReverbModel.m \
+  model/MSKAlgorithmModel.m \
   fifo/MSKOFifo.m \
   sample/MSKSample.m \
   sample/MSKSampleManager.m \
@@ -55,7 +57,7 @@ McLarenSynthKit_HEADER_FILES = \
   env/MSKEnvelopeFanout.h \
   model/MSKOscillatorModel.h \
   model/MSKModulationModel.h \
-  model/MSKDrawbarOscillatorModel.h \
+  model/MSKDrawbarModel.h \
   voice/MSKSinFixedOscillator.h \
   voice/MSKGeneralOscillator.h \
   voice/MSKDrawbarOscillator.h \
