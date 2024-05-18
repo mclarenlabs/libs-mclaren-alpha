@@ -228,6 +228,8 @@ typedef void (^MSKContextErrorBlock)(NSError *error);
 - (void) onError:(MSKContextErrorBlock)block;
 - (void) setGain:(double)gain;
 - (double) getGain;
+- (void) setVolume:(double)vol;
+- (double) getVolume;
 - (BOOL) close;
 
 @end
