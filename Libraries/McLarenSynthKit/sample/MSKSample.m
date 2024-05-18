@@ -289,6 +289,32 @@ NSError *errorFromSndFile(int code) {
 		   _frames, _basename, _ext, _samplerate];
 }
     
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _data = [coder decodeObjectForKey:@"data"];
+    _frames = [coder decodeIntegerForKey:@"frames"];
+    _channels = [coder decodeIntegerForKey:@"channels"];
+    _samplerate = [coder decodeIntegerForKey:@"samplerate"];
+    _path = [coder decodeObjectForKey:@"path"];
+    _basename = [coder decodeObjectForKey:@"basename"];
+    _ext = [coder decodeObjectForKey:@"ext"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeObject: _data forKey:@"data"];
+  [coder encodeInteger: _frames forKey:@"frames"];
+  [coder encodeInteger: _channels forKey:@"channels"];
+  [coder encodeInteger: _samplerate forKey:@"samplerate"];
+  [coder encodeObject: _path forKey:@"path"];
+  [coder encodeObject: _basename forKey:@"basename"];
+  [coder encodeObject: _ext forKey:@"ext"];
+}
 
 
 @end

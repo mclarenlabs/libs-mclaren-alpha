@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MSKSample : NSObject {
+@interface MSKSample : NSObject < NSCoding > {
   NSData *_data; // the raw data - float - mono or stereo
 }
 
