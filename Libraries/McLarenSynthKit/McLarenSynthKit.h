@@ -24,7 +24,7 @@
 #import "McLarenSynthKit/model/MSKDrawbarModel.h"
 #import "McLarenSynthKit/model/MSKReverbModel.h"
 // #import "McLarenSynthKit/model/MSKValuesModel.h"
-#import "McLarenSynthKit/model/MSKAlgorithmModel.h"
+// #import "McLarenSynthKit/model/MSKAlgorithmModel.h"
 #import "McLarenSynthKit/model/MSKSampleModel.h"
 
 #import "McLarenSynthKit/voice/MSKFMPhaseEnvelopeOscillator.h"
