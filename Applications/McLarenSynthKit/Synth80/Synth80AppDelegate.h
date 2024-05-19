@@ -12,6 +12,7 @@
 #import "MLStepperWithValue.h"
 
 #import "Synth80Model.h"
+#import "Synth80AlgorithmEngine.h"
 
 #import "MLOscillatorController.h"
 #import "MLEnvelopeController.h"
@@ -41,8 +42,6 @@
 @property (nonatomic, retain, strong) NSScrollSlider *outputVolumeSlider;
 @property (nonatomic, retain, strong) MLContextBufferView *contextBufferView;
 
-@property (nonatomic, retain, strong) NSMutableDictionary *notes;
-
-
+@property (nonatomic, retain, strong) Synth80AlgorithmEngine *algorithmEngine;
 
 @end

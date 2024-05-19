@@ -36,7 +36,7 @@
 
   self.modulationModel = [[MSKModulationModel alloc] init];
 
-  self.algorithmModel = [[MSKAlgorithmModel alloc] init];
+  self.algorithmModel = [[Synth80AlgorithmModel alloc] init];
 
   self.filtModel = [[MSKFilterModel alloc] init];
   self.filtModel.filtertype = MSK_FILTER_MOOG;

@@ -42,7 +42,7 @@
   return self;
 }
 
-- (void) bindToModel:(MSKAlgorithmModel*) model {
+- (void) bindToModel:(Synth80AlgorithmModel*) model {
 
   // bindings
   [_algorithmCombo.slider bind:@"value"
@@ -54,7 +54,7 @@
 			      toObject:model
 			   withKeyPath:@"algorithm"
 			 options: @{
-    NSValueTransformerBindingOption: [MSKAlgorithmTypeValueTransformer new]
+    NSValueTransformerBindingOption: [Synth80AlgorithmTypeValueTransformer new]
 	}];
 
 }

@@ -5,13 +5,13 @@
  */
 
 #import <AppKit/AppKit.h>
-#import "McLarenSynthKit/model/MSKAlgorithmModel.h"
+#import "Synth80AlgorithmModel.h"
 #import "MLCircularSliderWithValue.h"
 
 @interface MLAlgorithmController : NSBox
 
 @property MLCircularSliderWithValue *algorithmCombo;
 
-- (void) bindToModel:(MSKAlgorithmModel*)model;
+- (void) bindToModel:(Synth80AlgorithmModel*)model;
 
 @end

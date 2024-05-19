@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import "McLarenSynthKit/McLarenSynthKit.h"
+#import "Synth80AlgorithmModel.h"
 
 @interface Synth80Model : NSObject
 
@@ -18,7 +19,7 @@
 @property (nonatomic, retain, strong) MSKOscillatorModel *osc2Model;
 
 @property (nonatomic, retain, strong) MSKModulationModel *modulationModel;
-@property (nonatomic, retain, strong) MSKAlgorithmModel *algorithmModel;
+@property (nonatomic, retain, strong) Synth80AlgorithmModel *algorithmModel;
 
 @property (nonatomic, retain, strong) MSKReverbModel *reverbModel;
 @property (nonatomic, retain, strong) MSKFilterModel *filtModel;

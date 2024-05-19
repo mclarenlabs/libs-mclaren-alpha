@@ -22,6 +22,8 @@ Synth80_OBJC_FILES = \
   MLEnvelopeController.m \
   MLDrawbarController.m \
   MLModulationController.m \
+  Synth80AlgorithmModel.m \
+  Synth80AlgorithmEngine.m \
   MLAlgorithmController.m \
   MLFilterController.m \
   MLReverbController.m \

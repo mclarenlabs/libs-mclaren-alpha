@@ -26,7 +26,7 @@
 
     // [self makeWindow];
     [self makeMenu];
-    _notes = [[NSMutableDictionary alloc] init];
+    _algorithmEngine = [[Synth80AlgorithmEngine alloc] init];
   }
   return self;
 }
@@ -398,38 +398,17 @@ static int evenodd = 0;
  */
 
 - (void) noteOn:(NSUInteger)note {
-
-  MSKContextEnvelope *e = _notes[@(note)];
-  // if double repeat somehow
-  if (e != nil) {
-    [e noteAbort];		// release immediately
-    [_notes removeObjectForKey:@(note)];
-  }
-
-  MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:_ctx];
-  env.oneshot = NO;
-  env.model = _model.env1Model;
-  [env compile];
-
-  MSKDrawbarOscillator *osc = [[MSKDrawbarOscillator alloc] initWithCtx:_ctx];
-  osc.iNote = note;
-  osc.sEnvelope = env;
-  osc.model = _model.osc1Model;
-  osc.drawbarModel = _model.drawbar1Model;
-  osc.modulationModel = _model.modulationModel;
-  [osc compile];
-
-  _notes[@(note)] = env;
-  [_ctx addVoice:osc];
+  [_algorithmEngine noteOn: note
+		       vel: 127
+		       ctx: _ctx
+		     model: _model];
 }
-
+		    
 - (void) noteOff:(NSUInteger)note {
-  MSKContextEnvelope *e = _notes[@(note)];
-  if (e != nil) {
-    [e noteOff];		// begin release
-    [_notes removeObjectForKey:@(note)];
-  }
-
+  [_algorithmEngine noteOff: note
+			vel: 0
+			ctx: _ctx
+		      model: _model];
 }
 
 // Actions from the Piano are received on the Main Thread, should play on MIDI Queue
