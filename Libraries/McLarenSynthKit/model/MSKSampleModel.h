@@ -13,6 +13,7 @@
 #import "McLarenSynthKit/sample/MSKSample.h"
 
 @interface MSKSampleModel : NSObject < NSCoding >
+@property (readwrite) BOOL saveSample;
 @property (readwrite) MSKSample *sample;
 @end
 

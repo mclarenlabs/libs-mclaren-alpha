@@ -26,7 +26,9 @@
 }
 
 - (void) encodeWithCoder:(NSCoder*)coder {
-  [coder encodeObject: _sample forKey:@"sample"];
+  if (_saveSample == YES) {
+    [coder encodeObject: _sample forKey:@"sample"];
+  }
 }
 
 

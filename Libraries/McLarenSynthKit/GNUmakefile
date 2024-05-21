@@ -25,7 +25,6 @@ McLarenSynthKit_OBJC_FILES = \
   voice/MSKFMPhaseEnvelopeOscillator.m \
   model/MSKFilterModel.m \
   model/MSKReverbModel.m \
-  model/MSKAlgorithmModel.m \
   fifo/MSKOFifo.m \
   sample/MSKSample.m \
   sample/MSKSampleManager.m \
