@@ -34,6 +34,8 @@
 }
 
 - (NSView*) populateTopRow {
+
+  AppDelegate *appDelegate = [NSApp delegate];
   
   GSHbox *tophbox = [GSHbox new];
   [tophbox setDefaultMinXMargin: 5];
@@ -45,7 +47,8 @@
   [button setButtonType: NSMomentaryPushButton];
   [button setTitle:  @"Clear"];
   [button setImagePosition: NSNoImage]; 
-  [button setTarget: self];
+  // [button setTarget: self];
+  [button setTarget: appDelegate];
   [button setAction: @selector(clearLog:)];
   // [button setAutoresizingMask: NSViewMaxXMargin];
   [button sizeToFit];
@@ -59,7 +62,8 @@
   [playButton setButtonType: NSMomentaryPushButton];
   [playButton setTitle: @"Play"];
   [playButton setImagePosition: NSNoImage];
-  [playButton setTarget: self];
+  // [playButton setTarget: self];
+  [playButton setTarget: appDelegate];
   [playButton setAction: @selector(makeNote)];
   // [playButton setAutoresizingMask: NSViewMaxXMargin];
   [playButton sizeToFit];
@@ -142,7 +146,7 @@
   _modulationController = [MLModulationController new];
   [_modulationController setAutoresizingMask: NSViewHeightSizable];
   
-  _algorithmController = [MLAlgorithmController new];
+  _algorithmController = [Synth80AlgorithmController new];
   // [_algorithmController setAutoresizingMask: NSViewHeightSizable];
 
   [vbox addView: _algorithmController];
@@ -153,6 +157,9 @@
 - (NSView*) populateOutputColumn {
 
   AppDelegate *appDelegate = [NSApp delegate];
+  
+  NSBox *box = [[NSBox alloc] initWithFrame: NSZeroRect];
+  box.title = @"Output";
   
   GSVbox *vbox = [GSVbox new];
   [vbox setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
@@ -183,7 +190,10 @@
   [hbox addView: appDelegate.contextBufferView enablingXResizing: YES withMinXMargin:10];
   [vbox addView: hbox];
 
-  return vbox;
+  [box setContentView:vbox];
+  [box sizeToFit];
+  return box;
+  // return vbox;
 }
 
 

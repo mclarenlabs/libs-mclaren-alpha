@@ -13,7 +13,7 @@
 @property MLFilterController *filterController;
 @property MLReverbController *reverbController;
 @property MLModulationController *modulationController;
-@property MLAlgorithmController *algorithmController;
+@property Synth80AlgorithmController *algorithmController;
 @property (nonatomic, retain, strong) MLDrawbarController *drawbar1Controller;
 @property (nonatomic, retain, strong) MLSampleController *sample1Controller;
 @property (nonatomic, retain, strong) MLPianoController *pianoController;
