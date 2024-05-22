@@ -30,6 +30,10 @@
     return @"phase";
   case SYNTH80_ALGORITHM_TYPE_FMPHASE:
     return @"fmphase";
+  case SYNTH80_ALGORITHM_TYPE_SAMP1:
+    return @"smp1";
+  case SYNTH80_ALGORITHM_TYPE_SAMP2:
+    return @"smp2";
   default:
     return @"?";
   }
