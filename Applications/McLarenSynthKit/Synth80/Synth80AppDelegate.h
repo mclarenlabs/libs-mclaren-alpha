@@ -20,10 +20,10 @@
 #import "MLModulationController.h"
 #import "MLFilterController.h"
 #import "MLReverbController.h"
-#import "MLAlgorithmController.h"
 #import "MLContextBufferView.h"
 #import "MLPianoController.h"
 #import "MLSampleController.h"
+#import "Synth80AlgorithmController.h"
 
 #include "./GSTable-MLdecls.h"
 
@@ -43,5 +43,9 @@
 @property (nonatomic, retain, strong) MLContextBufferView *contextBufferView;
 
 @property (nonatomic, retain, strong) Synth80AlgorithmEngine *algorithmEngine;
+
+- (void) clearLog:(NSControl*)sender;
+- (void) appendLog:(NSString*)message;
+- (void) makeNote;
 
 @end

@@ -22,7 +22,9 @@
     self.model = [[Synth80Model alloc] init];
 
     // before textview is populated
-    font = [NSFont userFixedPitchFontOfSize:12.0];
+    // font = [NSFont userFixedPitchFontOfSize:12.0];
+    font = [NSFont userFontOfSize:12.0];
+    // font = [NSFont fontWithName:@"Helvetica" size:14];
 
     // [self makeWindow];
     [self makeMenu];
@@ -290,8 +292,8 @@
       if (numLines > 100) { // remove one
 	NSCharacterSet *newlineSet = [NSCharacterSet newlineCharacterSet];
 	NSRange found = [self.textview.textStorage.string rangeOfCharacterFromSet: newlineSet];
-	NSLog(@"range:%@", NSStringFromRange(found));
-	NSLog(@"%@", self.textview.textStorage.string);
+	// NSLog(@"range:%@", NSStringFromRange(found));
+	// NSLog(@"%@", self.textview.textStorage.string);
 	if (found.location != NSNotFound) {
 	  NSRange range = NSMakeRange(0, found.location+1);
 	  [self.textview.textStorage deleteCharactersInRange: range];
@@ -370,32 +372,28 @@ static int evenodd = 0;
 
 - (void) makeNote {
 
-  MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:_ctx];
-  env.oneshot = YES;
-  env.shottime = 1.0;		// 1.0 seconds
-  env.model = _model.env1Model;
-  [env compile];
+  // perform on SEQ queue same as pianoNoteOn to avoid race conditions
+  [_seq dispatchAsync:^ {
+      MSKExpEnvelope *env = [[MSKExpEnvelope alloc] initWithCtx:_ctx];
+      env.oneshot = YES;
+      env.shottime = 1.0;		// 1.0 seconds
+      env.model = _model.env1Model;
+      [env compile];
 
-  int note = (random() % 12) + 64;
+      int note = (random() % 12) + 64;
 
-  MSKDrawbarOscillator *osc = [[MSKDrawbarOscillator alloc] initWithCtx:_ctx];
-  osc.iNote = note;
-  osc.sEnvelope = env;
-  osc.model = _model.osc1Model;
-  osc.drawbarModel = _model.drawbar1Model;
-  osc.modulationModel = _model.modulationModel;
-  [osc compile];
+      MSKDrawbarOscillator *osc = [[MSKDrawbarOscillator alloc] initWithCtx:_ctx];
+      osc.iNote = note;
+      osc.sEnvelope = env;
+      osc.model = _model.osc1Model;
+      osc.drawbarModel = _model.drawbar1Model;
+      osc.modulationModel = _model.modulationModel;
+      [osc compile];
 
-  [_ctx addVoice:osc];
+      [_ctx addVoice:osc];
+    }];
 
 }
-
-/*
- * ToDo:
- * noteOn and noteOff are called from the MIDI queue, while makeNote
- * is called on the main thread.  This could lead to a race condition
- * retaining voices.
- */
 
 - (void) noteOn:(NSUInteger)note {
   [_algorithmEngine noteOn: note
@@ -435,19 +433,12 @@ static int evenodd = 0;
   [self makeSeq];
   [self makeGreedyListener];
 
-  // [self makeWidgets];
-  // [vbox sizeToFit];
-  // make min window size natural compacted size
-  
-  // [self.win makeKeyAndOrderFront:self];
-  // [self.win orderFrontRegardless];
-
   [self makeContext];
   [self makeFxPath];
   [self makeNote];
 
-  // TOM: the default document with WindowController was created before this
-  // method.
+  // NOTE: the default document with WindowController is created before this
+  // method is called so we can attach the volume slider here.
   Synth80WindowController *wc = [Synth80WindowController sharedWindowController];
   [_outputVolumeSlider bind:@"value"
 		     toObject: _ctx
@@ -459,7 +450,6 @@ static int evenodd = 0;
   [wc.pianoController.piano setTarget: self];
   
 
-  // [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
   [NSDocumentController sharedDocumentController];
 
 }
