@@ -299,6 +299,7 @@
   return self;
 }  
 
+#if 0
 - (void)drawBezelWithFrame:(NSRect)frame inView:(NSView *)controlView
 {
     
@@ -326,6 +327,54 @@
         
   // Make a rounded rect
   NSBezierPath* path = [NSBezierPath bezierPath];
+  [path appendBezierPathWithRoundedRect:NSInsetRect(frame, 1.0, 1.0)
+				xRadius:roundedRadius
+				yRadius:roundedRadius];
+    
+  // Make a gradient
+  NSColor *light = [self.color lightenColorByValue:0.2f];
+  NSGradient* grad = [[NSGradient alloc] initWithColorsAndLocations:
+					   light, 0.0f,
+					 self.color, 1.0f,
+					 nil];
+
+  // Draw the gradient from bottom to top inside the circle
+  [grad drawInBezierPath:path angle:90.0];
+
+  // Restore the context to what it was before we messed with it
+  [gc restoreGraphicsState];
+
+}
+#endif
+
+- (void)drawBezelWithFrame:(NSRect)frame inView:(NSView *)controlView
+{
+    
+  float roundedRadius = 3.0;
+    
+  // Get the graphics context that we are currently executing under
+  NSGraphicsContext* gc = [NSGraphicsContext currentContext];
+
+  // Draw darker overlay out to corner of button
+  [gc saveGraphicsState];
+  NSBezierPath *path;
+  path = [NSBezierPath bezierPathWithRoundedRect:frame
+					 xRadius:roundedRadius
+					 yRadius:roundedRadius];
+  [[_color darkenColorByValue:0.12f] setFill];
+  [path fill];
+  [gc restoreGraphicsState];
+
+  // If we are highlighted, then done
+  if([self isHighlighted]) {
+    return;
+  }
+    
+  // Draw a lighter rounded rect inside
+  [gc saveGraphicsState];
+        
+  // Make a rounded rect
+  path = [NSBezierPath bezierPath];
   [path appendBezierPathWithRoundedRect:NSInsetRect(frame, 1.0, 1.0)
 				xRadius:roundedRadius
 				yRadius:roundedRadius];
