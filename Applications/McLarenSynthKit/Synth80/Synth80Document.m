@@ -14,6 +14,8 @@
 #import "Synth80Document.h"
 #import "Synth80WindowController.h"
 
+static int DEBUG_DOC = 0;
+
 @implementation Synth80Document {
   Synth80WindowController *windowController; // save so it can be closed
   NSArray *keys;
@@ -81,6 +83,8 @@
 	      @"filtModel.fc",
 	      @"filtModel.q",
 	      @"filtModel.fcmod",
+
+	      @"sample1Model.sample"
 	     ];
 
     // TOM: 2024-05-17 -  moved this here from doc load
@@ -95,9 +99,11 @@
 
 - (void) makeWindowControllers {
 
-  NSLog(@"Synth80Document makeWindowControllers:%@", self.fileName);
+  if (DEBUG_DOC) {
+    NSLog(@"Synth80Document makeWindowControllers:%@", self.fileName);
+  }
+  
   windowController = [Synth80WindowController sharedWindowController];
-  // [windowController.document close];
   Synth80Document *doc  = windowController.document;
   [doc close];
 
@@ -105,11 +111,13 @@
   [windowController setDocument: self];
 
   [self addWindowController: windowController];
-
 }
 
 - (void) close {
-  NSLog(@"Synth80Document close:%@", self.fileName);
+  if (DEBUG_DOC) {
+    NSLog(@"Synth80Document close:%@", self.fileName);
+  }
+
   [self unregisterObservers];
   [self removeWindowController: windowController];
   [super close];
@@ -123,10 +131,14 @@
   AppDelegate *appDelegate = [NSApp delegate];
   Synth80Model *model = appDelegate.model;
 
-  NSLog(@"registerObservers:%@", model);
+  if (DEBUG_DOC) {
+    NSLog(@"registerObservers:%@", model);
+  }
 
   for (NSString *key in keys) {
-    NSLog(@"%@ addObserver:%@", self.fileName, key);
+    if (DEBUG_DOC) {
+      NSLog(@"%@ addObserver:%@", self.fileName, key);
+    }
     [model addObserver: self
 	    forKeyPath: key
 	       options: NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew
@@ -141,7 +153,9 @@
   Synth80Model *model = appDelegate.model;
 
   for (NSString *key in keys) {
-    NSLog(@"%@ unregisterObserver:%@", self.fileName, key);
+    if (DEBUG_DOC) {
+      NSLog(@"%@ unregisterObserver:%@", self.fileName, key);
+    }
     [model removeObserver: self
 	       forKeyPath: key];
   }
@@ -152,10 +166,16 @@
 			change: (NSDictionary*) change
 			context: (void*) context
 {
-  NSLog(@"Observe %@", keyPath);
+  if (DEBUG_DOC) {
+    NSLog(@"Observe %@", keyPath);
+  }
+  
   NSUndoManager *undo = [self undoManager];
   
-  NSLog(@"Observe '%@' of %@ %@", keyPath, model, change);
+  if (DEBUG_DOC) {
+    NSLog(@"Observe '%@' of %@ %@", keyPath, model, change);
+  }
+  
   if (![model isKindOfClass: [Synth80Model class]]) return;
 
   switch ([[change objectForKey: NSKeyValueChangeKindKey] intValue]) {
@@ -178,7 +198,9 @@
        * text field does not work (well) with the per-field mechanism.
        */
       if ([old isKindOfClass:[NSString class]]) {
-	NSLog(@"skipping string value");
+	if (DEBUG_DOC) {
+	  NSLog(@"skipping string value");
+	}
 	return;
       }
 
