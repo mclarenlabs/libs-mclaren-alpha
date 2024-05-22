@@ -15,6 +15,7 @@
 
 // AppKit components
 @property MLExpressiveButton *captureButton;
+@property NSButton *saveSampleButton;
 @property MLSampleView *sampleView;
 @property NSMenu *contextMenu;
 

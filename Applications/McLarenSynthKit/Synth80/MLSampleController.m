@@ -36,8 +36,8 @@
     GSHbox *hbox = [[GSHbox alloc] init];
     [hbox setAutoresizingMask: NSViewWidthSizable];
 
-    NSRect rect1 = NSMakeRect(0, 0, 100, 100);
-    NSFont *font = [NSFont userFixedPitchFontOfSize:24.0];
+    NSRect rect1 = NSMakeRect(0, 0, 100, 80);
+    NSFont *font = [NSFont userFixedPitchFontOfSize:18.0];
 
     self.captureButton = [[MLExpressiveButton alloc] initWithFrame:rect1];
     [[self.captureButton cell] setColor:[NSColor mcBlueColor]];
@@ -47,12 +47,25 @@
 
     self.captureButton.target = self;	// send to this controller?
 
+    _saveSampleButton = [[NSButton alloc] initWithFrame:NSZeroRect];
+    [_saveSampleButton setButtonType: NSSwitchButton];
+    [_saveSampleButton setAutoresizingMask: NSViewWidthSizable];
+    [_saveSampleButton setTitle:@"Save Sample"];
+    [_saveSampleButton sizeToFit];
+
+    GSVbox *vbox = [[GSVbox alloc] init];
+    [vbox setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+    [vbox addView: _saveSampleButton enablingYResizing: NO withMinYMargin: 0];
+    [vbox addView: _captureButton enablingYResizing: YES withMinYMargin: 5];
+    [vbox sizeToFit];
+
 
     NSRect rect = NSMakeRect(0, 0, 100, 100);
     self.sampleView = [[MLSampleView alloc] initWithFrame:rect];
-    [self.sampleView setAutoresizingMask: NSViewWidthSizable];
+    [self.sampleView setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
-    [hbox addView: _captureButton enablingXResizing: NO withMinXMargin: 0];
+    // [hbox addView: _captureButton enablingXResizing: NO withMinXMargin: 0];
+    [hbox addView: vbox enablingXResizing: NO withMinXMargin: 0];
     [hbox addView: _sampleView enablingXResizing: YES withMinXMargin: 10];
     [self setContentView: hbox];
     [self sizeToFit];
@@ -149,7 +162,10 @@
   // Use MSKSample save write method
   NSError *err = nil;
   [self.sampleModel.sample writeToFilePath:filePath error:&err];
-  [self.sampleView setNeedsDisplay:YES]; // to update basename on view
+
+  // Writing the sample changes its basename.
+  // Force View to redraw it because binding doesn't see the change.
+  [self.sampleView setNeedsDisplay:YES];
 
   if (err != nil) {
     NSAlert *erralert = [NSAlert alertWithError:err];
@@ -181,10 +197,8 @@
     [erralert runModal];
   }
   else {
-    // set the loaded sample as the one to play.  update the waveform
+    // set the loaded sample as the one to play.  cause the waveform view to update.
     self.sampleModel.sample = samp;
-    self.sampleView.sample = samp;
-    [self.sampleView setNeedsDisplay:YES];
   }    
 }
 
@@ -214,19 +228,33 @@
 - (void) butNoteOff:(unsigned)midiNote vel:(unsigned)vel {
   NSLog(@"Button:%u %u", midiNote, vel);
   [_recorder recOff];
-  self.sampleModel.sample = _recsample;
-  [self makeRecorder];
 
+  // hold a reference to the recording sample
+  MSKSample *tempSample = _recsample;
+
+  // wait until recorder finishes writing
   [self afterDelay:0.1 performBlockOnMainThread:^{
-      // display it
-      NSLog(@"SAMPLE: %@", self.sampleModel.sample);
-      self.sampleView.sample = self.sampleModel.sample;
-      [self.sampleView setNeedsDisplay:YES];
+      self.sampleModel.sample = tempSample;
     }];
+
+  // this recreates _recsample
+  [self makeRecorder];
 }
   
 - (void) bindToModel:(MSKSampleModel*)sampleModel {
   self.sampleModel = sampleModel;
+
+  NSLog(@"SampleController: bindToModel");
+
+  [_saveSampleButton bind: @"value"
+		 toObject: sampleModel
+	      withKeyPath: @"saveSample"
+		  options: nil];
+
+  [_sampleView bind: @"sample"
+	   toObject: sampleModel
+	withKeyPath: @"sample"
+	    options: nil];
 }
 
 @end
