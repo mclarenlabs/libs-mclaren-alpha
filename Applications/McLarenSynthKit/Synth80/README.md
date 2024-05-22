@@ -5,7 +5,7 @@ Synth80 is a two-oscillator software synthesizer with a built-in sampler.  It is
 Features:
 
 * document-based app with save/restore of settings as .synth80 documents
-* Undo/Redo
+* Undo/Redo (Alt-z, Alt-Z)
 * a variety algorithms
 * sample used as envelope or oscillator voice
 * capture, save and load samples
@@ -59,6 +59,10 @@ When saving a .synth80 document, the sample may be included or excluded.  Sample
 The Synth80 application includes a graphical keyboard that can be played with a mouse or with keyboard shortcuts: a, s, d, f, g, h, etc.
 
 An attached MIDI keyboard can also be used.  By default, the Synth80 application finds all attached MIDI keyboard devices.  This feature is implemented by the `makeGreedyListener` method in the AppDelegate.
+
+## Mouse-scroller sensitivity
+
+Most of the Cocoa controls have been augmented with mouse scroll-wheel behavior.  This makes it nicer to vary the controls.
 
 ## Pre-defined sounds
 
