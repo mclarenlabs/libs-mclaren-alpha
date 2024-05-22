@@ -10,9 +10,18 @@
 #import "NSColor+ColorExtensions.h"
 
 @implementation MLSampleView {
+  MSKSample *_sample;
   NSColor *_bgColor;
   NSColor *_dotColor;
   NSColor *_fillColor;
+}
+
+/*
+ * Make our 'sample' property bindable.
+ */
+
++ (void) initialize {
+  [self exposeBinding:@"sample"];
 }
 
 - (id) initWithFrame:(NSRect)frame {
@@ -28,6 +37,22 @@
     _fillColor = [NSColor mcPurpleColor];
   }
   return self;
+}
+
+/*
+ * Set/Get sample - with auto-redraw for setting new sample
+ */
+
+- (MSKSample*) sample {
+  return _sample;
+}
+
+- (void) setSample:(MSKSample*)samp {
+  _sample = samp;
+
+  [self performSelectorOnMainThread: @selector(setNeedsDisplay:)
+			 withObject: @YES
+		      waitUntilDone: NO];
 }
 
 - (void) drawBackground:(NSRect)rect {
@@ -145,7 +170,6 @@
 }
 
 - (void) drawRect:(NSRect)rect {
-  NSLog(@"MLSampleView drawRect:%@ %@", NSStringFromRect(rect), NSStringFromRect(_bounds));
 
   float midy = NSMidY(_bounds);
   float newheight = NSHeight(_bounds) / 2.0;
@@ -169,9 +193,9 @@
       [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:stride offset:1 rect:bot];
     }
 
+    [self drawBasename:_bounds];
   }
 
-  [self drawBasename:_bounds];
 
 }
  
