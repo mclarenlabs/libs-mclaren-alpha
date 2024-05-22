@@ -42,27 +42,27 @@
 
   // Pulsewidth
   _pwCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(125, 50)];
-  [_pwCombo.titleTextField setStringValue:@"PulseWidth"];
+  [_pwCombo.titleTextField setStringValue:@"Pulsewidth"];
   [_pwCombo.stepper setMinValue:5];
   [_pwCombo.stepper setMaxValue:95];
   [_pwCombo.stepper setIncrement:5];
 
   // Bendwidth
-  _bendwidthCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(125, 50)];
+  _bendwidthCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(140, 50)];
   [_bendwidthCombo.titleTextField setStringValue:@"BendWidth"];
   [_bendwidthCombo.stepper setMinValue:1];
   [_bendwidthCombo.stepper setMaxValue:24];
   [_bendwidthCombo.stepper setIncrement:1];
 
   // Harmonic
-  _harmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(125, 50)];
+  _harmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(140, 50)];
   [_harmCombo.titleTextField setStringValue:@"Harmonic"];
   [_harmCombo.stepper setMinValue:-50];
   [_harmCombo.stepper setMaxValue:50];
   [_harmCombo.stepper setIncrement:1.0];
 
   // Subharmonic
-  _subharmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(125, 50)];
+  _subharmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(140, 50)];
   [_subharmCombo.titleTextField setStringValue:@"Subharmonic"];
   [_subharmCombo.stepper setMinValue:-50];
   [_subharmCombo.stepper setMaxValue:50];
