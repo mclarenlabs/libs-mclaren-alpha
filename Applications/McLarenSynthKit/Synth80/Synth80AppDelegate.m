@@ -58,17 +58,17 @@
         if (e->_ev.type == SND_SEQ_EVENT_NOTEON) {
           // uint8_t chan = e->_ev.data.note.channel;
           uint8_t note = e->_ev.data.note.note;
-          // uint8_t vel = e->_ev.data.note.velocity;
+          uint8_t vel = e->_ev.data.note.velocity;
 
-	  [wself noteOn:note];
+	  [wself noteOn:note vel:vel];
         }
 
         if (e->_ev.type == SND_SEQ_EVENT_NOTEOFF) {
           // uint8_t chan = e->_ev.data.note.channel;
           uint8_t note = e->_ev.data.note.note;
-          // uint8_t vel = e->_ev.data.note.velocity;
+          uint8_t vel = e->_ev.data.note.velocity;
 
-	  [wself noteOff:note];
+	  [wself noteOff:note vel:vel];
         }
 
 	if (e->_ev.type == SND_SEQ_EVENT_CONTROLLER) {
@@ -395,30 +395,38 @@ static int evenodd = 0;
 
 }
 
-- (void) noteOn:(NSUInteger)note {
+- (void) noteOn:(NSUInteger)note vel:(unsigned)vel {
   [_algorithmEngine noteOn: note
 		       vel: 127
 		       ctx: _ctx
 		     model: _model];
+  [self performBlockOnMainThread:^{
+      Synth80WindowController *wc = [Synth80WindowController sharedWindowController];
+      [wc.pianoController.piano pianoNoteOn: note vel:vel];
+    }];
 }
 		    
-- (void) noteOff:(NSUInteger)note {
+- (void) noteOff:(NSUInteger)note vel:(unsigned)vel{
   [_algorithmEngine noteOff: note
 			vel: 0
 			ctx: _ctx
 		      model: _model];
+  [self performBlockOnMainThread:^{
+      Synth80WindowController *wc = [Synth80WindowController sharedWindowController];
+      [wc.pianoController.piano pianoNoteOff: note vel:vel];
+    }];
 }
 
 // Actions from the Piano are received on the Main Thread, should play on MIDI Queue
 - (void) pianoNoteOn:(unsigned)note vel:(unsigned)vel {
    [_seq dispatchAsync:^ {
-       [self noteOn: note];
+       [self noteOn:note vel:vel];
     }];
    [self appendLog:[NSString stringWithFormat:@"pianoNoteOn:%u vel:%u", note, vel]];
 }
 - (void) pianoNoteOff:(unsigned)note vel:(unsigned)vel {
   [_seq dispatchAsync:^ {
-      [self noteOff: note];
+      [self noteOff:note vel:vel];
     }];
    [self appendLog:[NSString stringWithFormat:@"pianoNoteOff:%u vel:%u", note, vel]];
 }
