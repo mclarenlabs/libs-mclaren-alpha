@@ -45,6 +45,12 @@
   case SYNTH80_ALGORITHM_TYPE_PHASE:
     return [self phaseNoteOn:note vel:vel ctx:ctx model:model];
     break;
+  case SYNTH80_ALGORITHM_TYPE_SAMP1:
+    return [self samp1NoteOn:note vel:vel ctx:ctx model:model];
+    break;
+  case SYNTH80_ALGORITHM_TYPE_SAMP2:
+    return [self samp2NoteOn:note vel:vel ctx:ctx model:model];
+    break;
   case SYNTH80_ALGORITHM_TYPE_FMPHASE:
     return [self fmphaseNoteOn:note vel:vel ctx:ctx model:model];
     break;
@@ -155,6 +161,7 @@
   v2.iNote = note;
   v2.model = model.osc2Model;
   v2.sEnvelope = env2;
+  v2.modulationModel = model.modulationModel;
   v2.sPhasedistortion = v1;
   [v2 compile];
 
@@ -211,6 +218,55 @@
   return YES;
 }
 
+/*
+ * Play the sample pitched.  With natural rate set to middle-C.
+ */
+- (BOOL) samp1NoteOn:(unsigned)midiNote vel:(unsigned)vel ctx:(MSKContext*)ctx model:(Synth80Model*)model {
+  
+  // NSLog(@"Piano:%u %u", midiNote, vel);
+  double factor = 1.0;
+  if (midiNote >= 60) {
+    factor = exp2((midiNote-60) / 12.0);
+    factor = 1.0 / factor;
+  }
+  else {
+    factor = exp((60-midiNote) / 12.0);
+  }
+
+  MSKSample *playsample = model.sample1Model.sample;
+  MSKSample *samp = [playsample resampleBy:factor];
+  MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx: ctx];
+
+  [player setSample: samp];
+  [player compile];
+
+  // Ask the context to play it
+  [ctx addVoice:player];
+  return YES;
+}
+  
+
+
+/*
+ * A simple single oscillator whose envelope is the sample.
+ */
+- (BOOL) samp2NoteOn:(unsigned)note vel:(unsigned)vel ctx:(MSKContext*)ctx model:(Synth80Model*)model {
+  
+  MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx:ctx];
+  [player setSample: model.sample1Model.sample];
+  [player compile];
+
+  MSKGeneralOscillator *osc = [[MSKGeneralOscillator alloc] initWithCtx:ctx];
+  osc.iNote = note;
+  osc.sEnvelope = player;
+  osc.model = model.osc1Model;
+  osc.modulationModel = model.modulationModel;
+  [osc compile];
+
+  // _notes[@(note)] = ??; // do not hold a reference
+  [ctx addVoice:osc];
+  return YES;
+}  
 /*
  * NoteOff is all the same.  Find the currently playing envelope for the note and
  * tell it to begins its noteOff transition.  Release the reference to the envelope
