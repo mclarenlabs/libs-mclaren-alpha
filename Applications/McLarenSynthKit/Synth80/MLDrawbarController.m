@@ -48,7 +48,7 @@
   if (self = [super initWithFrame:NSMakeRect(0, 0, 0, 0)]) {	// nsbox
     [self setTitle:@"Drawbar"];
 
-    [self setAutoresizingMask: NSViewWidthSizable];
+    [self setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
     
     GSHbox *hbox = [[GSHbox alloc] init];
     // [tab setAutoresizingMask: NSViewWidthSizable];
