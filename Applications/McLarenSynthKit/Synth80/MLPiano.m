@@ -64,7 +64,8 @@ static int cnoteForOctave[] = {12, 24, 36, 48, 60, 72, 84, 96, 108, 120 };
     // fixed velocity for ow
     _velocity = 127;
 
-    [self littleMidiTest];
+    // examine the white/black algorithm
+    // [self littleMidiTest];
 
     // default OUT protocol
     _noteOnSelector = @selector(pianoNoteOn:vel:);
