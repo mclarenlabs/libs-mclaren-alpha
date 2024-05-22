@@ -37,6 +37,7 @@
     _valueTextField = [[NSTextField alloc] initWithFrame:textRect];
 
     _slider = [[NSScrollSlider alloc] initWithFrame:sliderRect];
+    [_slider setAutoresizingMask: NSViewHeightSizable];
 
     // stack value and title fields
     // [self addView: _titleTextField enablingYResizing: NO];
