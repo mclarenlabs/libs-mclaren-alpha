@@ -12,7 +12,7 @@
  * An Envelope Model holds parameters that envelope generators use.
  */
 
-@interface MSKEnvelopeModel : NSObject {
+@interface MSKEnvelopeModel : NSObject < NSCoding > {
 @public
   double _attack;
   double _decay;

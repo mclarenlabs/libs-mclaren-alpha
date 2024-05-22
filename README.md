@@ -48,11 +48,19 @@ Applications are slightly different.  `Applications/MidiMon` depends only on the
 │   ├── AlsaSoundKit
 │   └── McLarenSynthKit
 ├── Tools
-│    ├── AlsaSoundKit
-│    └── McLarenSynthKit
+│   ├── AlsaSoundKit
+│   │   └── askpcmlist, askseqdump, miniosc1, minisynth1
+│   └── McLarenSynthKit
+│   │   └── capturesample, pdscaleplayer, playsample, scaleplayer, tiny
 ├── Applications
 │   ├── McLarenSynthKit
-│   └── MidiScriptDemo
+│   │   ├── LiveloopToy
+│   │   ├── MskFilterDemo
+│   │   ├── MskMetroDemo
+│   │   ├── MskOrganDemo
+│   │   ├── SampleToy
+│   │   └── Synth80
+│   ├── MidiScriptDemo
 │   └── MidiScriptDemo
 ├── README.md
 ```

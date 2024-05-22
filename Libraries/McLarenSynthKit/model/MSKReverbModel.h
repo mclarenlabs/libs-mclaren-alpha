@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MSKReverbModel : NSObject {
+@interface MSKReverbModel : NSObject < NSCoding > {
   @public
   int _on;			// reverb on/off
   double _dry;

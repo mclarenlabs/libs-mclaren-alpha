@@ -10,6 +10,7 @@
 
 #import "McLarenSynthKit/MSKContext.h"
 #import "McLarenSynthKit/model/MSKOscillatorModel.h"
+#import "McLarenSynthKit/model/MSKModulationModel.h"
 
 @interface MSKGeneralOscillator : MSKContextVoice
 
@@ -18,6 +19,9 @@
 
 // the model
 @property (nonatomic, readwrite) MSKOscillatorModel *model;
+
+// the modulation model
+@property (nonatomic, readwrite) MSKModulationModel *modulationModel;
 
 // the envelope
 @property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;

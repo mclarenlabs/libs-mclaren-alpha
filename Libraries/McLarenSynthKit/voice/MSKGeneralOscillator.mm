@@ -44,8 +44,11 @@ extern "C" {
     gosc->transpose.setRef(_model->_transpose);
     gosc->cents.setRef(_model->_cents);
     gosc->bendwidth.setRef(_model->_bendwidth);
-    gosc->bend.setRef(_model->_pitchbend);
     gosc->pw.setRef(_model->_pw);
+  }
+
+  if (_modulationModel != nil) {
+    gosc->bend.setRef(_modulationModel->_pitchbend);
   }
 
   return YES;

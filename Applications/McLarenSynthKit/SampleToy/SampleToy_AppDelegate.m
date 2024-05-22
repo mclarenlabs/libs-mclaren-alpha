@@ -369,6 +369,7 @@
   // Use MSKSample save write method
   NSError *err = nil;
   [self.playsample writeToFilePath:filePath error:&err];
+  [self.sampleView setNeedsDisplay:YES]; // to update basename on view
 
   if (err != nil) {
     NSAlert *erralert = [NSAlert alertWithError:err];

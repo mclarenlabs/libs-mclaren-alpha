@@ -38,17 +38,16 @@ extern "C" {
   pdosc->note = self.iNote;
 
   if (_model != nil) {
-    // help compiler understand _model holds a specialized model
     pdosc->osctype.setRef(_model->_osctype);
     pdosc->octave.setRef(_model->_octave);
     pdosc->transpose.setRef(_model->_transpose);
     pdosc->cents.setRef(_model->_cents);
     pdosc->bendwidth.setRef(_model->_bendwidth);
-    pdosc->bend.setRef(_model->_pitchbend);
   }
 
   if (_modulationModel != nil) {
     pdosc->modulation.setRef(_modulationModel->_modulation);
+    pdosc->bend.setRef(_modulationModel->_pitchbend);
   }
 
   return YES;

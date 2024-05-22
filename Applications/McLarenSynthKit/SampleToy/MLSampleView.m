@@ -40,22 +40,33 @@
   // Draw background - use inset to allow view of focus ring
   [ctx saveGraphicsState];
 
-  [[NSBezierPath bezierPathWithRoundedRect:rect
-				   xRadius:roundedRadius
-				   yRadius:roundedRadius] setClip];
-  // [[_bgColor darkenColorByValue:0.12f] setFill];
+  NSBezierPath *path;
+  path = [NSBezierPath bezierPathWithRoundedRect:_bounds
+					 xRadius:roundedRadius
+					 yRadius:roundedRadius];
   [[NSColor darkGrayColor] setFill];
-  NSRectFillUsingOperation(rect, NSCompositeSourceOver);
+  [path fill];
 
-  // TOM: 202309-16 was rect, change to self.bounds to avoid artifact
-  [[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(self.bounds, 1.0f, 1.0f)
-				   xRadius:roundedRadius
-				   yRadius:roundedRadius] setClip];
+  path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(self.bounds, 1.0f, 1.0f)
+					 xRadius:roundedRadius
+					 yRadius:roundedRadius];
   [_bgColor setFill];
-
-  NSRectFillUsingOperation(self.bounds, NSCompositeSourceOver);
+  [path fill];
 
   [ctx restoreGraphicsState];
+}
+
+- (void) drawBasename:(NSRect)rect {
+
+  NSString *str = _sample.basename;
+  NSColor *color = [NSColor blackColor];
+  NSDictionary *attrs = @{
+  NSForegroundColorAttributeName: color
+  };
+
+  double ypos = (_bounds.size.height / 2.0) - 6.0;
+  [str drawAtPoint:NSMakePoint(10, ypos) withAttributes: attrs];
+
 }
 
 
@@ -65,7 +76,7 @@
  * For each position, draw the max and min and rms values of the samples in that region.
  */
 
-- (void) drawSamples:(float*)samples num:(int)num cap:(int)cap stride:(int)stride rect:(NSRect)rect {
+- (void) drawSamples:(float*)samples num:(int)num cap:(int)cap stride:(int)stride offset:(int)offset rect:(NSRect)rect {
 
   double x = rect.origin.x;
   double y = rect.origin.y;
@@ -89,7 +100,7 @@
 
   for (int i = 0; i < num; i+= 1) {
     float fi = i;
-    float samp = samples[i*2 + stride];
+    float samp = samples[i*stride + offset];
     double xval=  x + (width * (fi / cap));
     double yval = y + ((samp + 1.0) * (height / 2.0));
 
@@ -134,29 +145,35 @@
 }
 
 - (void) drawRect:(NSRect)rect {
+  NSLog(@"MLSampleView drawRect:%@ %@", NSStringFromRect(rect), NSStringFromRect(_bounds));
 
-  float midy = NSMidY(rect);
-  float newheight = NSHeight(rect) / 2.0;
+  float midy = NSMidY(_bounds);
+  float newheight = NSHeight(_bounds) / 2.0;
 
   // split the rect into top/bot regions for the left/right channels
-  NSRect bot = NSMakeRect(rect.origin.x, rect.origin.y,
-   			  rect.size.width, newheight);
+  NSRect bot = NSMakeRect(_bounds.origin.x, _bounds.origin.y,
+   			  _bounds.size.width, newheight);
   
-  NSRect top = NSMakeRect(rect.origin.x, midy,
-			  rect.size.width, newheight);
+  NSRect top = NSMakeRect(_bounds.origin.x, midy,
+			  _bounds.size.width, newheight);
   
 
-  [self drawBackground:rect];
-
+  [self drawBackground:_bounds];
   if (_sample) {
 
-    [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:2 rect:top];
+    int stride = _sample.channels;
 
-    [self drawSamples:[_sample frame:1] num:[_sample frames] cap:[_sample capacity] stride:2 rect:bot];
+    [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:stride offset:0 rect:top];
+
+    if (stride > 1) {
+      [self drawSamples:[_sample frame:0] num:[_sample frames] cap:[_sample capacity] stride:stride offset:1 rect:bot];
+    }
 
   }
 
+  [self drawBasename:_bounds];
+
 }
-  
+ 
 
 @end

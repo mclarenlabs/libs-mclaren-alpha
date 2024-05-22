@@ -1223,13 +1223,16 @@ request.persize isExact:request.isExact error:error];
 + (double) vol2gain:(double)vol {
   // double gain = exp10((vol / 20.0) - 5.0);
   // exp10(x) = exp(M_LN10 * x)
-  double gain = exp(M_LN10 * ((vol / 20.0) - 5.0));
+  // double gain = exp(M_LN10 * ((vol / 20.0) - 5.0));
+  // 2024-05-15
+  double gain = exp(M_LN10 * ((vol / 20.0) - 3.0));
   return gain;
 }
 
 // translate gain (0..1.0] to a logarithmic value [0..100]
 + (double) gain2vol:(double)gain {
-  double vol = (gain<=0.00001) ? -10 : 20*(log10(gain) + 5.0);
+  // double vol = (gain<=0.00001) ? -10 : 20*(log10(gain) + 5.0);
+  double vol = (gain<=0.00001) ? 0 : 20*(log10(gain) + 3.0);
   return vol;
 }
 
@@ -1286,6 +1289,14 @@ request.persize isExact:request.isExact error:error];
 
 - (double) getGain {
   return _gain;
+}
+
+- (void) setVolume:(double)vol {
+  [self setGain:[MSKContext vol2gain:vol]];
+}
+
+- (double) getVolume {
+  return [MSKContext gain2vol:[self getGain]];
 }
  
 

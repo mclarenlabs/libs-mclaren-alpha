@@ -1,0 +1,22 @@
+{
+    ApplicationName = "Synth80";
+    ApplicationDescription = "Audio Synthesizer";
+    ApplicationRelease = "0.1.0";
+    Authors = ("McLaren Labs <info@mclarenlabs.com>");
+    Copyright = "Copyright (c) 2024 McLaren Labs <info@mclarenlabs.com>";
+    CopyrightDescription = "This program is released under the MIT License"; 
+
+    NSIcon = ScriptPapers;
+
+    NSTypes = (
+        {
+             NSUnixExtensions = ("synth80");
+             NSName = "synth80";
+             NSHumanReadableName = "Synth80 Document";
+             NSMIMETypes = ("application/synth80");
+             NSIcon = Synth80File;
+             NSRole = Editor;
+             NSDocumentClass = Synth80Document;
+        }
+    );
+}

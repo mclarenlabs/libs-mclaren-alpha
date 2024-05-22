@@ -28,4 +28,27 @@
   return velsens;
 }
 
+//
+// NSCoding
+//
+
+- (id) initWithCoder:(NSCoder*)coder {
+  if (self = [super init]) {
+    _attack = [coder decodeDoubleForKey:@"attack"];
+    _decay =  [coder decodeDoubleForKey:@"decay"];
+    _sustain =  [coder decodeDoubleForKey:@"sustain"];
+    _rel = [coder decodeDoubleForKey:@"release"];
+    _sens =  [coder decodeDoubleForKey:@"sensitivity"];
+  }
+  return self;
+}
+
+- (void) encodeWithCoder:(NSCoder*)coder {
+  [coder encodeDouble:_attack forKey:@"attack"];
+  [coder encodeDouble:_decay forKey:@"decay"];
+  [coder encodeDouble:_sustain forKey:@"sustain"];
+  [coder encodeDouble:_rel forKey:@"release"];
+  [coder encodeDouble:_sens forKey:@"sensitivity"];
+}
+
 @end
