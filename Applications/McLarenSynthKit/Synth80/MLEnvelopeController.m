@@ -12,7 +12,7 @@
 - (void) makeWidgets {
 
   // NSSize widgetSize = NSMakeSize(125, 50);
-  NSSize widgetSize = NSMakeSize(100, 50);
+  NSSize widgetSize = NSMakeSize(110, 50);
 
   // Envelope - Attack
   _attackCombo = [[MLCircularSliderWithValue alloc] initWithSize:widgetSize];
