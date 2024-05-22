@@ -8,7 +8,7 @@
 #import "Synth80AlgorithmModel.h"
 #import "MLCircularSliderWithValue.h"
 
-@interface MLAlgorithmController : NSBox
+@interface Synth80AlgorithmController : NSBox
 
 @property MLCircularSliderWithValue *algorithmCombo;
 
