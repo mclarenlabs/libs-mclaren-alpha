@@ -22,9 +22,6 @@ Synth80_OBJC_FILES = \
   MLEnvelopeController.m \
   MLDrawbarController.m \
   MLModulationController.m \
-  Synth80AlgorithmModel.m \
-  Synth80AlgorithmEngine.m \
-  MLAlgorithmController.m \
   MLFilterController.m \
   MLReverbController.m \
   MLPianoController.m \
@@ -38,6 +35,9 @@ Synth80_OBJC_FILES = \
   Synth80Model.m \
   Synth80WindowController.m \
   Synth80Document.m \
+  Synth80AlgorithmModel.m \
+  Synth80AlgorithmEngine.m \
+  Synth80AlgorithmController.m \
   Synth80AppDelegate.m
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc
