@@ -112,6 +112,7 @@
 
 - (NSView*) populateOscArray {
   GSTable *table = [[GSTable alloc] initWithNumberOfRows:3 numberOfColumns:2];
+  [table setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
   _env1Controller = [MLEnvelopeController new];
   _env1Controller.title = @"Env1";

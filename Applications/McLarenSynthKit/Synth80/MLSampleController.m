@@ -32,7 +32,7 @@
     // Make the context menu for this view
     [self makeContextMenu];
 
-    [self setAutoresizingMask: NSViewWidthSizable];
+    [self setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
     GSHbox *hbox = [[GSHbox alloc] init];
     [hbox setAutoresizingMask: NSViewWidthSizable];
 

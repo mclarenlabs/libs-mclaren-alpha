@@ -52,7 +52,7 @@
   if (self = [super initWithFrame:NSMakeRect(0, 0, 0, 0)]) {	// nsbox
     [self setTitle:@"Envelope"];
 
-    [self setAutoresizingMask: NSViewWidthSizable];
+    [self setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
     
     GSTable *tab = [[GSTable alloc] initWithNumberOfRows:1 numberOfColumns:4];
     // [tab setAutoresizingMask: NSViewWidthSizable];
