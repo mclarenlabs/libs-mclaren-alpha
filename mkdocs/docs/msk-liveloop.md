@@ -135,5 +135,7 @@ An example of a GUI application that allows starting, stopping, changing, disabl
 
 ## Contrasting Patterns and Liveloops
 
+``` objc
 [_sched addPattern:pat1];
 [_sched setLiveloop:@"loop1" pat:pat1];
+```
