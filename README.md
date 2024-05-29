@@ -60,7 +60,7 @@ Applications are slightly different.  `Applications/MidiMon` depends only on the
 │   │   ├── MskOrganDemo
 │   │   ├── SampleToy
 │   │   └── Synth80
-│   ├── MidiScriptDemo
+│   ├── MidiMon
 │   └── MidiScriptDemo
 ├── README.md
 ```
