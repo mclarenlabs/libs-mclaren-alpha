@@ -41,7 +41,7 @@ Synth80_OBJC_FILES = \
   Synth80AppDelegate.m
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc
-ADDITIONAL_LDFLAGS = -ldispatch
+ADDITIONAL_LDFLAGS = -ldispatch -lAlsaSoundKit -lMcLarenSynthKit
 
 # Run makefiles with "localdev=yes" to add addl flags that find
 # libraries in this package rather than in global installed locations
