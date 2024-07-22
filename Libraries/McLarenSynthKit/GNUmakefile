@@ -57,6 +57,7 @@ McLarenSynthKit_HEADER_FILES = \
   model/MSKOscillatorModel.h \
   model/MSKModulationModel.h \
   model/MSKDrawbarModel.h \
+  model/MSKSampleModel.m \
   voice/MSKSinFixedOscillator.h \
   voice/MSKGeneralOscillator.h \
   voice/MSKDrawbarOscillator.h \
