@@ -148,7 +148,14 @@
 					 color, 1.0f,
 					 nil];
   // Draw the gradient from bottom to top inside the circle
-  [grad drawInBezierPath:path angle:90.0];
+  @try {
+    [grad drawInBezierPath:path angle:90.0];
+  }
+  @catch (NSException *e) {
+    // workaround for ART backend
+    [light setFill];
+    [path fill];
+  }
 
   // Restore the context to what it was before we messed with it
   [ctx restoreGraphicsState];
