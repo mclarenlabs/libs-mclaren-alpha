@@ -336,7 +336,7 @@
   }
   @catch (NSException *e) {
     // workaround for ART backend
-    [light setFill];
+    [self.color setFill];
     [path fill];
   }    
 
