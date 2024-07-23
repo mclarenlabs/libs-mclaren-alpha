@@ -12,6 +12,20 @@ The window on the right is the "Transcript" window.  This is where scripts can w
 
 ![MidiScriptDemo](figs/MidiScriptDemo01.png)
 
+## Building StepTalk
+
+A prerequisite to using this project is to build and install StepTalk.  You can get it from https://github.com/gnustep/libs-steptalk.
+
+It is easy to build it and install it.
+
+```
+$ cd libs-steptalk
+$ make
+$ sudo -E make install
+```
+
+This will install the StepTalk libraries and framework in a system-wide location.
+
 ## Building
 
 If you have installed libAlsaSoundKit (ASK) globally, then you should be able to type
