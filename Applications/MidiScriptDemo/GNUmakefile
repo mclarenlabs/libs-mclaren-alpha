@@ -40,6 +40,8 @@ ifeq ($(localdev),yes)
 ADDITIONAL_CPPFLAGS += -I../../Libraries/
 ADDITIONAL_LIB_DIRS += -L../../Libraries/AlsaSoundKit/obj  
 ADDITIONAL_LDFLAGS += -Wl,-rpath='$$ORIGIN/../../../Libraries/AlsaSoundKit/obj' -l:libAlsaSoundKit.so
+else
+ADDITIONAL_LDFLAGS += -lAlsaSoundKit
 endif
 
 ifeq ($(check),yes)
