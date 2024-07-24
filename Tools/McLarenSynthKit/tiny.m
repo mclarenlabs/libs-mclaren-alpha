@@ -53,10 +53,10 @@ int main(int argc, char *argv[]) {
   dispatch_time_t attackt = dispatch_time(DISPATCH_TIME_NOW, 1.0*NSEC_PER_SEC);
   dispatch_after(attackt, dispatch_get_main_queue(), ^{
     
-    MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
+    MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] init];
     oscmodel1.osctype = MSK_OSCILLATOR_TYPE_TRIANGLE;
 
-    MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+    MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] init];
     envmodel1.sustain = 1.0;
     envmodel1.rel = 1.5;
 

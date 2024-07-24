@@ -45,10 +45,10 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
+  MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] init];
   oscmodel1.osctype = MSK_OSCILLATOR_TYPE_TRIANGLE;
 
-  MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] init];
   envmodel1.attack = 0.01;
   envmodel1.decay = 0.05;
   envmodel1.sustain = 0.9;

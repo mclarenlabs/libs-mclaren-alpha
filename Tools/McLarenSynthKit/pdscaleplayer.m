@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   // Build an Effects path consisting of a reverb unit and a low-pass filter.
   //
   
-  MSKReverbModel *modreverb = [[MSKReverbModel alloc] initWithName:@"reverb1"];
+  MSKReverbModel *modreverb = [[MSKReverbModel alloc] init];
   modreverb.on = YES;
   modreverb.dry = 70;
   modreverb.wet = 50;
@@ -74,20 +74,22 @@ int main(int argc, char *argv[]) {
   // Create the fixed models that will be shared by all notes
   //
 
-  MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] initWithName:@"osc1"];
+  MSKOscillatorModel *oscmodel1 = [[MSKOscillatorModel alloc] init];
   oscmodel1.osctype = MSK_OSCILLATOR_TYPE_TRIANGLE;
 
-  MSKModulatedOscillatorModel *oscmodel2 = [[MSKModulatedOscillatorModel alloc] initWithName:@"osc1"];
+  MSKOscillatorModel *oscmodel2 = [[MSKOscillatorModel alloc] init];
   oscmodel2.osctype = MSK_OSCILLATOR_TYPE_TRIANGLE;
-  oscmodel2.modulation = 0.2;
 
-  MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  MSKModulationModel *modmodel2 = [[MSKModulationModel alloc] init];
+  modmodel2.modulation = 0.2;
+
+  MSKEnvelopeModel *envmodel1 = [[MSKEnvelopeModel alloc] init];
   envmodel1.attack = 0.2; // slow attack
   envmodel1.decay = 0.2;
   envmodel1.sustain = 0.9;
   envmodel1.rel = 2.0;
 
-  MSKEnvelopeModel *envmodel2 = [[MSKEnvelopeModel alloc] initWithName:@"env1"];
+  MSKEnvelopeModel *envmodel2 = [[MSKEnvelopeModel alloc] init];
   envmodel2.attack = 0.01;
   envmodel2.decay = 0.05;
   envmodel2.sustain = 0.9;
@@ -129,6 +131,9 @@ int main(int argc, char *argv[]) {
 	osc2.iNote = [note unsignedIntegerValue];
 	osc2.sEnvelope = env2;
 	osc2.model = oscmodel2;
+  osc2.modulationModel = modmodel2;
+
+
 	osc2.sPhasedistortion = osc1;
 	[osc2 compile];
 	

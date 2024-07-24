@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
   NSLog(@"sample:%@", samp);
 
   // create a filter
-  MSKFilterModel *fmodel = [[MSKFilterModel alloc] initWithName:@"filt1"];
+  MSKFilterModel *fmodel = [[MSKFilterModel alloc] init];
   fmodel.filtertype = MSK_FILTER_NONE;
   fmodel.fc = fcutoff;
   fmodel.q = 2.0;
