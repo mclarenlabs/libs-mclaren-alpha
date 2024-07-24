@@ -264,6 +264,8 @@
   NSString *olds = self.textview.textStorage.string;
   NSRange allChars = NSMakeRange(0, [olds length]);
 
+  numLines = 0;
+
   [self performBlockOnMainThread:^{
       [self.textview.textStorage replaceCharactersInRange:allChars
 					       withString:news];
