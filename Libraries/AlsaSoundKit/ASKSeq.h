@@ -54,6 +54,7 @@ typedef void (^ASKSeqListener)(NSArray*); // receives an array of ASKSeqEvt stru
 - (void) output:(ASKSeqEvent*) ev;
 - (void) outputDirect:(ASKSeqEvent*) ev;
 - (void) dispatchAsync:(void(^)())block;
+- (int) getQueue;
 @end
 
 @protocol ASKSeqSource
