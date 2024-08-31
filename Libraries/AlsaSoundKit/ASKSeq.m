@@ -243,6 +243,7 @@ static int init_queue_tempo(snd_seq_t *handle, int queue, int qtempo, int ppq) {
                             
 
     dispatch_source_set_event_handler(_dsource, ^{
+	@autoreleasepool {
         // NSLog(@"Did get event");
         NSMutableArray *events = [[NSMutableArray alloc] init];
         snd_seq_event_t *ev;
@@ -263,6 +264,7 @@ static int init_queue_tempo(snd_seq_t *handle, int queue, int qtempo, int ppq) {
         // Broadcast the event lists to all listeners
         for (ASKSeqListener listener in _listeners) {
           listener(events);
+        }
         }
 
       });
