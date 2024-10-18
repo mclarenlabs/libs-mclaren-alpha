@@ -28,7 +28,7 @@
   [vbox setBorder: 5];
 
   [vbox addView: [self populateBottomRow] enablingYResizing: YES];
-  [vbox addView: [self populateMiddleRow] enablingYResizing: NO];
+  [vbox addView: [self populateMiddleRow] enablingYResizing: YES];
   [vbox addView: [self populateTopRow] enablingYResizing: NO];
   return vbox;
 }
@@ -75,9 +75,11 @@
 
 - (NSView*) populateMiddleRow {
   GSHbox *hbox = [GSHbox new];
-  [hbox addView: [self populateOscArray] withMinXMargin:5];
-  [hbox addView: [self populateAlgoColumn] withMinXMargin:5];
-  [hbox addView: [self populateOutputColumn] withMinXMargin:5];
+  [hbox setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+  
+  [hbox addView: [self populateOscArray] enablingXResizing: NO withMinXMargin:5];
+  [hbox addView: [self populateAlgoColumn] enablingXResizing: NO withMinXMargin:5];
+  [hbox addView: [self populateOutputColumn] enablingXResizing: YES withMinXMargin:5];
   return hbox;
 }
 
@@ -157,26 +159,11 @@
 
 - (NSView*) populateOutputColumn {
 
-  AppDelegate *appDelegate = [NSApp delegate];
-  
-  NSBox *box = [[NSBox alloc] initWithFrame: NSZeroRect];
-  box.title = @"Output";
-  
   GSVbox *vbox = [GSVbox new];
   [vbox setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
-  GSHbox *hbox = [GSHbox new];
-  [hbox setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
-
-  appDelegate.outputVolumeSlider = [[NSScrollSlider alloc] initWithFrame:NSMakeRect(0, 0, 20, 70)];
-  [appDelegate.outputVolumeSlider setMinValue:0];
-  [appDelegate.outputVolumeSlider setMaxValue:100];
-  [appDelegate.outputVolumeSlider setContinuous:YES];
-  [appDelegate.outputVolumeSlider setAutoresizingMask: NSViewHeightSizable];
-
-  NSRect sampleRect = NSMakeRect(0, 0, 100, 70);
-  appDelegate.contextBufferView = [[MLContextBufferView alloc] initWithFrame:sampleRect];
-  [appDelegate.contextBufferView setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+  _outputContextController = [[MLContextController alloc] initWithTitle:@"Output"];
+  _inputContextController = [[MLContextController alloc] initWithTitle:@"Input"];
 
   _filterController = [MLFilterController new];
   _filterController.title = @"Filt1";
@@ -184,19 +171,14 @@
   _reverbController = [MLReverbController new];
   _reverbController.title = @"Reverb1";
 
-  [vbox addView: _reverbController enablingYResizing: NO withMinYMargin:10];
-  [vbox addView: _filterController enablingYResizing: NO withMinYMargin:10];
-  // [vbox addView: _contextBufferView];
-  [hbox addView: appDelegate.outputVolumeSlider enablingXResizing: NO withMinXMargin:0];
-  [hbox addView: appDelegate.contextBufferView enablingXResizing: YES withMinXMargin:10];
-  [vbox addView: hbox];
+  [vbox addView: _reverbController enablingYResizing: NO withMinYMargin: 5];
+  [vbox addView: _filterController enablingYResizing: NO withMinYMargin: 5];
+  [vbox addView: _inputContextController enablingYResizing: YES withMinYMargin: 5];
+  [vbox addView: _outputContextController enablingYResizing: YES withMinYMargin: 5];
 
-  [box setContentView:vbox];
-  [box sizeToFit];
-  return box;
-  // return vbox;
+  [vbox sizeToFit];
+  return vbox;
 }
-
 
 - (void) makeWindow {
 

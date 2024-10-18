@@ -10,6 +10,8 @@
 @property MLEnvelopeController *env1Controller;
 @property MLOscillatorController *osc2Controller;
 @property MLEnvelopeController *env2Controller;
+@property MLContextController *outputContextController;
+@property MLContextController *inputContextController;
 @property MLFilterController *filterController;
 @property MLReverbController *reverbController;
 @property MLModulationController *modulationController;
