@@ -20,6 +20,8 @@
     // which is provided as part of the StepTalk distribution.
     [NSApp initializeApplicationScripting];
 
+    
+
   }
 
   [self makeWindow]; // order matters to get NSWindows95InterfaceStyle menus
@@ -68,6 +70,13 @@
       [scriptingMenu addItemWithTitle: @"Transcript ..."
 			       action: @selector(orderFrontTranscriptWindow:)
 			keyEquivalent: @""];
+
+      [scriptingMenu addItemWithTitle: @"Do Selection"
+			       action: @selector(executeSelectionScript:)
+			keyEquivalent: @"e"];
+      [scriptingMenu addItemWithTitle: @"Do and Show Selection"
+			       action: @selector(executeAndShowSelectionScript:)
+			keyEquivalent: @"d"];
 
       [scriptingItem setSubmenu: scriptingMenu];
     }
