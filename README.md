@@ -165,7 +165,6 @@ Before building "MidiScriptDemo" you must make sure "libs-steptalk" is installed
 ``` console
 $ git clone https://github.com/gnustep/libs-steptalk
 $ cd libs-steptalk
-$ cd Frameworks/StepTalk
 $ make
 $ sudo -E make install
 ```
