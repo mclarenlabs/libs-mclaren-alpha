@@ -346,6 +346,7 @@ static int evenodd = 0;
     exit(1);
   }
 
+#if 0
   [_ctx onWave:^(unsigned idx, MSKContextBuffer *buf) {
       if (((++evenodd) % 5) != 1) // Temporary Workaround
 	return;
@@ -354,7 +355,7 @@ static int evenodd = 0;
 	  [_contextBufferView setNeedsDisplay:YES];
 	}];
     }];
-
+#endif
 }
 
 - (void) makeFxPath {
@@ -450,10 +451,19 @@ static int evenodd = 0;
   // NOTE: the default document with WindowController is created before this
   // method is called so we can attach the volume slider here.
   Synth80WindowController *wc = [Synth80WindowController sharedWindowController];
-  [_outputVolumeSlider bind:@"value"
-		     toObject: _ctx
-		  withKeyPath: @"volume"
-		      options: nil];
+
+  [wc.outputContextController bindToContext: _ctx];
+
+  [_ctx onRms:^(unsigned idx, double rmsl, double rmsr, double absl, double absr) {
+      [wc.outputContextController.vuMeterView rmsL:rmsl rmsR:rmsr peakL:absl peakR:absr];
+    }];
+  
+  [wc.inputContextController bindToContext: wc.sample1Controller.rec];
+
+  [wc.sample1Controller.rec onRms:^(unsigned idx, double rmsl, double rmsr, double absl, double absr) {
+      [wc.inputContextController.vuMeterView rmsL:rmsl rmsR:rmsr peakL:absl peakR:absr];
+    }];
+  
 
   // Set the piano to play
   [wc.pianoController.piano setTarget: self];

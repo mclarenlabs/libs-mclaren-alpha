@@ -29,6 +29,8 @@ Synth80_OBJC_FILES = \
   MLSampleController.m \
   MLExpressiveButton.m \
   MLSampleView.m \
+  MLVUMeterView.m \
+  MLContextController.m \
   MLContextBufferView.m \
   NSColor+ColorExtensions.m \
   NSObject+MLBlocks.m \
