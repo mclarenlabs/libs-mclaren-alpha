@@ -2,7 +2,7 @@
 
 The Chromebook Linux subsystem (Crostini) makes a very nice environment for compiling and running GNUstep applications, with one giant exception: the Chromebook window manager does not know how to manage the resulting GNUstep application windows and menus.
 
-The solution presented here is to start a new X-windows session running in a Chromebook window that is managed by a compliant window manager.
+The solution is the BASH script here called "startgs1.sh".   It starts a new X-windows session running in a Chromebook window that is managed by a compliant window manager.  Inside this new environment GNUstep applications run nicely.
 
 ![Screenshot of Desktop](./Screenshot2024-09-09-7.33.15AM.png)
 
