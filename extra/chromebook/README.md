@@ -4,7 +4,7 @@ The Chromebook Linux subsystem (Crostini) makes a very nice environment for comp
 
 The solution presented here is to start a new X-windows session running in a Chromebook window that is managed by a compliant window manager.
 
-![Screenshot of Desktop](./Screenshot 2024-09-09 7.33.15 AM.png)
+![Screenshot of Desktop](./Screenshot2024-09-09-7.33.15AM.png)
 
 ## Explanation
 
