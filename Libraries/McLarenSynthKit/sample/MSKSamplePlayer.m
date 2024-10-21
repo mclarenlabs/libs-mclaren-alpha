@@ -35,7 +35,7 @@
  */
 
 - (BOOL) compile {
-  return YES;
+  return [super compile];
 }
  
 

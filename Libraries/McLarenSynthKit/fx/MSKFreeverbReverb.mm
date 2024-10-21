@@ -41,7 +41,7 @@ extern "C" {
     sppfreeverb->damp.setRef(_model->_damp);
   }
 
-  return YES;
+  return [super compile];
 }
 
 

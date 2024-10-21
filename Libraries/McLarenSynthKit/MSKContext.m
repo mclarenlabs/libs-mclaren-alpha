@@ -35,6 +35,12 @@ static BOOL playsChime = YES;    // Context plays tones when it starts
 
 @implementation MSKContextBuffer
 
+- (id) init {
+  [NSException raise:@"invalid init method" format:@"please call initWithCtx: for %@",
+               NSStringFromClass([self class])];
+  return nil;
+}
+
 - (id) initWithCtx:(MSKContext*)ctx {
 
   if (self = [super init]) {
@@ -71,6 +77,7 @@ void CFMSKContextBufferClear(__unsafe_unretained MSKContextBuffer *v) {
     _active = YES;
     _reclaim = NO;
 
+    _isCompiled = NO;
     _isInitialized = NO;
     _when = 0;
   }
@@ -78,6 +85,12 @@ void CFMSKContextBufferClear(__unsafe_unretained MSKContextBuffer *v) {
 }
 
 - (BOOL) auEval:(uint64_t)now nframes:(snd_pcm_sframes_t)nframes {
+
+  // must be compiled before evaluated
+  if (_isCompiled == NO) {
+    [NSException raise:@"non-compiled MSKVoice in Audio Thread" format:@"please call compile for %@",
+               NSStringFromClass([self class])];
+  }
 
   // initialize this voice the first time it is called
   if (_isInitialized == NO) {
@@ -100,9 +113,10 @@ void CFMSKContextBufferClear(__unsafe_unretained MSKContextBuffer *v) {
   return [self auRender:now nframes:nframes];
 }
 
+// Derived classes MUST call this in their compile method
 - (BOOL) compile {
-  NSLog(@"Compile method must be implemented");
-  exit(1);
+  _isCompiled = YES;
+  return YES;
 }
 
 - (BOOL) auInit:(uint64_t)now nframes:(snd_pcm_sframes_t)nframes {
@@ -775,6 +789,7 @@ request.persize isExact:request.isExact error:error];
 
   // TOM: 2019-07-01
   _rbuf = [[MSKContextVoice alloc] initWithCtx:self];
+  [_rbuf compile];
   if (CTXDEBUG) {
     NSLog(@"MSKContext allocating rbuf:%@", _rbuf);
   }
@@ -910,16 +925,21 @@ request.persize isExact:request.isExact error:error];
 
   // start-up notes to hear PCM device is working
   __block MSKLinEnvelope *e1 = [[MSKLinEnvelope alloc] initWithCtx:self];
+  [e1 compile];
+  
   __block MSKLinEnvelope *e2 = [[MSKLinEnvelope alloc] initWithCtx:self];
+  [e2 compile];
 
   if (playsChime == YES) {
     MSKSinFixedOscillator *v1 = [[MSKSinFixedOscillator alloc] initWithCtx:self];
     v1.iFreq = 440.0;
     v1.sEnvelope = e1;
+    [v1 compile];
 
     MSKSinFixedOscillator *v2 = [[MSKSinFixedOscillator alloc] initWithCtx:self];
     v2.iFreq = 490.0;
     v2.sEnvelope = e2;
+    [v2 compile];
 
     [self addVoice:v1];
     [self addVoice:v2];
@@ -927,10 +947,12 @@ request.persize isExact:request.isExact error:error];
 
   // visible internal buffer
   _pbuf = [[MSKContextVoice alloc] initWithCtx:self];
+  [_pbuf compile];
 
   // default FX is a low-pass filter
   MSKGeneralFilter *bq = [MSKGeneralFilter filterWithLowpass:self];
   bq.sInput = self.pbuf;
+  [bq compile];
   [self addFx:bq];
 
   // schedule our callback

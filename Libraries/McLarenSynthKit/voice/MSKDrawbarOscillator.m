@@ -107,7 +107,7 @@ static double GAIN = 1.0;
 
   CFMSKDrawbarOscillatorCalcFreq(self);
 
-  return YES;
+  return [super compile];
 }
 
 BOOL CFMSKDrawbarOscillatorControls(__unsafe_unretained MSKDrawbarOscillator *v, uint64_t now, snd_pcm_sframes_t nframes) {

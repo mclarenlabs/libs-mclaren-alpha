@@ -47,7 +47,7 @@ extern "C" {
 
   _linEnv->gain = _iGain;
 
-  return YES;
+  return [super compile];
 }
   
 
