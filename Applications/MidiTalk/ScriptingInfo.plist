@@ -1,0 +1,70 @@
+/* ScriptingSupport.plist 
+
+    This is a template file for application scripting support description.
+    You can take and modify this file.
+*/
+{
+    Classes = (
+        /* List public classes from your application here */
+        ASKSeq,
+	ASKSeqDispatcher,
+        ASKSeqOptions,
+	ASKSeqEvent,
+	ASKPcm,
+
+  	MSKError,
+	MSKMetronome,
+	MSKPattern,
+	Pattern,
+
+        MSKEnvelopeFanout,
+	MSKExpEnvelope,
+	MSKLinEnvelope,
+
+	MSKEnvelopeModel,
+	MSKOscillatorModel,
+
+	MSKGeneralOscillator,
+
+	Synth80Synth,
+
+	NSErrorPtr,
+	NSError, /* omitted from modules/Foundation for some reason */
+	NSAlert /* omitted from modules/AppKit for some reason */
+    );
+    Objects = {
+        /* Put a dictionary of public objects here. 
+        
+           Key is object name used in scripts and value is a path to that
+           object relative to application delegate. For example:
+           
+           CurrentMessage = "lastMailWindowOnTop.delegate.selectedMessage";
+
+        */
+        but1 = "buttonsController.but1";
+        but2 = "buttonsController.but2";
+        but3 = "buttonsController.but3";
+        but4 = "buttonsController.but4";
+        but5 = "buttonsController.but5";
+        but6 = "buttonsController.but6";
+        but7 = "buttonsController.but7";
+        but8 = "buttonsController.but8";
+
+	gauge1 = "gaugesController.gauge1";
+	gauge2 = "gaugesController.gauge2";
+	gauge3 = "gaugesController.gauge3";
+	gauge4 = "gaugesController.gauge4";
+	gauge5 = "gaugesController.gauge5";
+	gauge6 = "gaugesController.gauge6";
+
+	piano = "pianoController.piano";
+
+	ctx = "ctx";
+	rec = "rec";
+	seq = "seq";
+	disp = "disp";
+	metro = "metro";
+	sched = "sched";
+
+    };
+}
