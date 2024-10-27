@@ -442,14 +442,14 @@
 	  value = max;
 	}
       
-      [self setDoubleValue: value];
+      [self setValue: value];
       return;
     }
 
   [super keyDown: ev];
 }
 
-- (void) setDoubleValue:(double) value {
+- (void) setValue:(double) value {
   
   _userProgress = value;
 
@@ -462,7 +462,7 @@
   [self setNeedsDisplay:YES];
 }
 
-- (double) doubleValue {
+- (double) value {
   return _userProgress;
 }
 
@@ -481,6 +481,20 @@
     }
   }
 }
+
+//
+// USER: Register Callbacks
+//
+
+- (void) onChange:(SEL)sel target:(id)target {
+  _target = target;
+  _action = sel;
+}
+
+- (void) onChange:(id)block {
+  [self onChange:@selector(value:) target:block];
+}
+  
 
 #pragma clang diagnostic pop
 

@@ -58,11 +58,20 @@ typedef void (^MLGaugeCallbackBlock)(double);
 @property (readwrite, copy) MLGaugeCallbackBlock valueChangedBlock;
 
 // set and get the current value of the 'progress' in user coords
-- (void) setDoubleValue:(double) progress;
-- (double) doubleValue;
+- (void) setValue:(double) progress;
+- (double) value;
 
 // Event protocol OUT
 @property (readwrite, nonatomic) id target;
 @property (readwrite, nonatomic, assign) SEL action;
+
+//
+// USER: Register Callbacks
+//   The target receives the :sender and can use [sender value]
+//   to read the value.
+//
+
+- (void) onChange:(id)block;
+- (void) onChange:(SEL)sel target:(id)target;
 
 @end
