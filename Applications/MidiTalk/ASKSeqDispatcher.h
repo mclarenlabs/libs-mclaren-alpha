@@ -16,6 +16,7 @@
 
 @property (readwrite, nonatomic, weak) id target;
 
+@property (readwrite, nonatomic) id anyEventTarget;
 @property (readwrite, nonatomic) id noteOnTarget;
 @property (readwrite, nonatomic) id noteOffTarget;
 @property (readwrite, nonatomic) id keyPressureTarget;
@@ -26,6 +27,7 @@
 @property (readwrite, nonatomic) id usr1Target;
 @property (readwrite, nonatomic) id usr2Target;
 
+@property (readwrite, nonatomic, assign) SEL anyEventSelector; // @selector(seqEvent:
 @property (readwrite, nonatomic, assign) SEL noteOnSelector; // @selector(seqNoteOn:vel:chan:)
 @property (readwrite, nonatomic, assign) SEL noteOffSelector; // @selector(seqNoteOff:vel:chan:)
 @property (readwrite, nonatomic, assign) SEL keyPressureSelector; // @selector(seqKeyPressure:vel:chan:);
@@ -41,6 +43,7 @@
 //
 // Private - used internally - but could potentially be overridden
 //
+- (void) sendAnyEvent:(ASKSeqEvent*)evt;
 - (void) sendNoteOn:(NSUInteger)midiNote vel:(unsigned)vel chan:(unsigned)chan;
 - (void) sendNoteOff:(NSUInteger)midiNote vel:(unsigned)vel chan:(unsigned)chan;
 - (void) sendKeyPressure:(NSUInteger)midiNote vel:(unsigned)vel chan:(unsigned)chan;
@@ -56,6 +59,9 @@
 //
 // USER: Register Callbacks
 //
+
+- (void) onAnyEvent:(id)block;
+- (void) onAnyEvent:(SEL)sel target:(id)target;
 
 - (void) onNoteOn:(id)block;
 - (void) onNoteOn:(SEL)sel target:(id)target;

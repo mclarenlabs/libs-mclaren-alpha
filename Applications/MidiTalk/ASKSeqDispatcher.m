@@ -18,6 +18,9 @@
 - (void) handleEvent:(ASKSeqEvent*)e
 {
   // NSLog(@"handleEvent:%@", e);
+
+  [self sendAnyEvent:e];	// handle any event
+  
   switch (e->_ev.type) {
 
   case SND_SEQ_EVENT_NOTEON:
@@ -81,6 +84,7 @@
 {
   if (self = [super init]) {
     _seq = seq;
+    _anyEventSelector = @selector(seqEvent:);
     _noteOnSelector = @selector(seqNoteOn:vel:chan:);
     _noteOffSelector = @selector(seqNoteOff:vel:chan:);
     _keyPressureSelector = @selector(seqKeyPressure:vel:chan:);
@@ -110,6 +114,20 @@
 /*
  * The Senders
  */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
+- (void) sendAnyEvent:(ASKSeqEvent*)evt
+{
+  if (_anyEventTarget != nil) {
+    if ([_anyEventTarget respondsToSelector:_anyEventSelector] == YES) {
+      [_anyEventTarget performSelector:_anyEventSelector withObject:evt];
+    }
+  }
+  
+}
+#pragma clang diagnostic pop
 
 - (void) sendNoteOn:(NSUInteger)midiNote vel:(unsigned)vel chan:(unsigned) chan
 {
@@ -241,6 +259,15 @@
 /*
  * USER: register callbacks
  */
+
+- (void) onAnyEvent:(SEL)sel target:(id)target {
+  _anyEventTarget = target;
+  _anyEventSelector = sel;
+}
+
+- (void) onAnyEvent:(id)block {
+  [self onAnyEvent:@selector(value:) target:block];
+}
 
 - (void) onNoteOn:(SEL)sel target:(id)target {
   _noteOnTarget = target;
