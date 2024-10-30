@@ -14,7 +14,7 @@
 
 @interface ASKSeqDispatcher : NSObject
 
-@property (readwrite, nonatomic, weak) id target;
+// @property (readwrite, nonatomic, weak) id target;
 
 @property (readwrite, nonatomic) id anyEventTarget;
 @property (readwrite, nonatomic) id noteOnTarget;
