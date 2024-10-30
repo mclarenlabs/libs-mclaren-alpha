@@ -26,6 +26,11 @@
 
 	MSKGeneralOscillator,
 
+	MSKSample,
+	MSKSampleManager,
+	MSKSamplePlayer,
+	MSKSampleRecorder,
+
 	Synth80Synth,
 
 	NSErrorPtr,
@@ -56,6 +61,9 @@
 	gauge4 = "gaugesController.gauge4";
 	gauge5 = "gaugesController.gauge5";
 	gauge6 = "gaugesController.gauge6";
+
+	act1 = "activity1";
+	act2 = "activity2";
 
 	piano = "pianoController.piano";
 

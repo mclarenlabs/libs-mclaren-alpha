@@ -73,6 +73,7 @@
   GSHbox *hbox = [GSHbox new];
   [hbox setDefaultMinXMargin: 5];
   [hbox setBorder: 5];
+  [hbox setAutoresizingMask: NSViewWidthSizable];
 
   /* Start Button */
   _startButton = [NSButton new]; 
@@ -86,7 +87,7 @@
   [_startButton sizeToFit];
   [_startButton setTag: 1];
 
-  [hbox addView: _startButton withMinXMargin:20];
+  [hbox addView: _startButton enablingXResizing: NO withMinXMargin:20];
 
   /* Stop Button */
   _stopButton = [NSButton new];
@@ -99,7 +100,7 @@
   // [_stopButton setAutoresizingMask: NSViewMaxXMargin];
   [_stopButton sizeToFit];
 
-  [hbox addView: _stopButton withMinXMargin:5.0];
+  [hbox addView: _stopButton enablingXResizing: NO withMinXMargin:5.0];
 
 
   /* Continue Button */
@@ -113,7 +114,7 @@
   // [_continueButton setAutoresizingMask: NSViewMaxXMargin];
   [_continueButton sizeToFit];
 
-  [hbox addView: _continueButton withMinXMargin:5.0];
+  [hbox addView: _continueButton enablingXResizing: NO withMinXMargin:5.0];
 
   /* Tempo Slider */
   _tempoSlider = [[NSScrollSlider alloc] initWithFrame:NSMakeRect(0, 0, 100, 25)];
@@ -156,6 +157,17 @@
   [_tempoText setFormatter:numberFormatter];
 
   [hbox addView: _tempoText withMinXMargin: 5.0];
+
+  // Activity indicators
+  GSHbox *span = [GSHbox new];
+  [span setAutoresizingMask: NSViewWidthSizable];
+  _activity1 = [[MLActivity alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+  _activity2 = [[MLActivity alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+
+  [hbox addView: span enablingXResizing: YES];
+  [hbox addSeparator];
+  [hbox addView: _activity1 enablingXResizing: NO withMinXMargin: 5.0];
+  [hbox addView: _activity2 enablingXResizing: NO withMinXMargin: 5.0];
 
   return hbox;
 }
