@@ -15,6 +15,7 @@
 #import "MLFilterController.h"
 #import "MLReverbController.h"
 #import "MLContextController.h"
+#import "MLLamp.h"
 #import "MLActivity.h"
 
 @interface AppDelegate : NSObject<NSApplicationDelegate>
@@ -28,6 +29,12 @@
 @property (nonatomic, retain, strong) NSScrollSlider *tempoSlider;
 @property (nonatomic) int tempo;
 @property (nonatomic, retain, strong) NSTextField *tempoText;
+
+@property (nonatomic, retain, strong) MLLamp *lamp1;
+@property (nonatomic, retain, strong) MLLamp *lamp2;
+@property (nonatomic, retain, strong) MLLamp *lamp3;
+@property (nonatomic, retain, strong) MLLamp *lamp4;
+
 @property (nonatomic, retain, strong) MLActivity *activity1;
 @property (nonatomic, retain, strong) MLActivity *activity2;
 

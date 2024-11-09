@@ -4,6 +4,7 @@
  */
 
 #import "AlsaSoundKit/AlsaSoundKit.h"
+#import "MidiTalk_ASKSeq.h"
 
 #import "MidiTalk_AppDelegate.h"
 #import "GSTable-MLdecls.h"
@@ -161,10 +162,18 @@
   // Activity indicators
   GSHbox *span = [GSHbox new];
   [span setAutoresizingMask: NSViewWidthSizable];
+  _lamp1 = [[MLLamp alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+  _lamp2 = [[MLLamp alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+  _lamp3 = [[MLLamp alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+  _lamp4 = [[MLLamp alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
   _activity1 = [[MLActivity alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
   _activity2 = [[MLActivity alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
 
   [hbox addView: span enablingXResizing: YES];
+  [hbox addView: _lamp1 enablingXResizing: NO withMinXMargin: 5.0];
+  [hbox addView: _lamp2 enablingXResizing: NO withMinXMargin: 5.0];
+  [hbox addView: _lamp3 enablingXResizing: NO withMinXMargin: 5.0];
+  [hbox addView: _lamp4 enablingXResizing: NO withMinXMargin: 5.0];
   [hbox addSeparator];
   [hbox addView: _activity1 enablingXResizing: NO withMinXMargin: 5.0];
   [hbox addView: _activity2 enablingXResizing: NO withMinXMargin: 5.0];
@@ -360,7 +369,13 @@
   options->_sequencer_name = "miditalk";
 
   NSError *error;
-  _seq = [[ASKSeq alloc] initWithOptions:options error:&error];
+  // _seq = [[ASKSeq alloc] initWithOptions:options error:&error];
+  MidiTalk_ASKSeq *mtseq = [[MidiTalk_ASKSeq alloc] initWithOptions:options error:&error];
+  mtseq.midiInActivity = _activity1;
+  mtseq.midiOutActivity = _activity2;
+
+  _seq = mtseq;
+
   if (error != nil) {
     NSLog(@"Could not create sequencer.  Error:%@", error);
     exit(1);
@@ -368,6 +383,11 @@
 
   // create a default dispatcher
   _disp = [[ASKSeqDispatcher alloc] initWithSeq:_seq];
+
+}
+
+- (void) midiInTickler {
+  [_activity1 tickle];
 }
 
 - (void) makeScheduler {
@@ -383,7 +403,7 @@
   MSKContextRequest *request = [[MSKContextRequest alloc] init];
   request.rate = 44000;
 
-#define HIGHRESOLUTION 1
+#define HIGHRESOLUTION 0
 
 #if HIGHRESOLUTION
   request.persize = 128;
