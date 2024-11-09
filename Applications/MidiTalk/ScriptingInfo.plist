@@ -62,6 +62,11 @@
 	gauge5 = "gaugesController.gauge5";
 	gauge6 = "gaugesController.gauge6";
 
+	lamp1 = "lamp1";
+	lamp2 = "lamp2";
+	lamp3 = "lamp3";
+	lamp4 = "lamp4";
+
 	act1 = "activity1";
 	act2 = "activity2";
 
