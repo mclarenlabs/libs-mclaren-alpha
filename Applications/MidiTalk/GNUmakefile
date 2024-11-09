@@ -21,6 +21,8 @@ COMMON_OBJC_FILES = \
   MLFilterController.m \
   MLReverbController.m \
   MLVUMeterView.m \
+  MLActivity.m \
+  MLLamp.m \
   LabelWithValue.m \
   NSScrollSlider.m \
   NSColor+ColorExtensions.m \
@@ -28,7 +30,8 @@ COMMON_OBJC_FILES = \
   ASKSeqEvent+additions.m \
   ASKSeqDispatcher.m \
   Pattern.m \
-  NSErrorPtr.m
+  NSErrorPtr.m \
+  MSKSample+additions.m
 
 SYNTH80 = ../McLarenSynthKit/Synth80
 
@@ -45,6 +48,7 @@ MidiTalk_OBJC_FILES = \
   $(COMMON_OBJC_FILES) \
   $(SYNTH80_OBJC_Files) \
   STScriptingSupport.m \
+  MidiTalk_ASKSeq.m \
   MidiTalk_main.m \
   MidiTalk_AppDelegate.m
 
