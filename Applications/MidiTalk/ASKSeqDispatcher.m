@@ -9,6 +9,7 @@
 #include "NSObject+additions.h"
 #include "ASKSeqDispatcher.h"
 #include "apply.h"
+#import <AppKit/NSApplication.h>  // EventTrackingRunLoopMode
 
 @implementation ASKSeqDispatcher {
   ASKSeq *_seq;
@@ -96,11 +97,19 @@
 
     __weak ASKSeqDispatcher* wself = self; // weakly capture self
 
+    NSArray *modes = @[ NSDefaultRunLoopMode,
+					    NSRunLoopCommonModes,
+					    NSEventTrackingRunLoopMode,
+					    NSModalPanelRunLoopMode
+			];
+
     _block = ^(NSArray *evts) {
       for (ASKSeqEvent *e in evts) {
 	[wself performSelectorOnMainThread:@selector(handleEvent:)
 				withObject:e
-			     waitUntilDone:NO];
+			     waitUntilDone:NO
+				     modes:modes
+	 ];
       }
     };
 

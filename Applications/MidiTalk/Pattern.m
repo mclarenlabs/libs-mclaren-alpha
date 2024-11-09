@@ -11,6 +11,8 @@
 
 #import "StepTalk/STSelector.h"
 
+#import "AppKit/NSApplication.h"
+
 /*
  * Allow sync: to work on selectors in StepTalk
  */
@@ -40,11 +42,20 @@
 
 - (void) play:(id)block {
 
+  NSArray *modes = @[ NSDefaultRunLoopMode,
+					  NSRunLoopCommonModes,
+					  NSEventTrackingRunLoopMode,
+					  NSModalPanelRunLoopMode
+		      ];
+      
   [self thunk:^{
 
       [block performSelectorOnMainThread:@selector(value)
 			      withObject:@(0)
-			   waitUntilDone:NO];
+			   waitUntilDone:NO
+				   modes:modes
+
+       ];
       
     }];
 }

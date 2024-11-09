@@ -6,8 +6,6 @@
  *
  */
 
-#include <atomic.h>
-
 #import "MLActivity.h"
 #import "NSColor+ColorExtensions.h"
 
@@ -36,11 +34,14 @@
 					    xRadius:roundedRadius
 					    yRadius:roundedRadius];
 
-    [NSTimer scheduledTimerWithTimeInterval: 0.1
-				     target: self
-				   selector: @selector(timeout)
-				   userInfo: nil
-				    repeats: YES];
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: 0.1
+						  target: self
+						selector: @selector(timeout)
+						userInfo: nil
+						 repeats: YES];
+
+    // allow timer to fire while slider dragging is happening
+    [[NSRunLoop currentRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
   }
   return self;
 }
