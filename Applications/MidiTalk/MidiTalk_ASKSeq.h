@@ -12,6 +12,7 @@
 
 @interface MidiTalk_ASKSeq : ASKSeq
 
+@property (readwrite) MLActivity *metronomeBeatActivity;
 @property (readwrite) MLActivity *midiInActivity;
 @property (readwrite) MLActivity *midiOutActivity;
 
