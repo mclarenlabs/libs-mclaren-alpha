@@ -21,6 +21,7 @@
   _volumeSlider = [[NSScrollSlider alloc] initWithFrame:NSMakeRect(0, 0, 20, 50)];
   [_volumeSlider setMinValue:0];
   [_volumeSlider setMaxValue:100];
+  // [_volumeSlider setNumberOfTickMarks:101];
   [_volumeSlider setContinuous:YES];
   [_volumeSlider setAutoresizingMask: NSViewHeightSizable];
 
