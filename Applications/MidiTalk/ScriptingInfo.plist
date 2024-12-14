@@ -12,6 +12,9 @@
 	ASKSeqEvent,
 	ASKPcm,
 
+	MSKContext,
+	MSKContextRequest,
+
   	MSKError,
 	MSKMetronome,
 	MSKPattern,
@@ -78,6 +81,9 @@
 	disp = "disp";
 	metro = "metro";
 	sched = "sched";
+
+	filterModel = "filterModel";
+	reverbModel = "reverbModel";
 
     };
 }
