@@ -11,6 +11,8 @@
 
 #import "STScriptingSupport.h"
 
+#include "StepTalk/STEnvironment.h"
+
 @implementation AppDelegate
 
 - (id) init {
@@ -24,12 +26,41 @@
       //    ./STScriptingSupport.h
       // which is provided as part of the StepTalk distribution.
       [NSApp initializeApplicationScripting];
+      [self prepopulateConstants];
     }
 
     [self makeWindow];
     [self makeMenu];
   }
   return self;
+}
+
+/*
+ * NSApplication+additions.h in StepTalk defines some methods that we
+ * access dynamically.  [NSApp scriptingEnvironment] is one of them.
+ */
+
+- (void) prepopulateConstants {
+  SEL sel = @selector(scriptingEnvironment);
+  STEnvironment *env;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
+  if ([NSApp respondsToSelector:sel]) {
+    // NSLog(@"NSApp responds to selector:%d", sel);
+    env = [NSApp performSelector:sel];
+  }
+    
+#pragma clang diagnostic pop
+
+  if (env != nil) {
+    [env setObject:@(MSK_OSCILLATOR_TYPE_SIN) forName: @"MSK_OSCILLATOR_TYPE_SIN"];
+    [env setObject:@(MSK_OSCILLATOR_TYPE_SAW) forName: @"MSK_OSCILLATOR_TYPE_SAW"];
+    [env setObject:@(MSK_OSCILLATOR_TYPE_SQUARE) forName: @"MSK_OSCILLATOR_TYPE_SQUARE"];
+    [env setObject:@(MSK_OSCILLATOR_TYPE_TRIANGLE) forName: @"MSK_OSCILLATOR_TYPE_TRIANGLE"];
+    [env setObject:@(MSK_OSCILLATOR_TYPE_REVSAW) forName: @"MSK_OSCILLATOR_TYPE_REVSAW"];
+  }
 }
 
 - (void) makeWindow {
@@ -76,6 +107,10 @@
   [hbox setBorder: 5];
   [hbox setAutoresizingMask: NSViewWidthSizable];
 
+  /* Metronome Activity */
+  _activity0 = [[MLActivity alloc] initWithFrame:NSMakeRect(0, 0, 25, 25)];
+  [hbox addView: _activity0 enablingXResizing: NO withMinXMargin: 5.0];
+
   /* Start Button */
   _startButton = [NSButton new]; 
   [_startButton setBordered: YES];
@@ -88,7 +123,7 @@
   [_startButton sizeToFit];
   [_startButton setTag: 1];
 
-  [hbox addView: _startButton enablingXResizing: NO withMinXMargin:20];
+  [hbox addView: _startButton enablingXResizing: NO withMinXMargin:5.0];
 
   /* Stop Button */
   _stopButton = [NSButton new];
@@ -199,8 +234,20 @@
   [infoMenu addItemWithTitle:@ "About"
 		      action:@selector(orderFrontStandardAboutPanel:)
 	       keyEquivalent:@""];
-
 #if 1
+  if([NSApp isScriptingSupported])
+    {
+      id<NSMenuItem> scriptingItem =
+	[self.mainMenu addItemWithTitle: @"Scripting"
+			action: NULL
+		 keyEquivalent: @""];
+
+      NSMenu *scriptingMenu = [NSApp scriptingMenu];
+      [scriptingItem setSubmenu: scriptingMenu];
+    }
+  
+#endif
+#if 0
   // Note: the [NSApp scriptingMenu] installs itself as the main
   // menu and also does not work well with
   //   defaults write pad NSMenuInterfaceStyle NSWindows95InterfaceStyle
@@ -353,14 +400,20 @@
   NSError *error;
   _metro = [[MSKMetronome alloc] initWithSeq:_seq error:&error];
 
+  if (error != nil) {
+    NSLog(@"Could not create metronome. Error:%@", error);
+    exit(1);
+  }
+
   // synchronize metro tempo with control
   NSError *err;
   [_seq setTempo:120 error:&err];
 
   if (error != nil) {
-    NSLog(@"Could not create metronome. Error:%@", error);
+    NSLog(@"Could not set metronome tempo. Error:%@", err);
     exit(1);
   }
+
 }
 
 - (void) makeSeq {
@@ -371,6 +424,7 @@
   NSError *error;
   // _seq = [[ASKSeq alloc] initWithOptions:options error:&error];
   MidiTalk_ASKSeq *mtseq = [[MidiTalk_ASKSeq alloc] initWithOptions:options error:&error];
+  mtseq.metronomeBeatActivity = _activity0;
   mtseq.midiInActivity = _activity1;
   mtseq.midiOutActivity = _activity2;
 
@@ -386,9 +440,12 @@
 
 }
 
+#if 0
+// TOM: dead code I think
 - (void) midiInTickler {
   [_activity1 tickle];
 }
+#endif
 
 - (void) makeScheduler {
 
@@ -484,7 +541,7 @@
 
 - (void) makeFxPath {
 
-  // CTX.PBUX -> FILT -> REVERB
+  // CTX.PBUF -> FILT -> REVERB
   MSKGeneralFilter *filt = [[MSKGeneralFilter alloc] initWithCtx:_ctx];
   filt.sInput = _ctx.pbuf;
   filt.model = self.filterModel;
@@ -543,6 +600,10 @@
   [self makeBindings];
 
   [_outputContextController bindToContext: _ctx];
+
+#if 0
+  [_outputContextController.vuMeterView rmsL:0.5 rmsR:0.25 peakL:0.7 peakR:0.60];
+#endif
 
   [_ctx onRms:^(unsigned idx, double rmsl, double rmsr, double absl, double absr) {
       [_outputContextController.vuMeterView rmsL:rmsl rmsR:rmsr peakL:absl peakR:absr];

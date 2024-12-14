@@ -35,6 +35,7 @@
 @property (nonatomic, retain, strong) MLLamp *lamp3;
 @property (nonatomic, retain, strong) MLLamp *lamp4;
 
+@property (nonatomic, retain, strong) MLActivity *activity0;
 @property (nonatomic, retain, strong) MLActivity *activity1;
 @property (nonatomic, retain, strong) MLActivity *activity2;
 
