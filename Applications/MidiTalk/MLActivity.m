@@ -41,7 +41,8 @@
 						 repeats: YES];
 
     // allow timer to fire while slider dragging is happening
-    [[NSRunLoop currentRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
+    [[NSRunLoop mainRunLoop] addTimer:t forMode:NSRunLoopCommonModes];
+    [[NSRunLoop mainRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
   }
   return self;
 }
