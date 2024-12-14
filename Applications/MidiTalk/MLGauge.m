@@ -477,7 +477,7 @@
 {
   if (_target != nil) {
     if ([_target respondsToSelector:_action] == YES) {
-      [_target performSelector:_action withObject:self];
+      [_target performSelector:_action withObject:@(_userProgress)];
     }
   }
 }
