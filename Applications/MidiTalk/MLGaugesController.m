@@ -113,7 +113,7 @@
 
   _gauge1 = [self makeGauge:rect];
   _gauge1.color = [NSColor mcBlueColor];
-  _gauge1.legend = @"CC0";
+  _gauge1.legend = @"gauge1";
   _gauge1.userStart = 0;
   _gauge1.userEnd = 127;
 
@@ -121,7 +121,7 @@
   _gauge2.color = [NSColor mcGreenColor];
 
   // make this a midi controller CC8 0..127
-  _gauge2.legend = @"CC1";
+  _gauge2.legend = @"gauge2";
   _gauge2.format = @"%g";  
   _gauge2.userStart = 0;
   _gauge2.userEnd = 127;
