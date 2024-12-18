@@ -28,6 +28,9 @@
 	MSKOscillatorModel,
 
 	MSKGeneralOscillator,
+	MSKFMPhaseEnvelopeOscillator,
+	MSKPhaseDistortionOscillator,
+	MSKDrawbarOscillator,	
 
 	MSKSample,
 	MSKSampleManager,
