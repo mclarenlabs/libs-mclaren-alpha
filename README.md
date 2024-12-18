@@ -6,8 +6,8 @@ The second layer of the project is the MSK ("McLaren Synth Kit") library.  It bu
 
 There are a number of full-featured applications.
 
-* MidiTalk - a scriptable app using StepTalk interpreted scripting language for managing McLaren Synth Kit objectts.
-* Synth80 - a two-oscillator and sampling synth with full save/restore features.
+* MidiTalk - a scriptable app using StepTalk interpreted scripting language for managing McLaren Synth Kit objects.
+* Synth80 - a two-oscillator and sampling synth with full save/restore of patches.
 * MidiMon - watch MIDI system and dump events.
 
 There is a collection GUI demonstrations that show off aspects of the McLarenSynthKit.
@@ -19,7 +19,7 @@ There is a collection GUI demonstrations that show off aspects of the McLarenSyn
 * SampleToy (app) - capture a sample and play it with a keyboard
 Currently, there are the following ASK demonstration programs.
 
-And then there are collections of command-line tools.  The list below require only the ALSA Sound Kit Library.
+And then there are two collections of command-line tools.  The list below require only the ALSA Sound Kit Library.
 
 * askpcmlist (tool) - list the PCM (sound) devices in the system
 * askseqlist (tool) - list the MIDI Sequencer devices in the system
@@ -27,7 +27,7 @@ And then there are collections of command-line tools.  The list below require on
 * miniosc1 (tool) - make an oscillator on a PCM (sound) device
 * minisynth1 (tool) - generate tones on a PCM (sound) device from MIDI input events
 
-The command-line tools below illustrate some of the features of the McLaren Synth Kit.
+The second collection of command-line tools below illustrates some of the features of the McLaren Synth Kit.
 
 * scaleplayer (tool)- play a scale using a simple oscillator
 * pdscaleplayer (tool) - play a scale with a complex oscillator and reverb
