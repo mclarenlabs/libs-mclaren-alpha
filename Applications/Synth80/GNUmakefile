@@ -49,9 +49,9 @@ ADDITIONAL_LDFLAGS = -ldispatch
 # libraries in this package rather than in global installed locations
 
 ifeq ($(localdev),yes)
-ADDITIONAL_CPPFLAGS += -I../../../Libraries/
-ADDITIONAL_LIB_DIRS += -L ../../../Libraries/McLarenSynthKit/obj -L../../../Libraries/AlsaSoundKit/obj  
-ADDITIONAL_LDFLAGS += -Wl,-rpath='$$ORIGIN/../../../../Libraries/McLarenSynthKit/obj' -l:libMcLarenSynthKit.so -Wl,-rpath='$$ORIGIN/../../../../Libraries/AlsaSoundKit/obj' -l:libAlsaSoundKit.so
+ADDITIONAL_CPPFLAGS += -I../../Libraries/
+ADDITIONAL_LIB_DIRS += -L ../../Libraries/McLarenSynthKit/obj -L../../Libraries/AlsaSoundKit/obj  
+ADDITIONAL_LDFLAGS += -Wl,-rpath='$$ORIGIN/../../../Libraries/McLarenSynthKit/obj' -l:libMcLarenSynthKit.so -Wl,-rpath='$$ORIGIN/../../../Libraries/AlsaSoundKit/obj' -l:libAlsaSoundKit.so
 else
 ADDITIONAL_LDFLAGS += -lAlsaSoundKit -lMcLarenSynthKit
 endif
