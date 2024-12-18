@@ -33,7 +33,7 @@ COMMON_OBJC_FILES = \
   NSErrorPtr.m \
   MSKSample+additions.m
 
-SYNTH80 = ../McLarenSynthKit/Synth80
+SYNTH80 = ../Synth80
 
 ADDITIONAL_CPPFLAGS += -I$(SYNTH80)
 
@@ -55,7 +55,9 @@ MidiTalk_OBJC_FILES = \
 MidiTalk_RESOURCE_FILES = \
   Resources/Info-gnustep.plist \
   ScriptingInfo.plist \
-  Scripts
+  Scripts \
+  $(SYNTH80)/Patches /
+  Samples
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc
 ADDITIONAL_LDFLAGS = -ldispatch -lStepTalk
