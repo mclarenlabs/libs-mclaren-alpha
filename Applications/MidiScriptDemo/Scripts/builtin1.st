@@ -1,1 +1,0 @@
-Transcript showLine:'builtin script number One in Scripts folder'. 

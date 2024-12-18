@@ -1,7 +1,0 @@
-{
-  Default = {
-    Name = "cascade1";
-    Description = "This script illustrates using the SmallTalk cascade operation (';') to send multiple messages to the same receiver.";
-  };
-}
-
