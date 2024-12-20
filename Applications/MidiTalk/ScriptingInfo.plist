@@ -26,6 +26,7 @@
 
 	MSKEnvelopeModel,
 	MSKOscillatorModel,
+	MSKModulationModel,
 
 	MSKGeneralOscillator,
 	MSKFMPhaseEnvelopeOscillator,

@@ -56,7 +56,7 @@ MidiTalk_RESOURCE_FILES = \
   Resources/Info-gnustep.plist \
   ScriptingInfo.plist \
   Scripts \
-  $(SYNTH80)/Patches /
+  $(SYNTH80)/Patches \
   Samples
 
 ADDITIONAL_OBJCFLAGS = -Wall -Wno-import -fblocks -fobjc-arc

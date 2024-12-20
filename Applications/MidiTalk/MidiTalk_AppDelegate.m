@@ -234,7 +234,8 @@
   [infoMenu addItemWithTitle:@ "About"
 		      action:@selector(orderFrontStandardAboutPanel:)
 	       keyEquivalent:@""];
-#if 1
+#if 0
+  // Use StepTalk/ApplicationScripting provided menu
   if([NSApp isScriptingSupported])
     {
       id<NSMenuItem> scriptingItem =
@@ -247,7 +248,7 @@
     }
   
 #endif
-#if 0
+#if 1
   // Note: the [NSApp scriptingMenu] installs itself as the main
   // menu and also does not work well with
   //   defaults write pad NSMenuInterfaceStyle NSWindows95InterfaceStyle
