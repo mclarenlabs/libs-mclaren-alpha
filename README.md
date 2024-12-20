@@ -41,7 +41,7 @@ The two Libraries "AlsaSoundKit" and "McLarenSynthKit" are the core of the proje
 
 The "Applications" directory is organized with full-featured programs at the top, and a collection of demonstration programs in the "Demos" directory.
 
-The "Tools" directory is divided into two directory.  Tools using only the "AlsaSoundKit" library are in the "Tools/AlsaSoundKit" directory.  Tools requiring both the "McLarenSynthKit" library and the "AlsaSoundKit" library and are in the "Tools/McLarenSynthKit" directory
+The "Tools" directory is divided into two sub-directories.  Tools using only the "AlsaSoundKit" library are in the "Tools/AlsaSoundKit" directory.  Tools requiring both the "McLarenSynthKit" library and the "AlsaSoundKit" library and are in the "Tools/McLarenSynthKit" directory
 
 ``` console
 
@@ -126,7 +126,7 @@ We have provided help for working with this project "locally."  That is, with al
 
 When using `make install` with the ASK and MSK libraries, their headers and objects are placed in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing the libraries themselves with repeated compiling it can be more convenient to leave them in place, and to also leave the tools and applications in place too.
 
-To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries.
+To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries "in place."
 
 To work this way, first build the libraries but do not install.
 
@@ -149,12 +149,15 @@ $ make localdev=yes
 
 $ cd Applications/MidiMon
 $ make localdev=yes
+$ openapp ./MidiMon
 
 $ cd Applications/Synth80
 $ make localdev=yes
+$ openapp ./Synth80
 
 $ cd Applications/MidiTalk
 $ make localdev=yes
+$ openapp ./MidiTalk
 
 $ cd Applications/Demos
 $ make localdev=yes
