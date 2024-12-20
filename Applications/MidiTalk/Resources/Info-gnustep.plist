@@ -1,0 +1,6 @@
+{
+  ApplicationDescription = "Use StepTalk to script MIDI, Synths, Patterns and Samples";
+  ApplicationRelease = "MidiTalk 0.1";
+  FullVersionID = "0.1.0";
+  Authors = ( "McLaren Labs" , ) ;
+}

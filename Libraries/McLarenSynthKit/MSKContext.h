@@ -72,6 +72,8 @@ void CFMSKContextBufferClear(__unsafe_unretained MSKContextBuffer *v);
 
 @interface MSKContextVoice : MSKContextBuffer {
 
+  BOOL _isCompiled;
+
   @public
 
   // the rendering callback handler

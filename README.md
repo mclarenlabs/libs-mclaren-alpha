@@ -2,9 +2,24 @@
 
 This project contains libraries and programs for using MIDI and Sound devices on Linux with GNUstep.  The base of the project is the ASK ("Alsa Sound Kit") library for interfacing with ALSA (Advanced Linux Sound Architecture) via ObjectiveC.  This library makes it easy to enumerate MIDI and Sound devices, to open and close them, and to send and receive MIDI events and Sound buffers.
 
-The second layer of the project is the MSK ("McLaren Synth Kit") library.  It builds on top of the device-level ASK library by providing an object-oriented approach to sound generation.  An MSKContext provides a substrate for rendering sound graphs that are described by envelopes, oscillators, filters and effects generators.
+The second layer of the project is the MSK ("McLaren Synth Kit") library.  It builds on top of the device-level ASK library by providing an object-oriented approach to sound generation.  Sounds can be described as graphs consisting of envelopes, oscillators, filters and effects, and rendered by an MSKContext managing an audio device.  Classes also exist for capturing and manipulating samples.
 
+There are a number of full-featured applications.
+
+* [MidiTalk](./Applications/MidiTalk) - a scriptable app using StepTalk interpreted scripting language for managing McLaren Synth Kit objects.
+* [Synth80](./Applications/Synth80) - a two-oscillator and sampling synth with full save/restore of patches.
+* [MidiMon](./Applications/MidiMon) - watch MIDI system and dump events.
+
+There is a collection GUI demonstrations that show off aspects of the McLarenSynthKit.
+
+* MskFilterDemo (app) - use sliders to vary the properties of a filter
+* MskOrganDemo (app) - a drawbar organ with reverb and a filter
+* MskMetroDemo (app) - a simple Metronome using oscillators for tones
+* MskPatternDemo (app) - a Musical Pattern demonstration with adjustable tempo and waveform
+* SampleToy (app) - capture a sample and play it with a keyboard
 Currently, there are the following ASK demonstration programs.
+
+And then there are two collections of command-line tools.  The list below require only the ALSA Sound Kit Library.
 
 * askpcmlist (tool) - list the PCM (sound) devices in the system
 * askseqlist (tool) - list the MIDI Sequencer devices in the system
@@ -12,7 +27,7 @@ Currently, there are the following ASK demonstration programs.
 * miniosc1 (tool) - make an oscillator on a PCM (sound) device
 * minisynth1 (tool) - generate tones on a PCM (sound) device from MIDI input events
 
-And a few MSK demonstration programs.
+The second collection of command-line tools below illustrates some of the features of the McLaren Synth Kit.
 
 * scaleplayer (tool)- play a scale using a simple oscillator
 * pdscaleplayer (tool) - play a scale with a complex oscillator and reverb
@@ -20,30 +35,26 @@ And a few MSK demonstration programs.
 * capturesample (tool) - capture an audio sample to a file
 
 
-There are also a few GUI applications that use GNUstep AppKit with only the AlsaSoundKit part of the project.
-
-* MidiMon (app) - watch the MIDI system and dump events from multiple clients
-* MidiScriptDemo (app) - a scriptable app using StepTalk that can do many things with MIDI and PCM (audio) devices by accessing the ASK library
-
-And then there are GUI applications which build on the McLarenSynthKit part of the project.
-
-* MskFilterDemo (app) - use sliders to vary the properties of a filter
-* MskOrganDemo (app) - a drawbar organ with reverb and a filter
-* MskMetroDemo (app) - a simple Metronome using oscillators for tones
-* MskPatternDemo (app) - a Musical Pattern demonstration with adjustable tempo and waveform
-* SampleToy (app) - capture a sample and play it with a keyboard
-
-
 ## Organization of the Project
 
-The Libraries, Tools and Applications generally follow the same structure.  The AlsaSoundKit depends only on the Linux ALSA Library.  The McLarenSynthKit Library depends on the AlsaSoundKit Library as well as libsndfile and libresample.
+The two Libraries "AlsaSoundKit" and "McLarenSynthKit" are the core of the project.
 
-Tools are sub-divided into two categories.  The tools in `Tools/AlsaSoundKit` depend only on the AlsaSoundKit library.  Tools in `Tools/McLarenSynthKit` depend on the McLarenSynthKit library (which also depends on the AlsaSoundKit library).
+The "Applications" directory is organized with full-featured programs at the top, and a collection of demonstration programs in the "Demos" directory.
 
-Applications are slightly different.  `Applications/MidiMon` depends only on the AlsaSoundKit.  `Applications/MidiScriptDemo` depends on the AlsaSoundKit and also the StepTalk project.  Applications in `Applications/McLarenSynthKit` require the McLarenSynthKit library (which also depends on the AlsaSoundKit library).
+The "Tools" directory is divided into two sub-directories.  Tools using only the "AlsaSoundKit" library are in the "Tools/AlsaSoundKit" directory.  Tools requiring both the "McLarenSynthKit" library and the "AlsaSoundKit" library and are in the "Tools/McLarenSynthKit" directory
 
 ``` console
 
+├── Applications
+│   ├── MidiTalk
+│   ├── Synth80
+│   ├── MidiMon
+│   └── Demos
+│       ├── LiveloopToy
+│       ├── MskFilterDemo
+│       ├── MskMetroDemo
+│       ├── MskOrganDemo
+│       └── SampleToy
 ├── Libraries
 │   ├── AlsaSoundKit
 │   └── McLarenSynthKit
@@ -52,16 +63,6 @@ Applications are slightly different.  `Applications/MidiMon` depends only on the
 │   │   └── askpcmlist, askseqdump, miniosc1, minisynth1
 │   └── McLarenSynthKit
 │   │   └── capturesample, pdscaleplayer, playsample, scaleplayer, tiny
-├── Applications
-│   ├── McLarenSynthKit
-│   │   ├── LiveloopToy
-│   │   ├── MskFilterDemo
-│   │   ├── MskMetroDemo
-│   │   ├── MskOrganDemo
-│   │   ├── SampleToy
-│   │   └── Synth80
-│   ├── MidiMon
-│   └── MidiScriptDemo
 ├── README.md
 ```
 
@@ -103,33 +104,31 @@ $ cd Applications/MidiMon
 $ make
 $ sudo -E make install
 
-$ cd Applications/MidiScriptDemo
+$ cd Applications/Synth80
 $ make
 $ sudo -E make install
 
-$ cd Applications/McLarenSynthKit/MskOrganDemo
+$ cd Applications/MidiTalk
 $ make
 $ sudo -E make install
 
-$ cd Applications/McLarenSynthKit/MskFilterDemo
-$ make
-$ sudo -E make install
-
-$ cd Applications/McLarenSynthKit/MskMetroDemo
+$ cd Applications/Demos
 $ make
 $ sudo -E make install
 
 ```
 
-### Developing Locally
+### Support for Library Developers
 
-We have provided help for working with this project "locally."  That is, with all files remaining in the project directory.
+If you find yourself working on the library code itself (files in `Libraries/AlsaSoundKit` or `Libraries/McLarenSynthKit`) it can be painful to perform a `make install` after changing a line or two.
+
+We have provided help for working with this project "locally."  That is, with all files remaining in the `libs-mclaren-alpha` project directory.  This way you can re-compile a library file and all of the Applications and Tools can find the libraries in the project directtory itself.
 
 When using `make install` with the ASK and MSK libraries, their headers and objects are placed in a standard location (~/GNUstep/Local/Library or /usr/GNUstep/Local/Library, etc.).  But for developing the libraries themselves with repeated compiling it can be more convenient to leave them in place, and to also leave the tools and applications in place too.
 
-To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries.
+To facilitate working with the ASK and MSK libraries "in-place", the applications' and tools' GNUmakefiles have been given a flag called "localdev" that adds the compilation and linker flags so that it can find the two libraries "in place."
 
-In the example below, the ASK library is compiled but not installed.  The MidiMon application is compiled with the "localdev" flag so that it finds the library in the project and not in a global location.  There's nothing special about the "localdev" flag, we have simply used it in a consistent way so that each sub-program finds the ASK and MSK libraries using relative paths.
+To work this way, first build the libraries but do not install.
 
 ``` console
 ## build the libraries but do not install
@@ -137,30 +136,38 @@ $ cd Libraries/AlsaSoundKit
 $ make
 $ cd Libraries/McLarenSynthKit
 $ make
+```
 
-## build programs that to references the libraries where they reside
+Then for each application or tool, build it with the "localdev" flag and the Makefile will set up the library paths appropriately.
+
+``` console
+$ cd Tools/AlsaSoundKit
+$ make localdev=yes
+
+$ cd Tools/McLarenSynthKit
+$ make localdev=yes
+
 $ cd Applications/MidiMon
 $ make localdev=yes
-$ openapp ./MidiMon.app
+$ openapp ./MidiMon
 
-## etc.
-$ cd Applications/McLarenSynthKit/MskOrganDemo
+$ cd Applications/Synth80
 $ make localdev=yes
-$ openapp ./MskOrganDemo
+$ openapp ./Synth80
 
-$ cd Applications/McLarenSynthKit/MskMetroDemo
+$ cd Applications/MidiTalk
 $ make localdev=yes
-$ openapp ./MskMetroDemo &
-$ openapp ./MskPatternDemo &
+$ openapp ./MidiTalk
+
+$ cd Applications/Demos
+$ make localdev=yes
 ```
 
 ## StepTalk
 
 StepTalk is a scripting language with SmallTalk syntax that runs on top of the Objective-C runtime.  StepTalk scripts can create ObjectiveC objects and send messages using selectors.  The entire AppKit and Foundation libraries can be accessed through StepTalk.
 
-This project includes "MidiScriptDemo" to demonstrate some of the capabilities of StepTalk.  Using StepTalk scripts can send and receive MIDI events, and play notes on a PCM (sound) device.
-
-Before building "MidiScriptDemo" you must make sure "libs-steptalk" is installed on your system.  If you need to build it, the instructions are simple.
+Before building "MidiTalk" you must make sure "libs-steptalk" is installed on your system.  If you need to build it, the instructions are simple.
 
 ``` console
 $ git clone https://github.com/gnustep/libs-steptalk

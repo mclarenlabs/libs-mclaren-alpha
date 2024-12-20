@@ -49,7 +49,7 @@ extern "C" {
 
   _expEnv->gain = _iGain;
 
-  return YES;
+  return [super compile];
 }
 
 - (BOOL) noteOff {

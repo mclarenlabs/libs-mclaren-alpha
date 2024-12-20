@@ -55,7 +55,7 @@ static double GAIN = 4.0;
 
 // do nothing? 2023-01-02
 - (BOOL) compile {
-  return YES;
+  return [super compile];
 }
 
 void CFMSKFMPhaseEnvelopeOscillatorCalcFreq(__unsafe_unretained MSKFMPhaseEnvelopeOscillator *v) {

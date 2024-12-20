@@ -51,7 +51,7 @@ extern "C" {
     gosc->bend.setRef(_modulationModel->_pitchbend);
   }
 
-  return YES;
+  return [super compile];
 }
 
 //

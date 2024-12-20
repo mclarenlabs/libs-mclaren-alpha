@@ -70,7 +70,7 @@
 }
 
 - (BOOL) compile {
-  return YES;
+  return [super compile];
 }
 
 - (BOOL) auRender:(uint64_t)now nframes:(snd_pcm_sframes_t)nframes {

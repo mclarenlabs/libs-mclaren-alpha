@@ -1,0 +1,10 @@
+{
+    Default = {
+	Description = "A complex example with Attack, Decay Sustain Release control.
+FM harmonics selected by Gauge5 and Gauge6.
+Buttons 1 and 2 control the addition of an oscillator.
+
+The timbre of the note changes over its attack time.";
+	Name = "fmphase-example";
+    };
+}
