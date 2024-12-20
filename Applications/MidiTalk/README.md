@@ -29,7 +29,7 @@ In the MidiTalk application, the McLaren Labs Objective-C libraries known as the
 
 The MidiTalk book is available at the following URL.
 
-* https://mclarenlabs.com/miditalk/miditalk-book.pdf
+* https://mclarenlabs.com/static/miditalk/miditalk-book.pdf
 
 
 ## An Example
