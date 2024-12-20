@@ -6,9 +6,9 @@ The second layer of the project is the MSK ("McLaren Synth Kit") library.  It bu
 
 There are a number of full-featured applications.
 
-* MidiTalk - a scriptable app using StepTalk interpreted scripting language for managing McLaren Synth Kit objects.
-* Synth80 - a two-oscillator and sampling synth with full save/restore of patches.
-* MidiMon - watch MIDI system and dump events.
+* [MidiTalk](./Applications/MidiTalk) - a scriptable app using StepTalk interpreted scripting language for managing McLaren Synth Kit objects.
+* [Synth80](./Applications/Synth80) - a two-oscillator and sampling synth with full save/restore of patches.
+* [MidiMon](./Applications/MidiMon) - watch MIDI system and dump events.
 
 There is a collection GUI demonstrations that show off aspects of the McLarenSynthKit.
 
