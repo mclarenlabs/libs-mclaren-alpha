@@ -1,0 +1,6 @@
+{
+    Default = {
+	Description = "Play notes in triplet.";
+	Name = tripolet1;
+    };
+}
