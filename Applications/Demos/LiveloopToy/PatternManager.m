@@ -99,6 +99,7 @@
 - (void) playSample:(MSKSample*)samp {
   MSKSamplePlayer *player = [[MSKSamplePlayer alloc] initWithCtx:_ctx];
   player.sample = samp;
+  [player compile];
   [_ctx addVoice:player];
 }
 

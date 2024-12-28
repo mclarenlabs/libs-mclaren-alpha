@@ -280,7 +280,7 @@
     [e noteOff];		// begin release
     [_notes removeObjectForKey:@(note)];
   }
-
+  return YES;
 }
 
 @end

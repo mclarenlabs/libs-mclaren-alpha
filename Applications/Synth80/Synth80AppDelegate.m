@@ -311,7 +311,7 @@
     }];
 }
 
-static int evenodd = 0;
+// static int evenodd = 0;
 
 - (void) makeContext {
   MSKContextRequest *request = [[MSKContextRequest alloc] init];

@@ -115,7 +115,7 @@
   _data = ext;
   // 2020-08-21
   // _ev.data.ext.ptr = (void*) [_data bytes];
-  snd_seq_ev_set_variable(&(_ev), [_data length], [_data bytes]);
+  snd_seq_ev_set_variable(&(_ev), [_data length], (void*) [_data bytes]);
 }
 
 - (NSString*) description {

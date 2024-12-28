@@ -24,7 +24,7 @@
 @property (nonatomic, readwrite) MSKModulationModel *modulationModel;
 
 // the envelope
-@property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;
+@property (nonatomic, readwrite) MSKContextVoice *sEnvelope;
 
 - (id) initWithCtx:(MSKContext*)c;
 

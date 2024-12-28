@@ -498,7 +498,7 @@ static int PCMDEBUG = 0;
 
     [aliases addObject:alias];
 
-  nexthint:
+    // nexthint:
     n++;
   }
   

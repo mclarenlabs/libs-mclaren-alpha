@@ -21,7 +21,7 @@
   return self;
 }
 
-- (NSView*) populateVbox0 {
+- (GSVbox*) populateVbox0 {
 
   GSVbox *vbox = [GSVbox new];
   [vbox setDefaultMinYMargin: 5];
