@@ -3,6 +3,9 @@
  *
  */
 
+// enable Object memory use inspection panel
+#define USE_GSMEMORY_PANEL 1
+
 #import "AlsaSoundKit/AlsaSoundKit.h"
 #import "MidiTalk_ASKSeq.h"
 
@@ -12,6 +15,10 @@
 #import "STScriptingSupport.h"
 
 #include "StepTalk/STEnvironment.h"
+
+#if USE_GSMEMORY_PANEL
+#import "GNUstepGUI/GSMemoryPanel.h"
+#endif
 
 @implementation AppDelegate
 
@@ -642,6 +649,10 @@
   // convenient when developing to have these always open
   [NSApp orderFrontScriptsPanel:self];
   [NSApp orderFrontTranscriptWindow:self];
+#endif
+
+#if USE_GSMEMORY_PANEL
+  [NSApp orderFrontSharedMemoryPanel:self];  // show memory stats
 #endif
 
 }
