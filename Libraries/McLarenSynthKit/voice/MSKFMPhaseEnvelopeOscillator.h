@@ -27,10 +27,10 @@
 @property (nonatomic, readwrite) MSKModulationModel *modulationModel;
 
 // the envelope
-@property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;
+@property (nonatomic, readwrite) MSKContextVoice *sEnvelope;
 
 // the phase envelope
-@property (nonatomic, readwrite) MSKContextEnvelope *sPhaseenvelope;
+@property (nonatomic, readwrite) MSKContextVoice *sPhaseenvelope;
 
 - (id) initWithCtx:(MSKContext*)c;
 

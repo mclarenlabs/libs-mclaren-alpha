@@ -20,7 +20,7 @@
 @property (nonatomic, readwrite) MSKOscillatorModel *model;
 
 // the envelope
-@property (nonatomic, readwrite) MSKContextEnvelope *sEnvelope;
+@property (nonatomic, readwrite) MSKContextVoice *sEnvelope;
 
 // the modulation model
 @property (nonatomic, readwrite) MSKModulationModel *modulationModel;
