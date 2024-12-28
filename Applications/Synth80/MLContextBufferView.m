@@ -95,7 +95,12 @@
 
     if (cnt == spp) {
 
+#define DRAW_RMS_FILL 0
+
       double rms = sqrt(squaredsum / cnt);
+#if !DRAW_RMS_FILL
+      (void) rms;		// tell compiler to ignore it
+#endif
 
       // draw the outline
       {
@@ -106,7 +111,7 @@
 	[path stroke];
       }
 
-#if 0
+#if DRAW_RMS_FILL
       // draw the rms fill
       {
 	[_fillColor setStroke];
