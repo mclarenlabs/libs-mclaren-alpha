@@ -2,6 +2,8 @@
 
 This project contains libraries and programs for using MIDI and Sound devices on Linux with GNUstep.  The base of the project is the ASK ("Alsa Sound Kit") library for interfacing with ALSA (Advanced Linux Sound Architecture) via ObjectiveC.  This library makes it easy to enumerate MIDI and Sound devices, to open and close them, and to send and receive MIDI events and Sound buffers.
 
+![Desktop showing MidiTalk and Synth80 Apps](./figures/libs-mclaren-screenshot-rik.png)
+
 The second layer of the project is the MSK ("McLaren Synth Kit") library.  It builds on top of the device-level ASK library by providing an object-oriented approach to sound generation.  Sounds can be described as graphs consisting of envelopes, oscillators, filters and effects, and rendered by an MSKContext managing an audio device.  Classes also exist for capturing and manipulating samples.
 
 There are a number of full-featured applications.
@@ -45,6 +47,9 @@ The "Tools" directory is divided into two sub-directories.  Tools using only the
 
 ``` console
 
+├── Libraries
+│   ├── AlsaSoundKit
+│   └── McLarenSynthKit
 ├── Applications
 │   ├── MidiTalk
 │   ├── Synth80
@@ -55,9 +60,6 @@ The "Tools" directory is divided into two sub-directories.  Tools using only the
 │       ├── MskMetroDemo
 │       ├── MskOrganDemo
 │       └── SampleToy
-├── Libraries
-│   ├── AlsaSoundKit
-│   └── McLarenSynthKit
 ├── Tools
 │   ├── AlsaSoundKit
 │   │   └── askpcmlist, askseqdump, miniosc1, minisynth1
