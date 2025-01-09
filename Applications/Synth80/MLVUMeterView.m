@@ -142,9 +142,21 @@
   _peakL = peakL;
   _peakR = peakR;
 
+#if 0
   [self performSelectorOnMainThread: @selector(setNeedsDisplay:)
 			 withObject: @YES
 		      waitUntilDone: NO];
+#endif
+    NSArray *modes = @[ NSDefaultRunLoopMode,
+					  NSRunLoopCommonModes,
+					  NSEventTrackingRunLoopMode,
+					  NSModalPanelRunLoopMode
+		      ];
+
+    [self performSelectorOnMainThread: @selector(setNeedsDisplay:)
+			   withObject: @YES
+			waitUntilDone: NO
+				modes: modes ];
 }
 
 
