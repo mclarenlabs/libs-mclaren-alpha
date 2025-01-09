@@ -1,4 +1,4 @@
-/** -*- mode:c++ -*-
+ /** -*- mode:c++ -*-
  *
  * C++ implementation of synthesizer operators
  *
@@ -145,6 +145,14 @@ struct pdosc : public gosc {
 
     double sound;
 
+    // normalize
+    while (modulo >= 1.0) {
+      modulo -= 1.0;
+    }
+    while (phi >= 2*M_PI) {
+      phi -= 2*M_PI;
+    }
+    
     switch (osctype) {
     case MSK_OSCILLATOR_TYPE_NONE:
       sound = 0.0;
@@ -203,17 +211,6 @@ struct pdosc : public gosc {
       float pdl = modulation.l * 3.5 * pd.l;
       float pdr = modulation.r * 3.5 * pd.r;
 
-      phi += pdl;
-      modulo += pdl;
-
-      // normalize
-      while (modulo >= 1.0) {
-	modulo -= 1.0;
-      }
-      while (phi >= 2*M_PI) {
-	phi -= 2*M_PI;
-      }
-    
       double lsound = compute_sound(phi+pdl, modulo+pdl, osctype.l, pw.l);
       double rsound = compute_sound(phi+pdr, modulo+pdr, osctype.l, pw.r);
 
@@ -229,12 +226,12 @@ struct pdosc : public gosc {
 };
 
 
-struct fmpdosc : public gosc {
+struct fmpeosc : public gosc {
 
-  fmpdosc( unsigned _rate, unsigned _period) :
+  fmpeosc( unsigned _rate, unsigned _period) :
     gosc(_rate, _period)
   {
-    // fprintf(stderr, "fmpdosc init\n");
+    // fprintf(stderr, "fmpeosc init\n");
   }
 
   // controls
@@ -307,10 +304,10 @@ struct fmpdosc : public gosc {
 
 
   /* called once per period */
-  template <class ENV, class PD>
-  void render(a2Rate<float> &out, ENV &env, PD &pd) {
+  template <class ENV, class PE>
+  void render(a2Rate<float> &out, ENV &env, PE &pe) {
     env.preamble();
-    pd.preamble();
+    pe.preamble();
 
     osctype.preamble();
 
@@ -321,6 +318,8 @@ struct fmpdosc : public gosc {
     bendwidth.preamble();
     pw.preamble();
     modulation.preamble();
+    harmonic.preamble();
+    subharmonic.preamble();
 
     calcFreq();
     calcDelta();
@@ -332,29 +331,18 @@ struct fmpdosc : public gosc {
     for (int i = 0; i < period; i++) {
       bend.fetch(i);
       env.fetch(i);
-      pd.fetch(i);
+      pe.fetch(i);
 
-      float pdl = modulation.l * 3.5 * pd.l;
-      // float pdr = modulation.r * 3.5 * pd.r;
+      float pdl = modulation.l * pe.l;
+      float pdr = modulation.r * pe.r;
       
       double fmsound = compute_sound(phimod, modulomod, osctype.l, pw.l);
+      incrModuloMod();
 
-      phi += (pdl * fmsound);
-      modulo += (pdl * fmsound);
-
-      // normalize
-      while (modulo >= 1.0) {
-	modulo -= 1.0;
-      }
-      while (phi >= 2*M_PI) {
-	phi -= 2*M_PI;
-      }
-
-      double lsound = compute_sound(phi, modulo, osctype.l, pw.l);
-      double rsound = compute_sound(phi, modulo, osctype.l, pw.l);
+      double lsound = compute_sound(phi+(pdl*fmsound), modulo+(pdl*fmsound), osctype.l, pw.l);
+      double rsound = compute_sound(phi+(pdr*fmsound), modulo+(pdr*fmsound), osctype.l, pw.l);
 
       incrModulo();
-      incrModuloMod();
 
       out.l = lsound * env.l;
       out.r = rsound * env.r;
