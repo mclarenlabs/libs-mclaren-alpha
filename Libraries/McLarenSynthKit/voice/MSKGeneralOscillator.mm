@@ -14,8 +14,15 @@ extern "C" {
 
 #include "synthpp_voice.h"
 
+// define the FORM of the outputs/inputs
+typedef enum {
+  FORM_A2__C2,			// a2 output, c2 envelope
+  FORM_A2__A2,			// a2 output, a2 envelope
+} form_t;
+
 @implementation MSKGeneralOscillator {
   gosc *gosc;
+  form_t form;
 }
 
 - (id) initWithCtx:(MSKContext*)c {
@@ -51,6 +58,17 @@ extern "C" {
     gosc->bend.setRef(_modulationModel->_pitchbend);
   }
 
+  // 
+  // determine form at compile time
+  //
+  
+  if (_sEnvelope == nil) {
+    form = FORM_A2__C2;
+  }
+  else {
+    form = FORM_A2__A2;
+  }
+
   return [super compile];
 }
 
@@ -61,20 +79,26 @@ extern "C" {
 - (BOOL) auRender:(uint64_t)now nframes:(snd_pcm_sframes_t)nframes {
 
   a2Rate<MSKSAMPTYPE> out(0.0, 0.0, _frames);
-  
-  if (_sEnvelope == nil) {
-    float one = 1.0;
-    k1Rate<float> env(0.0); env.setRef(one);  // alt: c1Rate() could have been used
-    gosc->render(out, env);
+
+  switch (form) {
+  case FORM_A2__C2 :
+    {
+      c2Rate<float> env(1.0, 1.0);
+      gosc->render(out, env);
+    };
+    break;
+
+  case FORM_A2__A2 :
+    {
+      BOOL res = [_sEnvelope auEval:now nframes:nframes];
+      (void) res;
+      a2Rate<MSKSAMPTYPE> env(0.0, 0.0, _sEnvelope->_frames);
+      gosc->render(out, env);
+      _active = _sEnvelope->_active;
+    };
+    break;
   }
-  else {
-    BOOL res = [_sEnvelope auEval:now nframes:nframes];
-    (void) res;
-    a2Rate<MSKSAMPTYPE> env(0.0, 0.0, _sEnvelope->_frames);
-    gosc->render(out, env);
-    _active = _sEnvelope->_active;
-  }
-  
+
   return YES;
 }
 

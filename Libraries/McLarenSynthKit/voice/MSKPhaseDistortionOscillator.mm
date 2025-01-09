@@ -17,8 +17,16 @@ extern "C" {
 
 #include "synthpp_voice.h"
 
+typedef enum {
+  FORM_A2__C2_C2,		// a2 output, c2 envelope, c2 pd
+  FORM_A2__C2_A2,		// a2 output, c2 envelope, a2 pd
+  FORM_A2__A2_C2,		// a2 output, a2 envelope, c2 pd
+  FORM_A2__A2_A2,		// a2 output, a2 envelope, a2 pd
+} form_t;
+
 @implementation MSKPhaseDistortionOscillator {
   pdosc *pdosc;
+  form_t form;
 }
 
 - (id) initWithCtx:(MSKContext*)c {
@@ -50,37 +58,91 @@ extern "C" {
     pdosc->bend.setRef(_modulationModel->_pitchbend);
   }
 
+  // 
+  // determine form at compile time
+  //
+
+  if (_sEnvelope == nil) {
+    if (_sPhasedistortion == nil) {
+      form = FORM_A2__C2_C2;
+    }
+    else {
+      form = FORM_A2__C2_A2;
+    }
+  }
+  else {
+    if (_sPhasedistortion == nil) {
+      form = FORM_A2__A2_C2;
+    }
+    else {
+      form = FORM_A2__A2_A2;
+    }
+  }
+    
   return [super compile];
 }
   
 - (BOOL) auRender:(uint64_t)now nframes:(snd_pcm_sframes_t)nframes {
 
+  a2Rate<MSKSAMPTYPE> out(0.0, 0.0, _frames);
+
+#if 0 // OLD CODE
   MSKSAMPTYPE *buf = _frames;
 
   MSKSAMPTYPE *pdbuf = _sPhasedistortion->_frames;
   a2Rate<float> out; out.addr = buf;
   a2Rate<float> pd; pd.l = 0; pd.r = 0; pd.addr = pdbuf;
-  
-  if (self.sEnvelope == nil) {
-    BOOL res = [_sPhasedistortion auEval:now nframes:nframes];
-    (void) res;
+#endif
 
-    c2Rate<float> env(1.0, 1.0);
-    pdosc->render(out, env, pd);
-    _active = self.sEnvelope->_active;
-  }
-  else {
-    BOOL res1 = [_sPhasedistortion auEval:now nframes:nframes];
-    (void) res1;
-    BOOL res2 = [_sEnvelope auEval:now nframes:nframes];
-    (void) res2;
+  switch (form) {
+  case FORM_A2__C2_C2:
+    {
+      c2Rate<MSKSAMPTYPE> env(1.0, 1.0); // ENV defaults to 1
+      c2Rate<MSKSAMPTYPE> pd(0.0, 0.0); // PD defaults to 0
+      pdosc->render(out, env, pd);
+    }
+    break;
+
+  case FORM_A2__C2_A2:
+    {
+      BOOL res = [_sPhasedistortion auEval:now nframes:nframes];
+      (void) res;
+
+      c2Rate<MSKSAMPTYPE> env(1.0, 1.0);
+      a2Rate<MSKSAMPTYPE> pd(0.0, 0.0, _sPhasedistortion->_frames);
+      pdosc->render(out, env, pd);
+      _active = self.sPhasedistortion->_active;
+    }
+    break;
+
+  case FORM_A2__A2_C2:
+    {
+      BOOL res = [_sEnvelope auEval:now nframes:nframes];
+      (void) res;
     
-    MSKSAMPTYPE *envbuf = self.sEnvelope->_frames;
-    a2Rate<float> env; env.l = 0; env.r = 0; env.addr = envbuf;
-    pdosc->render(out, env, pd);
-    _active = self.sEnvelope->_active && _sPhasedistortion->_active;
-  }
+      a2Rate<MSKSAMPTYPE> env(0.0, 0.0, _sEnvelope->_frames);
+      c2Rate<float> pd(0.0, 0.0); // PD defaults to 0
+      pdosc->render(out, env, pd);
+      _active = self.sEnvelope->_active;
+    }
+    break;
 
+  case FORM_A2__A2_A2:
+    {
+      BOOL res1 = [_sEnvelope auEval:now nframes:nframes];
+      (void) res1;
+      BOOL res2 = [_sPhasedistortion auEval:now nframes:nframes];
+      (void) res2;
+    
+      a2Rate<MSKSAMPTYPE> env(0.0, 0.0, _sEnvelope->_frames);
+      a2Rate<MSKSAMPTYPE> pd(0.0, 0.0, _sPhasedistortion->_frames);
+      pdosc->render(out, env, pd);
+      _active = self.sEnvelope->_active && _sPhasedistortion->_active;
+    }
+    break;
+
+  }
+  
   return YES;
 }
 
