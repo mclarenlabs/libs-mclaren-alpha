@@ -1,4 +1,4 @@
-/** -*- mode:c++ -*-
+ /** -*- mode:c++ -*-
  *
  * C++ implementation of synthesizer operators
  *
@@ -143,7 +143,9 @@ struct pdosc : public gosc {
 
   double compute_sound(double phi, double modulo, int osctype, double pw) {
 
-    // this is too much to call every sample
+    double sound;
+
+    // normalize
     while (modulo >= 1.0) {
       modulo -= 1.0;
     }
@@ -151,8 +153,6 @@ struct pdosc : public gosc {
       phi -= 2*M_PI;
     }
     
-    double sound;
-
     switch (osctype) {
     case MSK_OSCILLATOR_TYPE_NONE:
       sound = 0.0;
@@ -225,3 +225,130 @@ struct pdosc : public gosc {
 
 };
 
+
+struct fmpeosc : public gosc {
+
+  fmpeosc( unsigned _rate, unsigned _period) :
+    gosc(_rate, _period)
+  {
+    // fprintf(stderr, "fmpeosc init\n");
+  }
+
+  // controls
+  k1Rate<double> modulation = 3.5;
+  k1Rate<double> harmonic = 1.0;
+  k1Rate<double> subharmonic = 1.0;
+
+  // oscillator state
+  double phimod = 0;
+  double dphimod = 0;
+  double modulomod = 0;
+  double incrmod = 0;
+
+  // must be called after calcDelta()
+  void calcDeltaMod() {
+    incrmod = incr * (harmonic.l / subharmonic.l);
+    dphimod = dphi * (harmonic.l / subharmonic.l);
+  }
+
+  void incrModuloMod() {
+    modulomod += incrmod;
+    if (modulomod >= 1.0) {
+      modulomod -= 1.0;
+    }
+    phimod += dphimod;
+    if (phimod >= 2*M_PI) {
+      phimod -= 2*M_PI;
+    }
+  }
+  
+
+  double compute_sound(double phi, double modulo, int osctype, double pw) {
+
+    // this is too much to call every sample
+    while (modulo >= 1.0) {
+      modulo -= 1.0;
+    }
+    while (phi >= 2*M_PI) {
+      phi -= 2*M_PI;
+    }
+    
+    double sound;
+
+    switch (osctype) {
+    case MSK_OSCILLATOR_TYPE_NONE:
+      sound = 0.0;
+      break;
+    case MSK_OSCILLATOR_TYPE_SIN:
+      sound = SINFN(phi);
+      break;
+    case MSK_OSCILLATOR_TYPE_SAW:
+      sound = 2.0*modulo - 1.0;
+      break;
+    case MSK_OSCILLATOR_TYPE_SQUARE:
+      sound = ((modulo*100.0) > pw) ? -1.0 : 1.0;
+      break;
+    case MSK_OSCILLATOR_TYPE_TRIANGLE:
+      sound = 2.0*fabs(2*modulo-1.0) - 1.0;
+      break;
+    case MSK_OSCILLATOR_TYPE_REVSAW:
+      sound = 1.0 - 2.0*modulo;
+      break;
+    default:
+      sound = 2*modulo -1.0;
+      break;
+    }
+
+    return sound;
+  }
+
+
+  /* called once per period */
+  template <class ENV, class PE>
+  void render(a2Rate<float> &out, ENV &env, PE &pe) {
+    env.preamble();
+    pe.preamble();
+
+    osctype.preamble();
+
+    octave.preamble();
+    transpose.preamble();
+    cents.preamble();
+    bend.preamble();
+    bendwidth.preamble();
+    pw.preamble();
+    modulation.preamble();
+    harmonic.preamble();
+    subharmonic.preamble();
+
+    calcFreq();
+    calcDelta();
+    calcDeltaMod();
+
+    if (pw.l < 5) pw.l = 5;
+    if (pw.l > 95) pw.l = 95;
+
+    for (int i = 0; i < period; i++) {
+      bend.fetch(i);
+      env.fetch(i);
+      pe.fetch(i);
+
+      float pdl = modulation.l * pe.l;
+      float pdr = modulation.r * pe.r;
+      
+      double fmsound = compute_sound(phimod, modulomod, osctype.l, pw.l);
+      incrModuloMod();
+
+      double lsound = compute_sound(phi+(pdl*fmsound), modulo+(pdl*fmsound), osctype.l, pw.l);
+      double rsound = compute_sound(phi+(pdr*fmsound), modulo+(pdr*fmsound), osctype.l, pw.l);
+
+      incrModulo();
+
+      out.l = lsound * env.l;
+      out.r = rsound * env.r;
+      out.store(i);
+    }
+    
+  }
+
+};

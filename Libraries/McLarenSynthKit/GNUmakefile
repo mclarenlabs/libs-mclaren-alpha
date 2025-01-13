@@ -22,7 +22,6 @@ McLarenSynthKit_OBJC_FILES = \
   model/MSKSampleModel.m \
   voice/MSKSinFixedOscillator.m \
   voice/MSKDrawbarOscillator.m \
-  voice/MSKFMPhaseEnvelopeOscillator.m \
   model/MSKFilterModel.m \
   model/MSKReverbModel.m \
   fifo/MSKOFifo.m \
@@ -35,6 +34,7 @@ McLarenSynthKit_OBJC_FILES = \
 McLarenSynthKit_OBJCC_FILES = \
   voice/MSKGeneralOscillator.mm \
   voice/MSKPhaseDistortionOscillator.mm\
+  voice/MSKFMPhaseEnvelopeOscillator.mm \
   env/MSKLinEnvelope.mm \
   env/MSKExpEnvelope.mm \
   filt/MSKGeneralFilter.mm \
