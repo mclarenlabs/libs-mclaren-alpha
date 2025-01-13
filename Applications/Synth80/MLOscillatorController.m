@@ -57,14 +57,14 @@
   // Harmonic
   _harmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(140, 50)];
   [_harmCombo.titleTextField setStringValue:@"Harmonic"];
-  [_harmCombo.stepper setMinValue:-50];
+  [_harmCombo.stepper setMinValue:1];
   [_harmCombo.stepper setMaxValue:50];
   [_harmCombo.stepper setIncrement:1.0];
 
   // Subharmonic
   _subharmCombo = [[MLStepperWithValue alloc] initWithSize:NSMakeSize(140, 50)];
   [_subharmCombo.titleTextField setStringValue:@"Subharmonic"];
-  [_subharmCombo.stepper setMinValue:-50];
+  [_subharmCombo.stepper setMinValue:1];
   [_subharmCombo.stepper setMaxValue:50];
   [_subharmCombo.stepper setIncrement:1.0];
 
