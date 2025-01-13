@@ -31,9 +31,6 @@ McLarenSynthKit_OBJC_FILES = \
   sample/MSKSampleRecorder.m \
   MSKPattern.m
 
-#   voice/MSKFMPhaseEnvelopeOscillator.m \
-
-
 McLarenSynthKit_OBJCC_FILES = \
   voice/MSKGeneralOscillator.mm \
   voice/MSKPhaseDistortionOscillator.mm\
